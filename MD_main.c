@@ -15,6 +15,12 @@
 /* Main program */
 int main()
 {
+
+    /* Declaration of variables */
+	double latticeSpacing;
+
+	/* Initiation of variables */
+	latticeSpacing = 1; //Should be in metal units
     
     /*
      Code for generating a uniform random number between 0 and 1. srand should only be called once.
