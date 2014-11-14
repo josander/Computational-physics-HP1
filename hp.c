@@ -1,5 +1,5 @@
 // Computational physics HP1
-// Svensson & Jossan
+// Svensson & Jossan.
 void main(){
 
 int i;
