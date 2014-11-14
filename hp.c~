@@ -4,6 +4,6 @@ void main(){
 
 int i;
 
-i = 1000;
+i = 100;
 
 }
