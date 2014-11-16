@@ -12,6 +12,6 @@ hpfunc.h
 //extern double get_virial_AL(double[][3], double, int);
 extern void rand_disp(double[][3],double, int);
 extern double get_ke(double[][3], int, double);
-
+extern double get_T(double, double, int);
 
 #endif
