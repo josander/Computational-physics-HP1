@@ -10,6 +10,7 @@
 #include <time.h>
 #include "initfcc.h"
 #include "alpotential.h"
+#include "hpfunc.h"
 
 
 /* Main program */
