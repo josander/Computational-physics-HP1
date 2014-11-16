@@ -29,7 +29,6 @@ int main()
 	int i, j, n;
 	double m;
 	double energy, pe, ke;
-	double K_B;
 	double tau_T, tau_P; 
 
 	// Initiation of variables 
