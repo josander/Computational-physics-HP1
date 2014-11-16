@@ -19,14 +19,18 @@ void rand_disp(double position[][3] ,double lattice_param ,int N)
 	for(i = 0; i < N; i++){
 		sum = 0;		
 		for(j = 0; j < 3; j++){
-			ran[j] = (double) rand() / (double) RAND_MAX - 0.5 ; // ran[j] goes from -0.5 to 0.5
-			sum =+ ran[j]*ran[j];
+			ran[j] = ((double) rand() / (double) RAND_MAX) -0.5; // ran[j] goes from -0.5 to 0.5
+			sum += ran[j]*ran[j];
 		}
+		
 		sum = sqrt(sum);
-		length_corr = (N*0.05)/sum;
+	
+		length_corr = (lattice_param*0.05)/sum;
+				
 		
 		for(j = 0; j < 3; j++){
-			position[i][j] =+ ran[j] * length_corr;
+			position[i][j] +=  ran[j] * length_corr;
+	
 		}
 
 	}  	
