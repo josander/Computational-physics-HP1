@@ -48,8 +48,10 @@ int main()
 	rand_disp(q, lattice_param, nbr_of_atoms);
 
 	// Initiation of the velocities 
-	for(i = 0; i < nbr_of_atoms; i++){
-		v[i] = 0.0;
+	for(j = 0; j < nbr_of_atoms; j++){
+		for(n = 0; n < 3; n++){
+			v[j][n] = 0.0;
+		}
 	}
 
 	// Get forces
@@ -63,9 +65,11 @@ int main()
 	}
 
 	// Calculate of initial energies
-	get_energy_AL(q, Nx*lattice_param, nbr_of_atoms);
-	get_ke(v, nbr_of_atoms, m);
+	pe = get_energy_AL(q, Nx*lattice_param, nbr_of_atoms);
+	ke = get_ke(v, nbr_of_atoms, m);
 	energy = pe + ke;
+
+	printf("E: %F \t Pe: %F \n", energy, pe);
 
 	// Make a file to save the energies in
 	FILE *e_file;
@@ -109,8 +113,8 @@ int main()
 		} 
 
 		// Calcutaion of the pe, ke and total energy
-		get_energy_AL(q, Nx*lattice_param, nbr_of_atoms);
-		get_ke(v, nbr_of_atoms, m);
+		pe = get_energy_AL(q, Nx*lattice_param, nbr_of_atoms);
+		ke = get_ke(v, nbr_of_atoms, m);
 		energy = pe + ke;
 	
 		// Print the average energy data to output file

@@ -42,15 +42,12 @@ double get_ke(double v[][3], int N, double m)
 	int i, j;
 	double ke = 0;
 	double v_tot;
-	for (i = 0; i < N; i++)
-		for(j = 0; j < 3; j++)		
-		ke += 0.5*m*v[j][i]*v[j][i];
+
+	for (i = 0; i < N; i++){
+		for(j = 0; j < 3; j++){		
+			ke += 0.5*m*v[j][i]*v[j][i];
 		}
 	}
 	return ke;
-
-
-
-
 }
 	
