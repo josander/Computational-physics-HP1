@@ -30,7 +30,7 @@ int main()
 
 	// Initiation of variables 
 	lattice_param = 4.05; // Units: [Å]
-	timestep = 0.1; // 
+	timestep = 0.1; // ps
 	nbr_of_timesteps = 1000;
 	nbr_of_atoms = 256;
 	Nx = 4, Ny = 4, Nz = 4;
@@ -58,16 +58,16 @@ int main()
 	get_forces_AL(f, q, Nx*lattice_param, nbr_of_atoms);
 
 	// Scale forces to acceleration
-	for(i = 0; i < nbr_of_atoms; i++){
-		for(j = 0; j < 3; j++){
-			a[i][j] = f[i][j]/m;
+	for(j = 0; j < nbr_of_atoms; j++){
+		for(n = 0; n < 3; n++){
+			a[j][n] = f[j][n]/m;
 		}
 	}
 
 	// Calculate of initial energies
 	pe = get_energy_AL(q, Nx*lattice_param, nbr_of_atoms);
 	ke = get_ke(v, nbr_of_atoms, m);
-	energy = pe + ke;
+	energy = sqrt(pe*pe) + sqrt(ke*ke);
 
 	printf("E: %F \t Pe: %F \n", energy, pe);
 
@@ -99,9 +99,9 @@ int main()
 		get_forces_AL(f, q, Nx*lattice_param, nbr_of_atoms);
 
 		// Scale forces to acceleration
-		for(i = 0; i < nbr_of_atoms; i++){
-			for(j = 0; j < 3; j++){
-				a[i][j] = f[i][j]/m;
+		for(j = 0; j < nbr_of_atoms; j++){
+			for(n = 0; n < 3; n++){
+				a[j][n] = f[j][n]/m;
 			}
 		}
 
@@ -115,7 +115,7 @@ int main()
 		// Calcutaion of the pe, ke and total energy
 		pe = get_energy_AL(q, Nx*lattice_param, nbr_of_atoms);
 		ke = get_ke(v, nbr_of_atoms, m);
-		energy = pe + ke;
+		energy = sqrt(pe*pe) + sqrt(ke*ke);
 	
 		// Print the average energy data to output file
 		fprintf(e_file,"%.5f \t %e \t %e \t %e \n", i*timestep, energy, pe, ke);
