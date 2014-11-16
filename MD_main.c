@@ -36,9 +36,8 @@ int main()
 	m = 0.00279636665; // metal units
 
 	// Declaration of matrixes and arrays 
-	double q[4*Nx*Ny*Nz][3];
+	double q[4*Nx*Ny*Nz][3], v[nbr_of_atoms][3], a[nbr_of_atoms][3];
 	double f[4*Nx*Ny*Nz][3];
-	double v[nbr_of_atoms], a[nbr_of_atoms];
 	double energy[nbr_of_atoms];
 	double pe[nbr_of_atoms];
 	double ke[nbr_of_atoms];
@@ -59,10 +58,11 @@ int main()
 	get_forces_AL(f, q, Nx*lattice_param, nbr_of_atoms);
 
 	// Scale forces to acceleration
-	
-
-	// Use the Al-potential to calculate the initial acceleration
-	
+	for(i = 0; i < nbr_of_atoms; i++){
+		for(j = 0; j < 3; j++){
+			a[i][j] = f[i][j]/m;
+		}
+	}
 
 	// Calculation of initial energies
 	//get_energy_AL(q, Nx*lattice_param, nbr_of_atoms);
