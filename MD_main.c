@@ -11,6 +11,8 @@
 #include "initfcc.h"
 #include "alpotential.h"
 #include "hpfunc.h"
+#define PI 3.141592653589
+#define K_B 0.000086173324
 
 
 // Main program 
@@ -37,7 +39,6 @@ int main()
 	nbr_of_atoms = 256;
 	Nx = 4, Ny = 4, Nz = 4;
 	m = 0.00279636665; // Metal units [ev/Å]
-	K_B = 0.000086173324 // eV/K 
 
 	// Declaration of matrixes and arrays 
 	double q[4*Nx*Ny*Nz][3], v[nbr_of_atoms][3], a[nbr_of_atoms][3];
