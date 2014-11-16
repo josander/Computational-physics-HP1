@@ -22,7 +22,7 @@ int main()
 {
 
     	// Declaration of variables 
-	double lattice_param;
+	double lattice_param, cell_size;
 	double timestep;
 	int nbr_of_timesteps;
 	int nbr_of_atoms;
@@ -49,9 +49,9 @@ int main()
 	temp_eq = 500 + 273.15; // Degree Celsius
 	press_eq = 6.324209 * pow(10, -7); // 1 Atm in eV/Å^3
 	tau_T = timestep*100;
-	tau_P = timestep*2000;
-	kappa_P = 2.21901454; //3.85 * pow(10, 9); // Liquid Aluminum Units: Å^3/eV
-
+	tau_P = timestep*100;
+	kappa_P = 2.21901454; //3.85 * pow(10, 9);/ // Liquid Aluminum Units: Å^3/eV
+	cell_size = lattice_param*Nx;
 	// Declaration of matrixes and arrays 
 	double q[4*Nx*Ny*Nz][3], v[nbr_of_atoms][3], a[nbr_of_atoms][3];
 	double f[4*Nx*Ny*Nz][3];
@@ -71,7 +71,7 @@ int main()
 	}
 
 	// Get forces
-	get_forces_AL(f, q, Nx*lattice_param, nbr_of_atoms);
+	get_forces_AL(f, q, cell_size, nbr_of_atoms);
 
 	// Scale forces to acceleration
 	for(j = 0; j < nbr_of_atoms; j++){
@@ -81,7 +81,7 @@ int main()
 	}
 
 	// Calculate of initial energies
-	pe = get_energy_AL(q, Nx*lattice_param, nbr_of_atoms);
+	pe = get_energy_AL(q, cell_size, nbr_of_atoms);
 	pe = sqrt(pe*pe);
 	ke = get_ke(v, nbr_of_atoms, m);
 	energy = sqrt(pe*pe) + sqrt(ke*ke);
@@ -90,7 +90,7 @@ int main()
 	temp = get_T(ke, nbr_of_atoms);
 
 	// Calculate initial pressure
-	press = get_P(q, Nx*lattice_param, nbr_of_atoms, temp);
+	press = get_P(q, cell_size, nbr_of_atoms, temp);
 
 	// Make a file to save the energies in
 	FILE *e_file;
@@ -117,7 +117,7 @@ int main()
 
 		// a(t+dt)
 		// Get forces
-		get_forces_AL(f, q, Nx*lattice_param, nbr_of_atoms);
+		get_forces_AL(f, q, cell_size, nbr_of_atoms);
 
 		// Scale forces to acceleration
 		for(j = 0; j < nbr_of_atoms; j++){
@@ -143,13 +143,14 @@ int main()
 		rescale_T(timestep, tau_T, temp_eq, temp, v, nbr_of_atoms);
 
 		// Calculate the pressure
-		press = get_P(q, Nx*lattice_param, nbr_of_atoms, temp);
-
+		cell_size = lattice_param * Nx;
+		press = get_P(q, cell_size, nbr_of_atoms, temp);
+	
 		// Scale position of the atoms to obtain the right pressure
 		lattice_param = rescale_P(timestep, tau_P, press_eq, press, q, nbr_of_atoms, kappa_P, lattice_param);
 
 		// Calcutaion of the pe, ke and total energy
-		pe = get_energy_AL(q, Nx*lattice_param, nbr_of_atoms);
+		pe = get_energy_AL(q, cell_size, nbr_of_atoms);
 		pe = sqrt(pe*pe);
 		ke = get_ke(v, nbr_of_atoms, m);
 		energy = sqrt(pe*pe) + sqrt(ke*ke);
