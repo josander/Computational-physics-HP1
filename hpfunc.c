@@ -19,7 +19,7 @@ void rand_disp(double position[][3] ,double lattice_param ,int N)
 	for(i = 0; i < N; i++){
 		sum = 0;		
 		for(j = 0; j < 3; j++){
-			ran[j] = rand() - 0.5 ; // ran[j] goes from -0.5 to 0.5
+			ran[j] = (double) rand() / (double) RAND_MAX - 0.5 ; // ran[j] goes from -0.5 to 0.5
 			sum =+ ran[j]*ran[j];
 		}
 		sum = sqrt(sum);
