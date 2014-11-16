@@ -49,4 +49,26 @@ double get_ke(double v[][3], int N, double m)
 	}
 	return ke;
 }
+
+double get_T(double ke, double K_B, int N)
+{
+	
+	double T = 2*ke/((3*N-5)*K_B);
+	return T;	
+}
+double get_alfaT(double timestep, double tau_T, double T_eq, double T)
+{
+	double alfaT;
+	alfaT = 1 + timestep*(T_eq - T)/(tau_T*T);
+	return alfaT;
+}
+
+double get_P()
+{
+
+}
+double get_alfaP()
+{
+
+}
 	
