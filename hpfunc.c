@@ -2,7 +2,7 @@
 hpfunc.c
 Contains function for homeproblem 1/b
 
-By Jossasn och Svensson
+By Jossan och Svensson
 
 */
 #include <stdlib.h>
@@ -31,6 +31,4 @@ void rand_disp(double position[][3] ,double lattice_param ,int N)
 
 	}  	
 		  
-
-
 }

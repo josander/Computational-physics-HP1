@@ -46,3 +46,36 @@ Authors: Jossan and Svensson
      */
     
     
+
+
+**********
+
+	/* Time evolution according to the velocity Verlet algorithm */
+	for (i = 1; i < nbr_of_timesteps + 1; i++){
+		/* v(t+dt/2) */
+		for (j = 0; j < nbr_of_atoms; j++){
+		    v[j] += timestep * 0.5 * a[j];
+		} 
+
+		/* q(t+dt) */
+		for (j = 0; j < nbr_of_atoms; j++){
+		    q[j] += timestep * v[j];
+		}
+
+		/* a(t+dt) */
+		//calc_acc(a, q, m, kappa, nbr_of_atoms);
+
+		/* v(t+dt) */
+		for (j = 0; j < nbr_of_atoms; j++){
+		    v[j] += timestep * 0.5 * a[j];
+		} 
+
+
+		/* Calcutaion of the pe, ke and total energy */
+		// calc_pe();
+		// calc_ke();
+		// energy = pe + ke;
+	
+		/* Print the average energy data to output file */
+		fprintf(e_file,"%.5f \t %e \t %e \t %e \n", i*timestep, energy, pe, ke);
+	}
