@@ -8,6 +8,8 @@ By Jossan och Svensson
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+#define PI 3.141592653589
+#define K_B 0.000086173324
 
 // Randomly displaces the atoms in position[][3] by 5% of the lattice parameter
 void rand_disp(double position[][3] ,double lattice_param ,int N)
