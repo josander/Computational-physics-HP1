@@ -17,25 +17,29 @@ int main()
 {
 
     	/* Declaration of variables */
-	double latticeSpacing;
+	double lattice_param;
 	double timestep;
 	double nbr_of_timesteps;
 	double nbr_of_atoms;
+	int Nx, Ny, Nz;
 	double energy;
 	double pe;
 	double ke;
 
-
 	/* Initiation of variables */
-	latticeSpacing = 1; //Should be in metal units
+	lattice_param = 1; //Should be in metal units
 	timestep = 1;
 	nbr_of_timesteps = 1000;
 	nbr_of_atoms = 256;
+	Nx = 4, Ny = 4, Nz = 4;
 
+	/* Declaration of matrixes */
+	double positions[4*Nx*Ny*Nz][3];
 
-	// Initiate a fcc lattice of Al-particles
+	/* Initiation of the fcc lattice of Al-particles */
+	init_fcc(positions, nbr_of_atoms, lattice_param);
 
-	// Introduce displacements, about 5 % of the lattice spacing
+	// Introduction of displacements, about 5 % of the lattice spacing
 
 	// Set initial velocities to 0 
 
