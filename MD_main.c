@@ -25,10 +25,11 @@ int main()
 	double energy;
 	double pe;
 	double ke;
+     	double random_value;
 
 	/* Initiation of variables */
-	lattice_param = 1; //Should be in metal units
-	timestep = 1;
+	lattice_param = 4.05; // Units: [Å]
+	timestep = 0.1;
 	nbr_of_timesteps = 1000;
 	nbr_of_atoms = 256;
 	Nx = 4, Ny = 4, Nz = 4;
@@ -40,8 +41,12 @@ int main()
 	init_fcc(positions, nbr_of_atoms, lattice_param);
 
 	// Introduction of displacements, about 5 % of the lattice spacing
+     	srand(time(NULL)); // Should only be called once
+     	random_value = (double) rand() / (double) RAND_MAX;
 
 	// Set initial velocities to 0 
+
+	// Use the Verlet algorithm
 
 	// Save the time evolution of the pe, ke and total energy
 	
