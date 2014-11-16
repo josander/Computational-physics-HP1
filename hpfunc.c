@@ -8,6 +8,7 @@ By Jossan och Svensson
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+#include "alpotential.h"
 #define PI 3.141592653589
 #define K_B 0.000086173324
 
@@ -77,10 +78,10 @@ void rescale_T(double timestep, double tau_T, double T_eq, double T, double v[][
 }
 
 // Calculates the preassure
-double get_P(double q[][3], double cell_length,int N, double T)
+double get_P(double q[][3], double cell_length, int N, double T)
 {
 	double virial, P;	
-	virial = get_virial_AL(double q, double cell_length, int N);
+	virial = get_virial_AL(q, cell_length, N);
 	
 	P = (N*K_B*T + virial)/pow(cell_length,3);
 

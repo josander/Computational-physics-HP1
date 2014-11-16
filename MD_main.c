@@ -34,6 +34,7 @@ int main()
 	double temp_eq;
 	double press;
 	double press_eq;
+	double kappa_P;
 
 
 	// Initiation of variables 
@@ -44,10 +45,10 @@ int main()
 	Nx = 4, Ny = 4, Nz = 4;
 	m = 0.00279636665; // Metal units [ev/Å]
 	temp_eq = 500 + 273.15; // Degree Celsius
-	press_eq = 1; // Atm
+	press_eq = 6.324209 * pow(10, -7); // 1 Atm in eV/Å^3
 	tau_T = timestep*100;
-	tau_P = 1;
-	kappa_P = 1;
+	tau_P = timestep*100;
+	kappa_P = 3.85 * pow(10, 9); // Liquid Aluminum Units: Å^3/eV
 
 	// Declaration of matrixes and arrays 
 	double q[4*Nx*Ny*Nz][3], v[nbr_of_atoms][3], a[nbr_of_atoms][3];
