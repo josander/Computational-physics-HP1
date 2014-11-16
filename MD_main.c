@@ -39,16 +39,16 @@ int main()
 
 	// Initiation of variables 
 	lattice_param = 4.05; // Units: [Å]
-	timestep = 0.001; // [ps]
-	nbr_of_timesteps = 5000;
+	timestep = 0.01; // [ps]
+	nbr_of_timesteps = 15000;
 	nbr_of_atoms = 256;
 	Nx = 4, Ny = 4, Nz = 4;
 	m = 0.00279636665; // Metal units [ev/Å]
 	temp_eq = 500 + 273.15; // Degree Celsius
 	press_eq = 6.324209 * pow(10, -7); // 1 Atm in eV/Å^3
 	tau_T = timestep*100;
-	tau_P = timestep*100;
-	kappa_P = 3.85 * pow(10, 9); // Liquid Aluminum Units: Å^3/eV
+	tau_P = timestep*2000;
+	kappa_P = 2.21901454; //3.85 * pow(10, 9); // Liquid Aluminum Units: Å^3/eV
 
 	// Declaration of matrixes and arrays 
 	double q[4*Nx*Ny*Nz][3], v[nbr_of_atoms][3], a[nbr_of_atoms][3];
@@ -95,7 +95,7 @@ int main()
 	e_file = fopen("energy.data","w");
 
 	// Save the initial energies in the file
-	fprintf(e_file,"%.5f \t %e \t %e \t %e \t %F \t %F \n", 0.0, energy, pe, ke, temp, press);
+	fprintf(e_file,"%.5f \t %e \t %e \t %e \t %F \t %e \n", 0.0, energy, pe, ke, temp, press);
 
 	// Time evolution according to the velocity Verlet algorithm
 	for (i = 1; i < nbr_of_timesteps + 1; i++){
@@ -158,7 +158,7 @@ int main()
 		}
 	
 		// Print the average energy data to output file
-		fprintf(e_file,"%.5f \t %e \t %e \t %e \t %F \t %F \n", i*timestep, energy, pe, ke, temp, press);
+		fprintf(e_file,"%.5f \t %e \t %e \t %e \t %F \t %e \n", i*timestep, energy, pe, ke, temp, press);
 	}
 
 	// Close the energy output file 
