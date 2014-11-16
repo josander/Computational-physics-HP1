@@ -14,6 +14,8 @@
 #define PI 3.141592653589
 #define K_B 0.000086173324
 
+/* OBS: Kolla om vi får tillbaka väntevärdet av virialen eller ej! */
+
 
 // Main program 
 int main()
