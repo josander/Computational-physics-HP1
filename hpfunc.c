@@ -76,5 +76,30 @@ void rescale_T(double timestep, double tau_T, double T_eq, double T, double v[][
 	}
 }
 
-
+// Calculates the preassure
+double get_P(double q[][3], double cell_length,int N, double T)
+{
+	double virial, P;	
+	virial = get_virial_AL(double q, double cell_length, int N);
 	
+	P = (N*K_B*T + virial)/pow(cell_length,3);
+
+	return P;
+
+}
+
+void rescale_P(double timestep, double tau_P, double P_eq, double P, double q[][3], int N, double kappa_T)
+{
+	double alphaP;
+	int i, j;
+
+	alphaP = 1 - timestep*kappa_T*(P_eq - P)/(tau_P);
+
+	for(i = 0; i < N; i++){
+		for(j = 0; j < 3; j++){
+			q[i][j] = pow(alphaP, 1/3) * q[i][j];
+		}
+	}
+
+
+}	
