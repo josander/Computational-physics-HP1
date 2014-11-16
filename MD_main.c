@@ -29,9 +29,11 @@ int main()
 	int i, j, n;
 	double m;
 	double energy, pe, ke;
-	double tau_T, tau_P, T, T_eq;
+	double tau_T, tau_P;
 	double temp;
 	double temp_eq;
+	double press;
+	double press_eq;
 
 
 	// Initiation of variables 
@@ -42,7 +44,10 @@ int main()
 	Nx = 4, Ny = 4, Nz = 4;
 	m = 0.00279636665; // Metal units [ev/Å]
 	temp_eq = 500 + 273.15; // Degree Celsius
+	press_eq = 1; // Atm
 	tau_T = timestep*100;
+	tau_P = 1;
+	kappa_P = 1;
 
 	// Declaration of matrixes and arrays 
 	double q[4*Nx*Ny*Nz][3], v[nbr_of_atoms][3], a[nbr_of_atoms][3];
@@ -81,12 +86,15 @@ int main()
 	// Calculate initial temperature
 	temp = get_T(ke, nbr_of_atoms);
 
+	// Calculate initial pressure
+	press = get_P(q, Nx*lattice_param, nbr_of_atoms, temp);
+
 	// Make a file to save the energies in
 	FILE *e_file;
 	e_file = fopen("energy.data","w");
 
 	// Save the initial energies in the file
-	fprintf(e_file,"%.5f \t %e \t %e \t %e \t %F \n", 0.0, energy, pe, ke, temp);
+	fprintf(e_file,"%.5f \t %e \t %e \t %e \t %F \t %F \n", 0.0, energy, pe, ke, temp, press);
 
 	// Time evolution according to the velocity Verlet algorithm
 	for (i = 1; i < nbr_of_timesteps + 1; i++){
@@ -128,8 +136,14 @@ int main()
 		// Calculate the temperature
 		temp = get_T(ke, nbr_of_atoms);
 
-		// Scale velocity to the right temperature
+		// Scale velocity of the atoms to obtain the right temperature
 		rescale_T(timestep, tau_T, temp_eq, temp, v, nbr_of_atoms);
+
+		// Calculate the pressure
+		press = get_P(q, Nx*lattice_param, nbr_of_atoms, temp);
+
+		// Scale position of the atoms to obtain the right pressure
+		rescale_P(timestep, tau_P, press_eq, press, q, nbr_of_atoms, kappa_P);
 
 		// Calcutaion of the pe, ke and total energy
 		pe = get_energy_AL(q, Nx*lattice_param, nbr_of_atoms);
@@ -143,7 +157,7 @@ int main()
 		}
 	
 		// Print the average energy data to output file
-		fprintf(e_file,"%.5f \t %e \t %e \t %e \t %F \n", i*timestep, energy, pe, ke, temp);
+		fprintf(e_file,"%.5f \t %e \t %e \t %e \t %F \t %F \n", i*timestep, energy, pe, ke, temp, press);
 	}
 
 	// Close the energy output file 
