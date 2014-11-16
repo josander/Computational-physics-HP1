@@ -29,11 +29,12 @@ int main()
 	int i, j, n;
 	double m;
 	double energy, pe, ke;
-	double tau_T, tau_P; 
+	double tau_T, tau_P, T, T_eq; 
+
 
 	// Initiation of variables 
 	lattice_param = 4.05; // Units: [Å]
-	timestep = 0.001; // ps
+	timestep = 0.001; // [ps]
 	nbr_of_timesteps = 10000;
 	nbr_of_atoms = 256;
 	Nx = 4, Ny = 4, Nz = 4;
