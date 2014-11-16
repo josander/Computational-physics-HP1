@@ -40,7 +40,7 @@ int main()
 	// Initiation of variables 
 	lattice_param = 4.05; // Units: [Å]
 	timestep = 0.01; // [ps]
-	nbr_of_timesteps = 15000;
+	nbr_of_timesteps = 5000;
 	nbr_of_atoms = 256;
 	Nx = 4, Ny = 4, Nz = 4;
 	m = 0.00279636665; // Metal units [ev/Å]
@@ -144,7 +144,7 @@ int main()
 		press = get_P(q, Nx*lattice_param, nbr_of_atoms, temp);
 
 		// Scale position of the atoms to obtain the right pressure
-		rescale_P(timestep, tau_P, press_eq, press, q, nbr_of_atoms, kappa_P);
+		lattice_param = rescale_P(timestep, tau_P, press_eq, press, q, nbr_of_atoms, kappa_P, lattice_param);
 
 		// Calcutaion of the pe, ke and total energy
 		pe = get_energy_AL(q, Nx*lattice_param, nbr_of_atoms);

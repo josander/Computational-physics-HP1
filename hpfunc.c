@@ -88,19 +88,20 @@ double get_P(double q[][3], double cell_length, int N, double T)
 	return P;
 
 }
-
-void rescale_P(double timestep, double tau_P, double P_eq, double P, double q[][3], int N, double kappa_T)
+// Rescales P and lattice_param
+double rescale_P(double timestep, double tau_P, double P_eq, double P, double q[][3], int N, double kappa_T, double lattice_param)
 {
 	double alphaP;
 	int i, j;
 
-	alphaP = 1 - timestep*kappa_T*(P_eq - P)/(tau_P);
-
+	alphaP = pow(1 - timestep*kappa_T*(P_eq - P)/(tau_P), 1/3);	
+	lattice_param =  alphaP*lattice_param;
 	for(i = 0; i < N; i++){
 		for(j = 0; j < 3; j++){
-			q[i][j] = pow(alphaP, 1/3) * q[i][j];
+			q[i][j] = alphaP * q[i][j];
 		}
 	}
-
+	return lattice_param;
+	
 
 }	
