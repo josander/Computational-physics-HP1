@@ -117,7 +117,7 @@ int main()
 		ke = get_ke(v, nbr_of_atoms, m);
 		energy = sqrt(pe*pe) + sqrt(ke*ke);
 
-		// Print every 1000 timestep
+		// Print every 1000 timestep in the terminal
 		if(i%1000 == 0){
 			printf("%i av %i steps \n", i, nbr_of_timesteps);
 		}
