@@ -31,6 +31,7 @@ MD
 
 # Data files
 *.data
+*.eps
 
 
 # OS generated files #
