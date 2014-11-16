@@ -29,16 +29,20 @@ int main()
 	int i, j, n;
 	double m;
 	double energy, pe, ke;
-	double tau_T, tau_P, T, T_eq; 
+	double tau_T, tau_P, T, T_eq;
+	double temp;
+	double temp_eq;
 
 
 	// Initiation of variables 
 	lattice_param = 4.05; // Units: [Å]
 	timestep = 0.001; // [ps]
-	nbr_of_timesteps = 10000;
+	nbr_of_timesteps = 5000;
 	nbr_of_atoms = 256;
 	Nx = 4, Ny = 4, Nz = 4;
 	m = 0.00279636665; // Metal units [ev/Å]
+	temp_eq = 500 + 273.15; // Degree Celsius
+	tau_T = timestep*100;
 
 	// Declaration of matrixes and arrays 
 	double q[4*Nx*Ny*Nz][3], v[nbr_of_atoms][3], a[nbr_of_atoms][3];
@@ -74,12 +78,15 @@ int main()
 	ke = get_ke(v, nbr_of_atoms, m);
 	energy = sqrt(pe*pe) + sqrt(ke*ke);
 
+	// Calculate initial temperature
+	temp = get_T(ke, nbr_of_atoms);
+
 	// Make a file to save the energies in
 	FILE *e_file;
 	e_file = fopen("energy.data","w");
 
 	// Save the initial energies in the file
-	fprintf(e_file,"%.5f \t %e \t %e \t %e \n", 0.0, energy, pe, ke);
+	fprintf(e_file,"%.5f \t %e \t %e \t %e \t %F \n", 0.0, energy, pe, ke, temp);
 
 	// Time evolution according to the velocity Verlet algorithm
 	for (i = 1; i < nbr_of_timesteps + 1; i++){
@@ -115,6 +122,15 @@ int main()
 			}
 		} 
 
+		// Calculate ke to calculate rescale
+		ke = get_ke(v, nbr_of_atoms, m);
+
+		// Calculate the temperature
+		temp = get_T(ke, nbr_of_atoms);
+
+		// Scale velocity to the right temperature
+		rescale_T(timestep, tau_T, temp_eq, temp, v, nbr_of_atoms);
+
 		// Calcutaion of the pe, ke and total energy
 		pe = get_energy_AL(q, Nx*lattice_param, nbr_of_atoms);
 		pe = sqrt(pe*pe);
@@ -123,11 +139,11 @@ int main()
 
 		// Print every 1000 timestep in the terminal
 		if(i%1000 == 0){
-			printf("%i av %i steps \n", i, nbr_of_timesteps);
+			printf("%i av %i steg \n", i, nbr_of_timesteps);
 		}
 	
 		// Print the average energy data to output file
-		fprintf(e_file,"%.5f \t %e \t %e \t %e \n", i*timestep, energy, pe, ke);
+		fprintf(e_file,"%.5f \t %e \t %e \t %e \t %F \n", i*timestep, energy, pe, ke, temp);
 	}
 
 	// Close the energy output file 

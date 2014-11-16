@@ -39,7 +39,7 @@ void rand_disp(double position[][3] ,double lattice_param ,int N)
 		  
 }
 
-// Calculates kenetic energy
+// Calculates kinetic energy
 double get_ke(double v[][3], int N, double m)
 {
 	int i, j;
@@ -52,6 +52,7 @@ double get_ke(double v[][3], int N, double m)
 	}
 	return ke;
 }
+
 // Calculates temperature
 double get_T(double ke, int N)
 {
@@ -60,12 +61,19 @@ double get_T(double ke, int N)
 	return T;	
 }
 
-// Calculates alfa_T, the correction parameter for v_i
-double get_alfaT(double timestep, double tau_T, double T_eq, double T)
+// Calculates alpha_T, the correction parameter for v_i
+void rescale_T(double timestep, double tau_T, double T_eq, double T, double v[][3], int N)
 {
-	double alfaT;
-	alfaT = 1 + timestep*(T_eq - T)/(tau_T*T);
-	return alfaT;
+	double alphaT;
+	int i, j;
+
+	alphaT = 1 + timestep*(T_eq - T)/(tau_T*T);
+
+	for(i = 0; i < N; i++){
+		for(j = 0; j < 3; j++){
+			v[i][j] = sqrt(alphaT) * v[i][j];
+		}
+	}
 }
 
 
