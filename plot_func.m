@@ -13,7 +13,7 @@ plot(data(:,1),data(:,2:end));
 
 
 % labels
-xlabel('Energy');
-ylabel('Time');
+ylabel('Energy');
+xlabel('Time');
 print(gcf,'-depsc2','samp2.eps')
 
