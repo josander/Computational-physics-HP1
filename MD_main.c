@@ -33,7 +33,7 @@ int main()
 	nbr_of_timesteps = 1000;
 	nbr_of_atoms = 256;
 	Nx = 4, Ny = 4, Nz = 4;
-	m = 1; // Units: [u/...]
+	m = 0.00279636665; // metal units
 
 	// Declaration of matrixes and arrays 
 	double q[4*Nx*Ny*Nz][3];
