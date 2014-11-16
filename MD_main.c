@@ -28,16 +28,17 @@ int main()
 	double m;
 	double energy, pe, ke;
 	double K_B;
-	double tau_T, tau_P; 
+	double tau_T, tau_P, T, T_eq; 
 
 	// Initiation of variables 
 	lattice_param = 4.05; // Units: [Å]
-	timestep = 0.001; // ps
+	timestep = 0.001; // [ps]
 	nbr_of_timesteps = 10000;
 	nbr_of_atoms = 256;
 	Nx = 4, Ny = 4, Nz = 4;
 	m = 0.00279636665; // Metal units [ev/Å]
-	K_B = 0.000086173324 // eV/K 
+	K_B = 0.000086173324 // [eV/K] 
+	T_eq = 300; // [K]
 
 	// Declaration of matrixes and arrays 
 	double q[4*Nx*Ny*Nz][3], v[nbr_of_atoms][3], a[nbr_of_atoms][3];
