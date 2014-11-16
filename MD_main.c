@@ -30,8 +30,8 @@ int main()
 
 	// Initiation of variables 
 	lattice_param = 4.05; // Units: [Å]
-	timestep = 0.1; // ps
-	nbr_of_timesteps = 1000;
+	timestep = 0.001; // ps
+	nbr_of_timesteps = 10000;
 	nbr_of_atoms = 256;
 	Nx = 4, Ny = 4, Nz = 4;
 	m = 0.00279636665; // Metal units [ev/Å]
@@ -66,10 +66,9 @@ int main()
 
 	// Calculate of initial energies
 	pe = get_energy_AL(q, Nx*lattice_param, nbr_of_atoms);
+	pe = sqrt(pe*pe);
 	ke = get_ke(v, nbr_of_atoms, m);
 	energy = sqrt(pe*pe) + sqrt(ke*ke);
-
-	printf("E: %F \t Pe: %F \n", energy, pe);
 
 	// Make a file to save the energies in
 	FILE *e_file;
@@ -114,8 +113,14 @@ int main()
 
 		// Calcutaion of the pe, ke and total energy
 		pe = get_energy_AL(q, Nx*lattice_param, nbr_of_atoms);
+		pe = sqrt(pe*pe);
 		ke = get_ke(v, nbr_of_atoms, m);
 		energy = sqrt(pe*pe) + sqrt(ke*ke);
+
+		// Print every 1000 timestep
+		if(i%1000 == 0){
+			printf("%i av %i steps \n", i, nbr_of_timesteps);
+		}
 	
 		// Print the average energy data to output file
 		fprintf(e_file,"%.5f \t %e \t %e \t %e \n", i*timestep, energy, pe, ke);
