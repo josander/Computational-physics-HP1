@@ -94,7 +94,7 @@ double rescale_P(double timestep, double tau_P, double P_eq, double P, double q[
 	double alphaP;
 	int i, j;
 
-	alphaP = pow(1 - timestep*kappa_T*(P_eq - P)/(tau_P), 1/3);	
+	alphaP = pow(1 - (timestep*kappa_T*(P_eq - P)/tau_P), 1/3);	
 	lattice_param =  alphaP*lattice_param;
 	for(i = 0; i < N; i++){
 		for(j = 0; j < 3; j++){
@@ -102,6 +102,4 @@ double rescale_P(double timestep, double tau_P, double P_eq, double P, double q[
 		}
 	}
 	return lattice_param;
-	
-
 }	
