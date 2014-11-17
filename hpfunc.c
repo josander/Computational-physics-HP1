@@ -109,26 +109,38 @@ double rescale_P(double timestep, double tau_P, double P_eq, double P, double q[
 
 
 // Function that calculates the correlation function
-void get_corr_func(double A[], double corr_func[], int nbr_of_timesteps)
+void get_corr_func(double A[], double *corr_func, int nbr_of_timesteps)
 {
 	int i, k;
-	double mean, mean2;
+	double mean = 0;
+	double mean2 = 0;
+	double norm_fact = 0;
+	int start = 1000;
 
 	// Calculate all the expected values <A> and <A^2>
-	for(i = 0; i < nbr_of_timesteps; i++){
+	for(i = start; i < nbr_of_timesteps; i++){
 		mean += A[i]/nbr_of_timesteps;
 		mean2 +=  A[i]*A[i]/nbr_of_timesteps;
 	}
+
+	for(i = start; i < nbr_of_timesteps; i++){
+		norm_fact = (A[i] - mean)*(A[i] - mean);
+	}
+
+	printf("Mean: %F \t Mean2: %F \n", mean, mean2);
 	
 
 	// Calculate the correlation function
 	for(k = 0; k < nbr_of_timesteps; k++){
-		for(i = 0; i < nbr_of_timesteps; i++){
-			if((i+k) >= nbr_of_timesteps){
+		for(i = start+k+1; i < nbr_of_timesteps; i++){
+
+			corr_func[k] += (A[i] - mean)*(A[i-k] - mean)/norm_fact;
+			/*if((i+k) >= nbr_of_timesteps){
 				corr_func[k] = ((A[i]*A[i+k-nbr_of_timesteps])/2 - mean*mean)/(mean2 - mean*mean);
 			}else{
 				corr_func[k] = ((A[i]*A[i+k])/2 - mean*mean)/(mean2 - mean*mean);
-			}
+			}*/
 		}
+		printf("Corr: %e \n", corr_func[k]);
 	}
 }

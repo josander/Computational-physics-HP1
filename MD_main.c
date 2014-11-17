@@ -1,7 +1,5 @@
 /*
  MD_main.c
- 
- Created by AL on 2013-10-31.
  */
 
 #include <stdio.h>
@@ -40,7 +38,7 @@ int main()
 	// Initiation of variables 
 	lattice_param = 4.05; // Units: [Å]
 	timestep = 0.01; // [ps]
-	nbr_of_timesteps = 5000;
+	nbr_of_timesteps = 2000;
 	nbr_of_atoms = 256;
 	Nx = 4, Ny = 4, Nz = 4;
 	m = 0.00279636665; // Metal units [ev/Å]
@@ -58,6 +56,11 @@ int main()
 	double *press = malloc(nbr_of_timesteps * sizeof(double));
 	double *corr_func_T = malloc(nbr_of_timesteps * sizeof(double));
 	double *corr_func_P = malloc(nbr_of_timesteps * sizeof(double));
+
+	// Initiation of corr_func
+	for(i = 0; i <nbr_of_timesteps; i++){
+		corr_func_T[i] = 0.0; 
+	}
 
 	// Initiation of the fcc lattice of Al-atoms 
 	init_fcc(q, Nx, lattice_param);
@@ -169,10 +172,24 @@ int main()
 
 	// Get the correlation functions
 	get_corr_func(temp, corr_func_T, nbr_of_timesteps);
-	get_corr_func(temp, corr_func_P, nbr_of_timesteps);
+	get_corr_func(press, corr_func_P, nbr_of_timesteps);
+
+	// Print the corr-func in the terminal
+	for(i = 10; i < 15; i++){
+		printf("Corr-func for P: %F \n", corr_func_P);
+	}
+
+	// Write corr_func to data file
+	FILE *c_file;
+	c_file = fopen("correlation.data","w");
+
+	for(i = 0; i < nbr_of_timesteps; i++){
+		fprintf(c_file,"%.5f \t %e \n", corr_func_T[i], corr_func_P[i]);
+	}
 
 	// Close the energy output file 
 	fclose(e_file);
+	fclose(c_file);
 
 	// Free allocated memory
 	free(temp); free(press); free(corr_func_T); free(corr_func_P); 
