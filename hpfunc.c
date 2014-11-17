@@ -131,15 +131,15 @@ void get_corr_func(double A[], double *corr_func, int nbr_of_timesteps)
 	
 
 	// Calculate the correlation function
-	for(k = 0; k < nbr_of_timesteps; k++){
-		for(i = start+k+1; i < nbr_of_timesteps; i++){
+	for(k = 0; k < nbr_of_timesteps-start; k++){
+		for(i = start+k; i < nbr_of_timesteps; i++){
 
-			corr_func[k] += (A[i] - mean)*(A[i-k] - mean)/norm_fact;
-			/*if((i+k) >= nbr_of_timesteps){
+			//corr_func[k] += (A[i] - mean)*(A[i-k] - mean)/norm_fact;
+			if((i+k) >= nbr_of_timesteps){
 				corr_func[k] = ((A[i]*A[i+k-nbr_of_timesteps])/2 - mean*mean)/(mean2 - mean*mean);
 			}else{
 				corr_func[k] = ((A[i]*A[i+k])/2 - mean*mean)/(mean2 - mean*mean);
-			}*/
+			}
 		}
 		printf("Corr: %e \n", corr_func[k]);
 	}

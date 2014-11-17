@@ -22,7 +22,7 @@ plot(data(:,1),data(:,end-1));
 ylabel('Temerature');
 xlabel('Time');
 print(gcf,'-depsc2','temperature.eps')
-
+%%
 plot(data(:,1),data(:,end), [0 100],[6.32*10^-7 6.32*10^-7]);
 
 
