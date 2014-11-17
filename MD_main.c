@@ -33,12 +33,14 @@ int main()
 	double temp_eq;
 	double press_eq;
 	double kappa_P;
+	double s_T;
+	double s_P;
 
 
 	// Initiation of variables 
 	lattice_param = 4.05; // Units: [Å]
 	timestep = 0.01; // [ps]
-	nbr_of_timesteps = 2000;
+	nbr_of_timesteps = 10000;
 	nbr_of_atoms = 256;
 	Nx = 4, Ny = 4, Nz = 4;
 	m = 0.00279636665; // Metal units [ev/Å]
@@ -48,6 +50,8 @@ int main()
 	tau_P = timestep*100;
 	kappa_P = 2.21901454; //3.85 * pow(10, 9);/ // Liquid Aluminum Units: Å^3/eV
 	cell_size = lattice_param*Nx;
+	s_T = 0; 
+	s_P = 0;
 
 	// Declaration of matrixes and arrays 
 	double q[4*Nx*Ny*Nz][3], v[nbr_of_atoms][3], a[nbr_of_atoms][3];
@@ -59,7 +63,8 @@ int main()
 
 	// Initiation of corr_func
 	for(i = 0; i <nbr_of_timesteps; i++){
-		corr_func_T[i] = 0.0; 
+		corr_func_T[i] = 0.0;
+		corr_func_P[i] = 0.0;
 	}
 
 	// Initiation of the fcc lattice of Al-atoms 
@@ -174,11 +179,6 @@ int main()
 	get_corr_func(temp, corr_func_T, nbr_of_timesteps);
 	get_corr_func(press, corr_func_P, nbr_of_timesteps);
 
-	// Print the corr-func in the terminal
-	for(i = 10; i < 15; i++){
-		printf("Corr-func for P: %F \n", corr_func_P);
-	}
-
 	// Write corr_func to data file
 	FILE *c_file;
 	c_file = fopen("correlation.data","w");
@@ -186,6 +186,19 @@ int main()
 	for(i = 0; i < nbr_of_timesteps; i++){
 		fprintf(c_file,"%.5f \t %e \n", corr_func_T[i], corr_func_P[i]);
 	}
+
+	// Calculate the statistical inefficiency
+	for(i = 0; i < 500; i++){
+		s_T += corr_func_T[i];
+	}
+	for(i = 0; i < 700; i++){
+	s_P += corr_func_P[i];
+	}
+
+	s_T *= 2;
+	s_P *= 2;
+
+	printf("sT: %F \t sP: %F \n", s_T, s_P);
 
 	// Close the energy output file 
 	fclose(e_file);

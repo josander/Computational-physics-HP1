@@ -23,20 +23,18 @@ ylabel('Temerature');
 xlabel('Time');
 print(gcf,'-depsc2','temperature.eps')
 %%
+
 plot(data(:,1),data(:,end), [0 100],[6.32*10^-7 6.32*10^-7]);
-
-
 
 ylabel('Pressure');
 xlabel('Time');
 print(gcf,'-depsc2','pressure.eps')
 
-%%
+%% Plot the correlation data
 
 corrData = importdata('correlation.data');
 set(gcf,'renderer','painters','PaperPosition',[0 0 12 6]);
 
-%%
 subplot(2,1,1);
 plot(corrData(:,1));
 
