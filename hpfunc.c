@@ -105,4 +105,30 @@ double rescale_P(double timestep, double tau_P, double P_eq, double P, double q[
 		}
 	}
 	return lattice_param;
-}	
+}
+
+
+// Function that calculates the correlation function
+void get_corr_func(double A[], double corr_func[], int nbr_of_timesteps)
+{
+	int i, k;
+	double mean;
+
+	// Calculate all the expected values <A> and <A^2>
+	for(i = 0; i < nbr_of_timesteps; i++){
+		mean += A[i]/nbr_of_timesteps;
+		mean2 +=  A[i]*A[i]/nbr_of_timesteps;
+	}
+	
+
+	// Calculate the correlation function
+	for(k = 0; k < nbr_of_timesteps; k++){
+		for(i = 0; i < nbr_of_timesteps; i++){
+			if((i+k) >= nbr_of_timesteps){
+				corr_func[k] = ((A[i]*A[i+k-nbr_of_timesteps])/2 - mean*mean)/(mean2 - mean*mean);
+			}else{
+				corr_func[k] = ((A[i]*A[i+k])/2 - mean*mean)/(mean2 - mean*mean);
+			}
+		}
+	}
+}
