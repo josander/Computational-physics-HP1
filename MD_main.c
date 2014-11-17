@@ -56,6 +56,8 @@ int main()
 	double f[4*Nx*Ny*Nz][3];
 	double *temp = malloc(nbr_of_timesteps * sizeof(double));
 	double *press = malloc(nbr_of_timesteps * sizeof(double));
+	double *corr_func_T = malloc(nbr_of_timesteps * sizeof(double));
+	double *corr_func_P = malloc(nbr_of_timesteps * sizeof(double));
 
 	// Initiation of the fcc lattice of Al-atoms 
 	init_fcc(q, Nx, lattice_param);
@@ -98,7 +100,7 @@ int main()
 	e_file = fopen("energy.data","w");
 
 	// Save the initial energies in the file
-	fprintf(e_file,"%.5f \t %e \t %e \t %e \t %F \t %e \n", 0.0, energy, pe, ke, temp, press);
+	fprintf(e_file,"%.5f \t %e \t %e \t %e \t %F \t %e \n", 0.0, energy, pe, ke, temp[0], press[0]);
 
 	// Time evolution according to the velocity Verlet algorithm
 	for (i = 1; i < nbr_of_timesteps + 1; i++){
@@ -162,11 +164,19 @@ int main()
 		}
 	
 		// Print the average energy data to output file
-		fprintf(e_file,"%.5f \t %e \t %e \t %e \t %F \t %e \n", i*timestep, energy, pe, ke, temp, press);
+		fprintf(e_file,"%.5f \t %e \t %e \t %e \t %F \t %e \n", i*timestep, energy, pe, ke, temp[i], press[i]);
 	}
+
+	// Get the correlation functions
+	get_corr_func(temp, corr_func_T, nbr_of_timesteps);
+	get_corr_func(temp, corr_func_P, nbr_of_timesteps);
 
 	// Close the energy output file 
 	fclose(e_file);
+
+	// Free allocated memory
+	free(temp); free(press); free(corr_func_T); free(corr_func_P); 
+	temp = NULL; press = NULL; corr_func_T = NULL; corr_func_P = NULL;
 
 	return 0;
 }
