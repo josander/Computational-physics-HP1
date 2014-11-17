@@ -32,9 +32,7 @@ int main()
 	double m;
 	double energy, pe, ke;
 	double tau_T, tau_P;
-	double temp;
 	double temp_eq;
-	double press;
 	double press_eq;
 	double kappa_P;
 
@@ -52,9 +50,12 @@ int main()
 	tau_P = timestep*100;
 	kappa_P = 2.21901454; //3.85 * pow(10, 9);/ // Liquid Aluminum Units: Å^3/eV
 	cell_size = lattice_param*Nx;
+
 	// Declaration of matrixes and arrays 
 	double q[4*Nx*Ny*Nz][3], v[nbr_of_atoms][3], a[nbr_of_atoms][3];
 	double f[4*Nx*Ny*Nz][3];
+	double *temp = malloc(nbr_of_timesteps * sizeof(double));
+	double *press = malloc(nbr_of_timesteps * sizeof(double));
 
 	// Initiation of the fcc lattice of Al-atoms 
 	init_fcc(q, Nx, lattice_param);
@@ -87,10 +88,10 @@ int main()
 	energy = sqrt(pe*pe) + sqrt(ke*ke);
 
 	// Calculate initial temperature
-	temp = get_T(ke, nbr_of_atoms);
+	temp[0] = get_T(ke, nbr_of_atoms);
 
 	// Calculate initial pressure
-	press = get_P(q, cell_size, nbr_of_atoms, temp);
+	press[0] = get_P(q, cell_size, nbr_of_atoms, temp[0]);
 
 	// Make a file to save the energies in
 	FILE *e_file;
@@ -137,17 +138,17 @@ int main()
 		ke = get_ke(v, nbr_of_atoms, m);
 
 		// Calculate the temperature
-		temp = get_T(ke, nbr_of_atoms);
+		temp[i] = get_T(ke, nbr_of_atoms);
 
 		// Scale velocity of the atoms to obtain the right temperature
-		rescale_T(timestep, tau_T, temp_eq, temp, v, nbr_of_atoms);
+		rescale_T(timestep, tau_T, temp_eq, temp[i], v, nbr_of_atoms);
 
 		// Calculate the pressure
 		cell_size = lattice_param * Nx;
-		press = get_P(q, cell_size, nbr_of_atoms, temp);
+		press[i] = get_P(q, cell_size, nbr_of_atoms, temp[i]);
 	
 		// Scale position of the atoms to obtain the right pressure
-		lattice_param = rescale_P(timestep, tau_P, press_eq, press, q, nbr_of_atoms, kappa_P, lattice_param);
+		lattice_param = rescale_P(timestep, tau_P, press_eq, press[i], q, nbr_of_atoms, kappa_P, lattice_param);
 
 		// Calcutaion of the pe, ke and total energy
 		pe = get_energy_AL(q, cell_size, nbr_of_atoms);
