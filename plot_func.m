@@ -1,4 +1,4 @@
-% plot
+% Plot energy, temperature and pressure
 
 % load the data file
 clf
@@ -7,17 +7,16 @@ set(gcf,'renderer','painters','PaperPosition',[0 0 12 6]);
 
 %%
 
-
-%plot
-
+figure(1);
 plot(data(:,1),data(:,2:end-2));
-
 
 % labels
 ylabel('Energy');
 xlabel('Time');
 print(gcf,'-depsc2','energy.eps')
 %% 
+
+figure(2);
 plot(data(:,1),data(:,end-1));
 
 ylabel('Temerature');
@@ -25,6 +24,8 @@ xlabel('Time');
 print(gcf,'-depsc2','temperature.eps')
 
 %% 
+
+figure(3);
 plot(data(:,1),data(:,end));
 
 ylabel('Pressure');
