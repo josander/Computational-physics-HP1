@@ -112,7 +112,7 @@ double rescale_P(double timestep, double tau_P, double P_eq, double P, double q[
 void get_corr_func(double A[], double corr_func[], int nbr_of_timesteps)
 {
 	int i, k;
-	double mean;
+	double mean, mean2;
 
 	// Calculate all the expected values <A> and <A^2>
 	for(i = 0; i < nbr_of_timesteps; i++){
