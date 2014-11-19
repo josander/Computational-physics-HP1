@@ -58,5 +58,8 @@ set(gcf,'renderer','painters','PaperPosition',[0 0 12 6]);
 Size = size(corrData);
 
 plot3(dispData(:,1), dispData(:,2), dispData(:,3));
+ylabel('Y');
+xlabel('X');
+zlabel('Z');
 
-print(gcf,'-depsc2','diffusionSolid.eps')
+print(gcf,'-depsc2','diffusionLiquid.eps')

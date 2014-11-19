@@ -195,10 +195,10 @@ int main()
 	}
 
 	// Calculate the statistical inefficiency
-	for(i = 0; i < 4; i++){
+	for(i = 0; i < 5; i++){
 		s_T += corr_func_T[i];
 	}
-	for(i = 0; i < 4; i++){
+	for(i = 0; i < 5; i++){
 		s_P += corr_func_P[i];
 	}
 
