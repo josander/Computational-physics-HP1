@@ -114,23 +114,23 @@ void get_corr_func(double A[], double *corr_func, int nbr_of_timesteps, int star
 	int i, k;
 	double mean = 0;
 	double mean2 = 0;
-	double first_term[nbr_of_timesteps - start];
+	
 	int stop = 1000;
-
+	double first_term[stop];
 	for(k = 0; k < stop ; k++){
 		first_term[k] = 0.0;
 	}
 
 	// Calculate all the expected values of A
-	for(i = start; i < nbr_of_timesteps; i++){
-		mean += A[i]/(nbr_of_timesteps - start);
-		mean2 += ((A[i]*A[i])/(nbr_of_timesteps - start)); 
+	for(i = start; i < nbr_of_timesteps - stop; i++){
+		mean += A[i]/(nbr_of_timesteps - start - stop);
+		mean2 += ((A[i]*A[i])/(nbr_of_timesteps - start - stop)); 
 	}
 
 	// Calculate the first term
 	for(i = start; i < nbr_of_timesteps - stop ; i++){
 		for(k = 0; k < stop; k++){
-			first_term[k] += (A[i]*A[i+k])/(nbr_of_timesteps - start - k);
+			first_term[k] += (A[i]*A[i+k])/(stop);
 		}
 	}
 
