@@ -112,9 +112,9 @@ double rescale_P(double timestep, double tau_P, double P_eq, double P, double q[
 void get_corr_func(double A[], double *corr_func, int nbr_of_timesteps, int start)
 {
 	int i, k;
-	double mean = 0;
-	double mean2 = 0;
-	double norm_fact = 0;
+	double mean = 0.0;
+	double mean2 = 0.0;
+	double norm_fact = 0.0;
 	double first_term[nbr_of_timesteps - start];
 
 	for(k = 0; k < (nbr_of_timesteps - start); k++){
