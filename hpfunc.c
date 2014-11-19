@@ -95,7 +95,7 @@ double rescale_P(double timestep, double tau_P, double P_eq, double P, double q[
 	int i, j;
 
 
-	alphaP = pow((1.0 - timestep*kappa_T*(P_eq - P)/tau_P), 0.33333);	
+	alphaP = pow((1.0 - timestep*kappa_T*(P_eq - P)/tau_P), 0.333333);	
 
 	lattice_param =  alphaP*lattice_param;
 	//printf("%F \n", alphaP);
@@ -116,7 +116,32 @@ void get_corr_func(double A[], double *corr_func, int nbr_of_timesteps, int star
 	double mean2 = 0.0;
 	double norm_fact = 0.0;
 	double first_term[nbr_of_timesteps - start];
+	int stop = 1000;
 
+	for(k = 0; k < stop ; k++){
+		first_term[k] = 0.0;
+	}
+
+	// Calculate all the expected values of A
+	for(i = start; i < nbr_of_timesteps; i++){
+		mean += A[i]/(nbr_of_timesteps - start);
+		mean2 += ((A[i]*A[i])/(nbr_of_timesteps - start)); 
+	}
+
+	// Calculate the first term
+	for(i = start; i < nbr_of_timesteps - stop ; i++){
+		for(k = 0; k < stop; k++){
+			first_term[k] += (A[i]*A[i+k])/(nbr_of_timesteps - start - k);
+		}
+	}
+
+	// Calculate the correlation function
+	for(k = 0; k < stop; k++){
+		corr_func[k] = ((first_term[k] - (mean*mean))/(mean2 - (mean*mean)));
+	}
+
+
+/*
 	for(k = 0; k < (nbr_of_timesteps - start); k++){
 		first_term[k] = 0.0;
 	}
@@ -138,4 +163,6 @@ void get_corr_func(double A[], double *corr_func, int nbr_of_timesteps, int star
 	for(k = 0; k < (nbr_of_timesteps - start); k++){
 		corr_func[k] = ((first_term[k] - (mean*mean))/(mean2 - (mean*mean)));
 	}
+*/
+
 }
