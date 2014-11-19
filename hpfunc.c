@@ -11,6 +11,7 @@ By Jossan och Svensson
 #include "alpotential.h"
 #define PI 3.141592653589
 #define K_B 0.000086173324
+#define nbr_of_atoms 256
 
 // Randomly displaces the atoms in position[][3] by 5% of the lattice parameter
 void rand_disp(double position[][3] ,double lattice_param ,int N)
@@ -117,7 +118,7 @@ void get_corr_func(double A[], double *corr_func, int nbr_of_timesteps, int star
 	int stop = 1000;
 	double first_term[nbr_of_timesteps-start];
 
-
+	// Initiate the array first_term
 	for(k = 0; k < (nbr_of_timesteps - start); k++){
 		first_term[k] = 0.0;
 	}
@@ -143,15 +144,16 @@ void get_corr_func(double A[], double *corr_func, int nbr_of_timesteps, int star
 }
 
 // Function that calculates the mean-squared-displacement
-void get_MSD(double *MSD, double q[][3], double s, int nbr_of_timesteps, int nbr_of_atoms)
+void get_MSD(double MSD[], double *q[nbr_of_atoms][3], int nbr_of_timesteps)
 {
 	int i, j, k;
 	double diffusion_coeff = 0;
 
+	// Calculate the displacement of every particle s timesteps ahead
 	for(i = 0; i < nbr_of_timesteps; i++){
-		for(j = 1; j < nbr_of_atoms; j++){
-			for(k = 0; k < 3; k++){
-				MSD[i][k] += (q[i+s][k] - q[i][k])/nbr_of_atoms;
+		for(j = 0; j < nbr_of_timesteps - i; j++){
+			for(k = 0; k < nbr_of_atoms; k++){
+				MSD[j] += sqrt((q[i+j][k][0] - q[i][k][0])*(q[i+j][k][0] - q[i][k][0]) + (q[i+j][k][1] - q[i][k][1])*(q[i+j][k][1] - q[i][k][1]) + (q[i+j][k][2] - q[i][k][2])*(q[i+j][k][2] - q[i][k][2]))/nbr_of_atoms;
 			}
 		}
 	}

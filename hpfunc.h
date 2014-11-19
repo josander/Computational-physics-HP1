@@ -6,6 +6,7 @@ hpfunc.h
 
 #ifndef _hpfunc_h
 #define _hpfunc_h
+#define nbr_of_atoms 256
 
 extern void rand_disp(double[][3],double, int);
 extern double get_ke(double[][3], int, double);
@@ -14,7 +15,7 @@ extern void rescale_T(double, double, double , double, double[][3], int);
 extern double get_P(double[][3], double ,int , double);
 extern double rescale_P(double, double, double, double, double[][3], int , double, double );
 extern void get_corr_func(double[], double *, int, int);
-extern void get_MSD(double *, double[][3], double, int, int);
+extern void get_MSD(double[], double[][nbr_of_atoms][3], int);
 
 
 #endif
