@@ -20,6 +20,7 @@
 *.so.*
 *.dylib
 
+
 # Executables
 *.exe
 *.out
@@ -32,6 +33,7 @@ MD
 # Data files
 *.data
 *.eps
+*.mat
 
 
 # OS generated files #
