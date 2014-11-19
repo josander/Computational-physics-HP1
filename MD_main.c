@@ -40,7 +40,7 @@ int main()
 	// Initiation of variables 
 	lattice_param = 4.05; // Units: [Å]
 	timestep = 0.01; // [ps]
-	nbr_of_timesteps = 10000;
+	nbr_of_timesteps = 5000;
 	nbr_of_atoms = 256;
 	Nx = 4, Ny = 4, Nz = 4;
 	m = 0.00279636665; // Metal units [ev/Å]
@@ -192,7 +192,7 @@ int main()
 		s_T += corr_func_T[i];
 	}
 	for(i = 0; i < 700; i++){
-	s_P += corr_func_P[i];
+		s_P += corr_func_P[i];
 	}
 
 	s_T *= 2;

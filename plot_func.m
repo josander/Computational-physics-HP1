@@ -1,9 +1,10 @@
-% Plot energy, temperature and pressure
+%% Plot energy, temperature and pressure
 
 % load the data file
 clf
 data = importdata('energy.data');
 set(gcf,'renderer','painters','PaperPosition',[0 0 12 6]);
+Size = size(data);
 
 %%
 
@@ -24,19 +25,23 @@ xlabel('Time');
 print(gcf,'-depsc2','temperature.eps')
 %%
 
-plot(data(:,1),data(:,end), [0 100],[6.32*10^-7 6.32*10^-7]);
+plot(data(:,1),data(:,end), [0 Size(2)],[6.32*10^-7 6.32*10^-7]);
 
 ylabel('Pressure');
 xlabel('Time');
 print(gcf,'-depsc2','pressure.eps')
 
 %% Plot the correlation data
+clf
 
 corrData = importdata('correlation.data');
 set(gcf,'renderer','painters','PaperPosition',[0 0 12 6]);
+Size = size(corrData);
 
 subplot(2,1,1);
 plot(corrData(:,1));
+hold on
+plot([0 Size(2)], [exp(-2) exp(-2)]);
 
 subplot(2,1,2);
 plot(corrData(:,2));
