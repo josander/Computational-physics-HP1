@@ -41,7 +41,7 @@ int main()
 	// Initiation of variables 
 	lattice_param = 4.05; // Units: [Å]
 	timestep = 0.01; // [ps]
-	nbr_of_timesteps = 30000;
+	nbr_of_timesteps = 10000;
 	nbr_of_atoms = 256;
 	Nx = 4, Ny = 4, Nz = 4;
 	m = 0.00279636665; // Metal units [ev/Å]
@@ -53,7 +53,7 @@ int main()
 	cell_size = lattice_param*Nx;
 	s_T = 0; 
 	s_P = 0;
-	startCut = 800;
+	startCut = 1000;
 
 	// Declaration of matrixes and arrays 
 	double q[4*Nx*Ny*Nz][3], v[nbr_of_atoms][3], a[nbr_of_atoms][3];
@@ -157,16 +157,20 @@ int main()
 
 		// Calculate the temperature
 		temp[i] = get_T(ke, nbr_of_atoms);
-
-		// Scale velocity of the atoms to obtain the right temperature
-		rescale_T(timestep, tau_T, temp_eq, temp[i], v, nbr_of_atoms);
-
+		if(i < startCut){
+			// Scale velocity of the atoms to obtain the right temperature
+			rescale_T(timestep, tau_T, temp_eq, temp[i], v, nbr_of_atoms);
+		}
+		
 		// Calculate the pressure
 		cell_size = lattice_param * Nx;
 		press[i] = get_P(q, cell_size, nbr_of_atoms, temp[i]);
-	
-		// Scale position of the atoms to obtain the right pressure
-		lattice_param = rescale_P(timestep, tau_P, press_eq, press[i], q, nbr_of_atoms, kappa_P, lattice_param);
+		
+
+		if(i < startCut){
+			// Scale position of the atoms to obtain the right pressure
+			lattice_param = rescale_P(timestep, tau_P, press_eq, press[i], q, nbr_of_atoms, kappa_P, lattice_param);
+		}
 
 		// Calcutaion of the pe, ke and total energy
 		pe = get_energy_AL(q, cell_size, nbr_of_atoms);
@@ -210,8 +214,7 @@ int main()
 	printf("sT: %F \t sP: %F \n", s_T, s_P);
 	
 	// Get the MSD
-	get_MSD(MSD_T, s_T, nbr_of_timesteps, nbr_of_atoms);
-	get_MSD(MSD_P, s_P, nbr_of_timesteps, nbr_of_atoms);
+
 
 	// Close the energy output file 
 	fclose(e_file);

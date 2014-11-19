@@ -12,24 +12,24 @@ figure(1);
 plot(data(:,1),data(:,2:end-2));
 
 % labels
-ylabel('Energy');
-xlabel('Time');
+ylabel('Energy [eV]','interpreter','latex','fontsize',10);
+xlabel('Time [ps]','interpreter','latex','fontsize',10);
 print(gcf,'-depsc2','energy.eps') 
 
 figure(2);
 plot(data(:,1),data(:,end-1));
 meanTemp = mean(data(1500:Size(1),end-1))
 
-ylabel('Temerature');
-xlabel('Time');
+ylabel('Temperature [K]','interpreter','latex','fontsize',10);
+xlabel('Time [ps]','interpreter','latex','fontsize',10);
 print(gcf,'-depsc2','temperature.eps')
 
 figure(3);
 plot(data(:,1),data(:,end));
 meanPress = mean(data(1000:Size(1),end))
 
-ylabel('Pressure');
-xlabel('Time');
+ylabel('Pressure [$eV\AA^3$]','interpreter','latex','fontsize',10);
+xlabel('Time [ps]','interpreter','latex','fontsize',10);
 print(gcf,'-depsc2','pressure.eps')
 
 %% Plot the correlation data
