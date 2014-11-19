@@ -35,12 +35,13 @@ int main()
 	double kappa_P;
 	double s_T;
 	double s_P;
+	int startCut;
 
 
 	// Initiation of variables 
 	lattice_param = 4.05; // Units: [Å]
 	timestep = 0.01; // [ps]
-	nbr_of_timesteps = 5000;
+	nbr_of_timesteps = 2000;
 	nbr_of_atoms = 256;
 	Nx = 4, Ny = 4, Nz = 4;
 	m = 0.00279636665; // Metal units [ev/Å]
@@ -52,14 +53,15 @@ int main()
 	cell_size = lattice_param*Nx;
 	s_T = 0; 
 	s_P = 0;
+	startCut = 0;
 
 	// Declaration of matrixes and arrays 
 	double q[4*Nx*Ny*Nz][3], v[nbr_of_atoms][3], a[nbr_of_atoms][3];
 	double f[4*Nx*Ny*Nz][3];
 	double *temp = malloc(nbr_of_timesteps * sizeof(double));
 	double *press = malloc(nbr_of_timesteps * sizeof(double));
-	double *corr_func_T = malloc(nbr_of_timesteps * sizeof(double));
-	double *corr_func_P = malloc(nbr_of_timesteps * sizeof(double));
+	double *corr_func_T = malloc((nbr_of_timesteps-startCut+1) * sizeof(double));
+	double *corr_func_P = malloc((nbr_of_timesteps-startCut+1) * sizeof(double));
 
 	// Initiation of corr_func
 	for(i = 0; i <nbr_of_timesteps; i++){
@@ -176,14 +178,14 @@ int main()
 	}
 
 	// Get the correlation functions
-	get_corr_func(temp, corr_func_T, nbr_of_timesteps);
-	get_corr_func(press, corr_func_P, nbr_of_timesteps);
+	get_corr_func(temp, corr_func_T, nbr_of_timesteps+1, startCut);
+	get_corr_func(press, corr_func_P, nbr_of_timesteps+1, startCut);
 
 	// Write corr_func to data file
 	FILE *c_file;
 	c_file = fopen("correlation.data","w");
 
-	for(i = 0; i < nbr_of_timesteps; i++){
+	for(i = 0; i < (nbr_of_timesteps-startCut+1); i++){
 		fprintf(c_file,"%.5f \t %e \n", corr_func_T[i], corr_func_P[i]);
 	}
 
