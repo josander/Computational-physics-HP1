@@ -41,7 +41,7 @@ int main()
 	// Initiation of variables 
 	lattice_param = 4.05; // Units: [Å]
 	timestep = 0.01; // [ps]
-	nbr_of_timesteps = 10000;
+	nbr_of_timesteps = 30000;
 	nbr_of_atoms = 256;
 	Nx = 4, Ny = 4, Nz = 4;
 	m = 0.00279636665; // Metal units [ev/Å]
@@ -62,6 +62,8 @@ int main()
 	double *press = malloc((nbr_of_timesteps+1) * sizeof(double));
 	double *corr_func_T = malloc((nbr_of_timesteps-startCut+1) * sizeof(double));
 	double *corr_func_P = malloc((nbr_of_timesteps-startCut+1) * sizeof(double));
+	double *MSD_T = malloc((nbr_of_timesteps+1)* (3) * sizeof(double));
+	double *MSD_P = malloc((nbr_of_timesteps+1) * (3) * sizeof(double));
 
 	// Initiation of corr_func
 	for(i = 0; i <nbr_of_timesteps - startCut + 1; i++){
@@ -206,6 +208,10 @@ int main()
 	s_P *= 2;
 
 	printf("sT: %F \t sP: %F \n", s_T, s_P);
+	
+	// Get the MSD
+	get_MSD(MSD_T, s_T, nbr_of_timesteps, nbr_of_atoms);
+	get_MSD(MSD_P, s_P, nbr_of_timesteps, nbr_of_atoms);
 
 	// Close the energy output file 
 	fclose(e_file);

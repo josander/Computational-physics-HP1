@@ -143,7 +143,18 @@ void get_corr_func(double A[], double *corr_func, int nbr_of_timesteps, int star
 }
 
 // Function that calculates the mean-squared-displacement
-void get_MSD()
+void get_MSD(double *MSD, double q[][3], double s, int nbr_of_timesteps, int nbr_of_atoms)
 {
-	;
+	int i, j, k;
+	double diffusion_coeff = 0;
+
+	for(i = 0; i < nbr_of_timesteps; i++){
+		for(j = 1; j < nbr_of_atoms; j++){
+			for(k = 0; k < 3; k++){
+				MSD[i][k] += (q[i+s][k] - q[i][k])/nbr_of_atoms;
+			}
+		}
+	}
+
+	printf("Self-diffusion coefficient: %F \n", diffusion_coeff);
 }
