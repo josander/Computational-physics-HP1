@@ -114,7 +114,6 @@ void get_corr_func(double A[], double *corr_func, int nbr_of_timesteps, int star
 	int i, k;
 	double mean = 0;
 	double mean2 = 0;
-	double norm_fact = 0;
 	double first_term[nbr_of_timesteps - start];
 
 	for(k = 0; k < (nbr_of_timesteps - start); k++){
