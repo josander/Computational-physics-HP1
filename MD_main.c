@@ -41,7 +41,7 @@ int main()
 	// Initiation of variables 
 	lattice_param = 4.05; // Units: [Å]
 	timestep = 0.01; // [ps]
-	nbr_of_timesteps = 2000;
+	nbr_of_timesteps = 10000;
 	nbr_of_atoms = 256;
 	Nx = 4, Ny = 4, Nz = 4;
 	m = 0.00279636665; // Metal units [ev/Å]
@@ -64,7 +64,7 @@ int main()
 	double *corr_func_P = malloc((nbr_of_timesteps-startCut+1) * sizeof(double));
 
 	// Initiation of corr_func
-	for(i = 0; i <nbr_of_timesteps; i++){
+	for(i = 0; i <nbr_of_timesteps - startCut + 1; i++){
 		corr_func_T[i] = 0.0;
 		corr_func_P[i] = 0.0;
 	}
