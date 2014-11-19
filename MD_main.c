@@ -53,7 +53,7 @@ int main()
 	cell_size = lattice_param*Nx;
 	s_T = 0; 
 	s_P = 0;
-	startCut = 0;
+	startCut = 800;
 
 	// Declaration of matrixes and arrays 
 	double q[4*Nx*Ny*Nz][3], v[nbr_of_atoms][3], a[nbr_of_atoms][3];

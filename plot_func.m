@@ -26,7 +26,7 @@ print(gcf,'-depsc2','temperature.eps')
 
 figure(3);
 plot(data(:,1),data(:,end));
-meanPress = mean(data(3000:Size(1),end))
+meanPress = mean(data(1000:Size(1),end))
 
 ylabel('Pressure');
 xlabel('Time');
