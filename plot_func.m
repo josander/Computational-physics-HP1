@@ -48,3 +48,13 @@ subplot(2,1,2);
 plot(corrData(:,2));
 hold on
 plot([0 Size(1)], [exp(-2) exp(-2)],'g-');
+
+%% Plot the displacement in 3D
+
+figure(5);
+
+dispData = importdata('displacement.data');
+set(gcf,'renderer','painters','PaperPosition',[0 0 12 6]);
+Size = size(corrData);
+
+plot3(dispData(:,1), dispData(:,2), dispData(:,3));
