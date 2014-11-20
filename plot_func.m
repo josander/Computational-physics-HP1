@@ -92,3 +92,28 @@ xlabel('Timestep');
 
 print(gcf,'-depsc2','MSD.eps');
 
+%% Plot the Velocity correlation function
+
+figure(7);
+
+MSDdata = importdata('MSD.data');
+set(gcf,'renderer','painters','PaperPosition',[0 0 12 6]);
+
+plot(MSDdata(:,2));
+ylabel('Displacement');
+xlabel('Timestep');
+
+print(gcf,'-depsc2','VCF.eps');
+
+%% Plot the Spectral function
+
+figure(7);
+
+MSDdata = importdata('MSD.data');
+set(gcf,'renderer','painters','PaperPosition',[0 0 12 6]);
+
+plot(MSDdata(:,3));
+ylabel('Displacement');
+xlabel('Timestep');
+
+print(gcf,'-depsc2','spectral.eps');

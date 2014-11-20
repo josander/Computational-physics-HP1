@@ -328,13 +328,6 @@ int main()
 		fprintf(c_file,"%.5f \t %e \n", corr_func_T[i], corr_func_P[i]);
 	}
 
-	
-/* 	This does not work! Problem with sending in a 3D-array as an argument 
-	// Get the MSD
-	get_MSD(MSD, Q, nbr_of_timesteps);
-
-*/
-
 	// Calculate the mean squared displacement and the velocity correlation function
 	for(i = 0; i < nbr_of_timesteps; i++){
 		for(j = 0; j < nbr_of_timesteps - i; j++){
