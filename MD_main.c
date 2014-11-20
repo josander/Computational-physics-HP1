@@ -247,8 +247,8 @@ int main()
 	// Get the MSD
 	get_MSD(MSD_T, Q, nbr_of_timesteps);
 	get_MSD(MSD_P, Q, nbr_of_timesteps);
-
 */
+
 	// Calculate the displacement of every particle s timesteps ahead
 	for(i = 0; i < nbr_of_timesteps; i++){
 		for(j = 0; j < nbr_of_timesteps - i; j++){
