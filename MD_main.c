@@ -238,8 +238,9 @@ int main()
 		fprintf(d_file,"%e \t %e \t %e \n", q[100][0], q[100][1], q[100][2]);
 	}
 
+	// Verlet algoritm for time evolution
 	// No rescaling of the velocities and positions
-	for (i = startCut; i < nbr_of_timesteps + 1; i++){ // No eqlib
+	for (i = startCut; i < nbr_of_timesteps + 1; i++){
 		// v(t+dt/2)
 		for (j = 0; j < nbr_of_atoms; j++){
 			for(n = 0; n < 3; n++){
