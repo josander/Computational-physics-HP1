@@ -169,8 +169,11 @@ void get_spectral_func(double *vel_corr_func, double *omega, double *spectral_fu
 	int i, j, k;
 
 	for(i = 0; i < nbr_of_timesteps + 1; i++){
-		omega[i] = 2 * i / (nbr_of_timesteps + 1);
-		spectral_func[i] = vel_corr_func[i] * cos(omega[i] * i * timestep);
+		omega[i] = i * PI / nbr_of_timesteps;
+		for(j = 0; j < nbr_of_timesteps +1; j++){
+			spectral_func[i] += vel_corr_func[j] * cos(PI * i * timestep)/nbr_of_timesteps;
+		}
+		spectral_func[i] *= 2;
 	}
 }
 
