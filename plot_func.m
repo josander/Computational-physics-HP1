@@ -96,7 +96,7 @@ dispData = importdata('displacement.data');
 set(gcf,'renderer','painters','PaperPosition',[0 0 12 6]);
 Size = size(corrData);
 
-plot3(dispData(:,1), dispData(:,2), dispData(:,3));
+plot3(dispData(:,1), dispData(:,2), dispData(:,3),'r');
 ylabel('Y');
 xlabel('X');
 zlabel('Z');
@@ -106,7 +106,6 @@ print(gcf,'-depsc2','diffusionLiquid.eps')
 %% Plot the MSD
 
 figure(6);
-
 MSDdata = importdata('MSD.data');
 set(gcf,'renderer','painters','PaperPosition',[0 0 12 6]);
 
@@ -132,7 +131,6 @@ print(gcf,'-depsc2','VCF.eps');
 %% Plot the Spectral function
 
 figure(7);
-
 MSDdata = importdata('MSD.data');
 set(gcf,'renderer','painters','PaperPosition',[0 0 12 6]);
 
