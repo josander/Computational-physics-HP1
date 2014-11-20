@@ -75,4 +75,5 @@ plot(MSDdata(:,1));
 ylabel('Displacement');
 xlabel('Time');
 
-print(gcf,'-depsc2','MSD.eps')
+print(gcf,'-depsc2','MSD.eps');
+

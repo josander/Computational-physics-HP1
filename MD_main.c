@@ -41,7 +41,7 @@ int main()
 	nbr_of_timesteps = 2000;
 	Nx = 4, Ny = 4, Nz = 4;
 	m = 0.00279636665; // Metal units [ev/Å]
-	temp_eq = 700 + 273.15; // Degree Celsius 
+	temp_eq = 500 + 273.15; // Degree Celsius 
 	press_eq = 6.324209 * pow(10, -7); // 1 Atm in eV/Å^3
 	tau_T = timestep*100;
 	tau_P = timestep*100;
@@ -58,8 +58,7 @@ int main()
 	double *press = malloc((nbr_of_timesteps+1) * sizeof(double));
 	double *corr_func_T = malloc((nbr_of_timesteps-startCut+1) * sizeof(double));
 	double *corr_func_P = malloc((nbr_of_timesteps-startCut+1) * sizeof(double));
-	double *MSD_T = malloc((nbr_of_timesteps+1) * sizeof(double));
-	double *MSD_P = malloc((nbr_of_timesteps+1) * sizeof(double));
+	double *MSD = malloc((nbr_of_timesteps+1) * sizeof(double));
 
 	// Declaration of the Q-array
 	double *allElements = malloc((nbr_of_timesteps+1)*(nbr_of_atoms)*(3)*sizeof(double));
@@ -245,19 +244,24 @@ int main()
 	
 /*
 	// Get the MSD
-	get_MSD(MSD_T, Q, nbr_of_timesteps);
-	get_MSD(MSD_P, Q, nbr_of_timesteps);
+	get_MSD(MSD, Q, nbr_of_timesteps);
 
 */
 
 	// Calculate the displacement of every particle s timesteps ahead
+	n = 0;
 	for(i = 0; i < nbr_of_timesteps; i++){
 		for(j = 0; j < nbr_of_timesteps - i; j++){
 			for(k = 0; k < nbr_of_atoms; k++){
-				MSD_T[j] += sqrt((Q[i+j][k][0] - Q[i][k][0])*(Q[i+j][k][0] - Q[i][k][0]) + (Q[i+j][k][1] - Q[i][k][1])*(Q[i+j][k][1] - Q[i][k][1]) + (Q[i+j][k][2] - Q[i][k][2])*(Q[i+j][k][2] - Q[i][k][2]))/nbr_of_atoms;
+				if(j == 2){
+					n++;
+				}
+				MSD[j] += sqrt((Q[i+j][k][0] - Q[i][k][0])*(Q[i+j][k][0] - Q[i][k][0]) + (Q[i+j][k][1] - Q[i][k][1])*(Q[i+j][k][1] - Q[i][k][1]) + (Q[i+j][k][2] - Q[i][k][2])*(Q[i+j][k][2] - Q[i][k][2]))/nbr_of_atoms;
 			}
 		}
 	}
+
+	printf("n %i \t %i \n", n, nbr_of_atoms);
 
 	// New file to print the MSD
 	FILE *m_file;
@@ -265,7 +269,7 @@ int main()
 
 	// Save the MSD-data
 	for(j = 0; j < nbr_of_timesteps+1; j++){
-		fprintf(m_file,"%.5f \t %e \n", MSD_T[j], MSD_P[j]);
+		fprintf(m_file,"%.5f \n", MSD[j]);
 	}
 
 	// Close the energy output file 
