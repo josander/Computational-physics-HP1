@@ -44,7 +44,7 @@ int main()
 	nbr_of_timesteps = 2000;
 	Nx = 4, Ny = 4, Nz = 4;
 	m = 0.00279636665; // Metal units [ev/Å]
-	temp_eq = 900 + 273.15; // Degree Celsius 
+	temp_eq = 500 + 273.15; // Degree Celsius 
 	press_eq = 6.324209 * pow(10, -7); // 1 Atm in eV/Å^3
 	tau_T = timestep*100;
 	tau_P = timestep*100;
@@ -57,6 +57,7 @@ int main()
 	// Declaration of matrixes and arrays 
 	double q[4*Nx*Ny*Nz][3], v[nbr_of_atoms][3], a[nbr_of_atoms][3];
 	double f[4*Nx*Ny*Nz][3];
+	double omega[nbr_of_timesteps + 1];
 	double *temp = malloc((nbr_of_timesteps+1) * sizeof(double));
 	double *press = malloc((nbr_of_timesteps+1) * sizeof(double));
 	double *corr_func_T = malloc((nbr_of_timesteps-startCut+1) * sizeof(double));
@@ -64,7 +65,6 @@ int main()
 	double *MSD = malloc((nbr_of_timesteps+1) * sizeof(double));
 	double *vel_corr_func = malloc((nbr_of_timesteps+1) * sizeof(double));
 	double *spectral_func = malloc((nbr_of_timesteps+1) * sizeof(double));
-	double *omega = malloc((nbr_of_timesteps+1) * sizeof(double));
 
 	// Declaration of the Q-array and the V-array
 	double *allElements = malloc((nbr_of_timesteps+1)*(nbr_of_atoms)*(3)*sizeof(double));
@@ -139,12 +139,6 @@ int main()
 		}
 	}
 
-	// Get the initial Einstein frequency for the calculation of the spectral function
-	for(j = 0; j < nbr_of_atoms; j++){
-		meanF += (f[j][0]*f[j][0] + f[j][1]*f[j][1] + f[j][2]*f[j][2])/nbr_of_atoms;
-	}
-	omega[0] = sqrt(meanF/(3*m*K_B*temp[0]));
-
 	// Make a file to save the energies and displacement of a particle in
 	FILE *e_file;
 	e_file = fopen("energy.data","w");
@@ -195,13 +189,6 @@ int main()
 
 		// Calculate the temperature
 		temp[i] = get_T(ke, nbr_of_atoms);
-
-		// Get the Einstein frequency for the calculation of the spectral function
-		meanF = 0;
-		for(j = 0; j < nbr_of_atoms; j++){
-			meanF += (f[j][0]*f[j][0] + f[j][1]*f[j][1]+f[j][2]*f[j][2])/nbr_of_atoms;
-		}
-		omega[i] = sqrt(meanF/(3*m*K_B*temp[i]));
 
 		// Scale velocity of the atoms to obtain the right temperature
 		rescale_T(timestep, tau_T, temp_eq, temp[i], v, nbr_of_atoms);
@@ -278,14 +265,6 @@ int main()
 		// Calculate the temperature
 		temp[i] = get_T(ke, nbr_of_atoms);
 
-		// Get the Einstein frequency for the calculation of the spectral function
-		meanF = 0;
-		for(j = 0; j < nbr_of_atoms; j++){
-			meanF += (f[j][0]*f[j][0] + f[j][1]*f[j][1]+f[j][2]*f[j][2])/nbr_of_atoms;
-		}
-		omega[i] = sqrt(meanF/(3*m*K_B*temp[i]));
-
-		
 		// Calculate the pressure
 		cell_size = lattice_param * Nx;
 		press[i] = get_P(q, cell_size, nbr_of_atoms, temp[i]);
@@ -361,7 +340,7 @@ int main()
 
 	// Save the MSD-data
 	for(j = 0; j < 200; j++){
-		fprintf(m_file,"%.5f \t %e \t %e \t %e \n", timestep*j, MSD[j], vel_corr_func[j], spectral_func[j]);
+		fprintf(m_file,"%.5f \t %e \t %e \t %e \t %e \n", timestep*j, MSD[j], vel_corr_func[j], omega[j], spectral_func[j]);
 	}
 
 	// Close the energy output file 
@@ -371,8 +350,8 @@ int main()
 	fclose(m_file);
 
 	// Free allocated memory
-	free(temp); free(press); free(corr_func_T); free(corr_func_P); free(Q); free(V); free(vel_corr_func); free(spectral_func); free(MSD); free(omega);
-	temp = NULL; press = NULL; corr_func_T = NULL; corr_func_P = NULL; Q = NULL; V = NULL; vel_corr_func = NULL; spectral_func = NULL; MSD = NULL; omega = NULL; 
+	free(temp); free(press); free(corr_func_T); free(corr_func_P); free(Q); free(V); free(vel_corr_func); free(spectral_func); free(MSD);
+	temp = NULL; press = NULL; corr_func_T = NULL; corr_func_P = NULL; Q = NULL; V = NULL; vel_corr_func = NULL; spectral_func = NULL; MSD = NULL;
 
 	return 0;
 }

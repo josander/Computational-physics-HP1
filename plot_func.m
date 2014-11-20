@@ -134,8 +134,8 @@ figure(8);
 MSDdata = importdata('MSD.data');
 set(gcf,'renderer','painters','PaperPosition',[0 0 12 6]);
 
-plot(MSDdata(:,1),MSDdata(:,4));
-ylabel('Displacement');
-xlabel('Time');
+plot(MSDdata(:,4),MSDdata(:,5));
+ylabel('Dont know');
+xlabel('Omega');
 
 print(gcf,'-depsc2','spectral.eps');

@@ -156,7 +156,6 @@ void get_corr_func(double A[], double *corr_func, int nbr_of_timesteps, int star
 
 	printf("Statistical inefficiency: %F \n", s);
 	printf("Result: %.6f ± %F \n", mean, sigmaTot);
-
 }
 
 
@@ -167,7 +166,8 @@ void get_spectral_func(double *vel_corr_func, double *omega, double *spectral_fu
 	int i, j, k;
 
 	for(i = 0; i < nbr_of_timesteps + 1; i++){
-		spectral_func[i] = 2 * vel_corr_func[i] * cos(omega[i] * i * timestep);
+		omega[i] = 2 * i / (nbr_of_timesteps + 1);
+		spectral_func[i] = vel_corr_func[i] * cos(omega[i] * i * timestep);
 	}
 }
 
