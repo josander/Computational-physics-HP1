@@ -39,6 +39,7 @@ meanPress = mean(data(1000:Size(1),end))
 title('Pressure','interpreter','latex','fontsize',14);
 y = ylabel('Pressure [$eV/\AA^3$]','interpreter','latex','fontsize',10);
 xlabel('Time [ps]','interpreter','latex','fontsize',10);
+axis([0 Size(1)*0.01 -0.004 0.004]);
 plotTickLatex2D
 set(y, 'Units', 'Normalized', 'Position', [-0.1, 0.5, 0]);
 print(gcf,'-depsc2','pressure.eps')
@@ -47,21 +48,21 @@ sT= 5.028783;
 sP= 4.884246; 
 
 %% Plot the correlation data
-
+corrSamp = 10000;
 figure(4);
 corrData = importdata('correlation.data');
 set(gcf,'renderer','painters','PaperPosition',[0 0 12 6]);
 Size = size(corrData);
 
 subplot(2,1,1);
-plot(corrData(:,1));
+plot((0:0.01:(corrSamp-0.1)/100)',corrData(1:corrSamp,1));
 hold on
-plot([0 Size(1)], [exp(-2) exp(-2)],'g-');
+plot([0 (corrSamp-0.01)/100], [exp(-2) exp(-2)],'g-');
 
 subplot(2,1,2);
-plot(corrData(:,2));
+plot((0:0.01:(corrSamp-0.1)/100)',corrData(1:corrSamp,2));
 hold on
-plot([0 Size(1)], [exp(-2) exp(-2)],'g-');
+plot([0 (corrSamp-0.01)/100], [exp(-2) exp(-2)],'g-');
 
 %% Plot the displacement in 3D
 
