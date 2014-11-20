@@ -46,7 +46,7 @@ int main()
 	nbr_of_timesteps = 5000;
 	Nx = 4, Ny = 4, Nz = 4;
 	m = 0.00279636665; // Metal units [ev/Å]
-	temp_eq = 900 + 273.15; // Degree Celsius 
+	temp_eq = 950 + 273.15; // Degree Celsius 
 	press_eq = 6.324209 * pow(10, -7); // 1 Atm in eV/Å^3
 	tau_T = timestep*10;
 	tau_P = timestep*10;
@@ -57,7 +57,7 @@ int main()
 	meanF = 0;
 	nbr_of_freq = 1000;
 	corrLength = 50;
-	nbr_of_steps = 300 + 1;
+	nbr_of_steps = 300;
 
 	// If startCut is too big, write a message
 	if(startCut > nbr_of_timesteps/2){
@@ -161,7 +161,8 @@ int main()
 	fprintf(e_file,"%.5f \t %e \t %e \t %e \t %F \t %e \n", 0.0, energy, pe, ke, temp[0], press[0]);
 	fprintf(d_file,"%.5f \t %e \t %e \n", q[100][0], q[100][1], q[100][2]);
 
-	// Time evolution according to the velocity Verlet algorithm (eqlib)
+	// Time evolution according to the velocity Verlet algorithm
+	// This part uses the equilibration function such that the velocities and the positions are rescaled
 	for (i = 1; i < startCut ; i++){
 		// v(t+dt/2)
 		for (j = 0; j < nbr_of_atoms; j++){
@@ -237,7 +238,9 @@ int main()
 		fprintf(d_file,"%e \t %e \t %e \n", q[100][0], q[100][1], q[100][2]);
 	}
 
-	for (i = startCut; i < nbr_of_timesteps + 1; i++){ // No eqlib
+	// Verlet algoritm for time evolution
+	// No rescaling of the velocities and positions
+	for (i = startCut; i < nbr_of_timesteps + 1; i++){
 		// v(t+dt/2)
 		for (j = 0; j < nbr_of_atoms; j++){
 			for(n = 0; n < 3; n++){
@@ -296,10 +299,7 @@ int main()
 			for(n = 0; n < 3; n++){
 				Q[i][j][n] = q[j][n];			
 				V[i][j][n] = v[j][n];
-				
 			}
-	
-				
 		}
 
 		// Print the average energy data to output file
@@ -335,18 +335,17 @@ int main()
 		}
 	}
 
-		
-
-	// Calculate the spectral function
-	get_spectral_func(vel_corr_func, omega, spectral_func, nbr_of_steps, nbr_of_freq, timestep);
-
-
 	// Calculate the self diffusion coefficient from the MSD. Valid method if q>>l and t>>tau
-	self_diffusion = (MSD[nbr_of_steps - 1]-MSD[50]) / ((nbr_of_steps-1-50) * timestep * 6);
+	self_diffusion = (MSD[nbr_of_steps - 1] - MSD[50]) / ((nbr_of_steps-1-50) * timestep * 6);
 
 	// Print the self diffusion coefficient from the MSD in the terminal
 	printf("Self diffusion coefficient from MSD: %e \n",self_diffusion);
 
+<<<<<<< HEAD
+=======
+	// Calculate the spectral function
+	get_spectral_func(vel_corr_func, omega, spectral_func, nbr_of_steps, nbr_of_freq, timestep);
+>>>>>>> e10ccfbafad6fd6c0959b128ee0332132c9520a3
 
 	// Calculate the self diffusion coefficient from the spectral function
 	self_diffusion = spectral_func[0]/6;
