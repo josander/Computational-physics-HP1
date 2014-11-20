@@ -48,7 +48,7 @@ int main()
 	tau_P = timestep*100;
 	kappa_P = 2.21901454; //3.85 * pow(10, 9);/ // Liquid Aluminum Units: Å^3/eV
 	cell_size = lattice_param*Nx;
-	startCut = 10000;
+	startCut = 1000;
 	self_diffusion = 0;
 
 	// Declaration of matrixes and arrays 
@@ -328,7 +328,8 @@ int main()
 				MSD[j] += msd*msd/(nbr_of_timesteps - j)/nbr_of_atoms;
 
 				vel = sqrt((V[i+j][k][0] * V[i][k][0])*(V[i+j][k][0] * V[i][k][0]) + (V[i+j][k][1] * V[i][k][1])*(V[i+j][k][1] * V[i][k][1]) + (V[i+j][k][2] * V[i][k][2])*(V[i+j][k][2] * V[i][k][2]));
-				vel_corr_func[j] += vel*vel/(nbr_of_timesteps - j)/nbr_of_atoms;	
+				vel_corr_func[j] += vel*vel/(nbr_of_timesteps - j)/nbr_of_atoms;
+					
 			}
 		}
 	}
