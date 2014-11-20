@@ -117,6 +117,8 @@ void get_corr_func(double A[], double *corr_func, int nbr_of_timesteps, int star
 	double mean2 = 0;
 	int stop = 1000;
 	double first_term[nbr_of_timesteps-start];
+	double s = 0;
+	double sigmaTot;
 
 	// Initiate the array first_term
 	for(k = 0; k < (nbr_of_timesteps - start); k++){
@@ -141,7 +143,36 @@ void get_corr_func(double A[], double *corr_func, int nbr_of_timesteps, int star
 		corr_func[k] = ((first_term[k] - (mean*mean))/(mean2 - (mean*mean)));
 	}
 
+	// Calculate the statistical inefficiency
+	for(i = 0; i < 5; i++){
+		s += corr_func[i];
+	}
+
+	s *= 2;
+
+	sigmaTot = sqrt((mean2 - mean*mean)/(nbr_of_timesteps-start)/s);
+
+	printf("Statistical inefficiency: %F \n", s);
+	printf("Result: %F ± %F \n", mean, sigmaTot);
+
 }
+
+/*
+// Function that calculates the mean-squared-displacement
+void get_MSD(double MSD[], double q[][nbr_of_atoms][3], int nbr_of_timesteps)
+{
+	int i, j, k;
+
+	// Calculate the displacement of every particle s timesteps ahead
+	for(i = 0; i < nbr_of_timesteps; i++){
+		for(j = 0; j < nbr_of_timesteps - i; j++){
+			for(k = 0; k < nbr_of_atoms; k++){
+				MSD[j] += sqrt((q[i+j][k][0] - q[i][k][0])*(q[i+j][k][0] - q[i][k][0]) + (q[i+j][k][1] - q[i][k][1])*(q[i+j][k][1] - q[i][k][1]) + (q[i+j][k][2] - q[i][k][2])*(q[i+j][k][2] - q[i][k][2]))/nbr_of_atoms;
+			}
+		}
+	}
+
+}*/
 
 /*
 // Function that calculates the mean-squared-displacement

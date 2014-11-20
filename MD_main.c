@@ -30,8 +30,6 @@ int main()
 	double temp_eq;
 	double press_eq;
 	double kappa_P;
-	double s_T;
-	double s_P;
 	int startCut;
 	double msd;
 	double vel;
@@ -50,8 +48,6 @@ int main()
 	tau_P = timestep*100;
 	kappa_P = 2.21901454; //3.85 * pow(10, 9);/ // Liquid Aluminum Units: Å^3/eV
 	cell_size = lattice_param*Nx;
-	s_T = 0; 
-	s_P = 0;
 	startCut = 1000;
 	self_diffusion = 0;
 
@@ -64,6 +60,7 @@ int main()
 	double *corr_func_P = malloc((nbr_of_timesteps-startCut+1) * sizeof(double));
 	double *MSD = malloc((nbr_of_timesteps+1) * sizeof(double));
 	double *vel_corr_func = malloc((nbr_of_timesteps+1) * sizeof(double));
+	double *spectral_func = malloc((nbr_of_timesteps+1) * sizeof(double));
 
 	// Declaration of the Q-array and the V-array
 	double *allElements = malloc((nbr_of_timesteps+1)*(nbr_of_atoms)*(3)*sizeof(double));
@@ -228,7 +225,9 @@ int main()
 	}
 
 	// Get the correlation functions
+	printf("TEMPERATURE: \n");
 	get_corr_func(temp, corr_func_T, nbr_of_timesteps+1, startCut);
+	printf("PRESSURE: \n");
 	get_corr_func(press, corr_func_P, nbr_of_timesteps+1, startCut);
 
 	// Write corr_func to data file
@@ -239,18 +238,6 @@ int main()
 		fprintf(c_file,"%.5f \t %e \n", corr_func_T[i], corr_func_P[i]);
 	}
 
-	// Calculate the statistical inefficiency
-	for(i = 0; i < 5; i++){
-		s_T += corr_func_T[i];
-	}
-	for(i = 0; i < 5; i++){
-		s_P += corr_func_P[i];
-	}
-
-	s_T *= 2;
-	s_P *= 2;
-
-	printf("sT: %F \t sP: %F \n", s_T, s_P);
 	
 /* 	This does not work! Problem with sending in a 3D-array as an argument 
 	// Get the MSD
@@ -278,7 +265,7 @@ int main()
 	printf("Self diffusion coefficient from MSD: %e \n",self_diffusion);
 
 	// Print the self diffusion coefficient from the vel-corr-func in the terminal
-	printf("Self diffusion coefficient from MSD: %e \n",self_diffusion);
+	printf("Self diffusion coefficient from vel-corr-func: %e \n",self_diffusion);
 
 	// New file to print the MSD
 	FILE *m_file;
@@ -286,7 +273,7 @@ int main()
 
 	// Save the MSD-data
 	for(j = 0; j < nbr_of_timesteps+1; j++){
-		fprintf(m_file,"%.5f \n", MSD[j]);
+		fprintf(m_file,"%.5f \t %e \n", MSD[j], vel_corr_func[j]);
 	}
 
 	// Close the energy output file 
@@ -296,8 +283,8 @@ int main()
 	fclose(m_file);
 
 	// Free allocated memory
-	free(temp); free(press); free(corr_func_T); free(corr_func_P); free(Q); free(V); free(vel_corr_func);
-	temp = NULL; press = NULL; corr_func_T = NULL; corr_func_P = NULL; Q = NULL; V = NULL; vel_corr_func = NULL;
+	free(temp); free(press); free(corr_func_T); free(corr_func_P); free(Q); free(V); free(vel_corr_func); free(spectral_func);
+	temp = NULL; press = NULL; corr_func_T = NULL; corr_func_P = NULL; Q = NULL; V = NULL; vel_corr_func = NULL; spectral_func = NULL;
 
 	return 0;
 }
