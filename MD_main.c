@@ -35,16 +35,16 @@ int main()
 	double vel;
 	double self_diffusion;
 	double meanF;
-	int nbr_of_terms;
+	int nbr_of_steps;
 
 
 	// Initiation of variables 
 	lattice_param = 4.05; // Units: [Å]
 	timestep = 0.01; // [ps]
-	nbr_of_timesteps = 2000;
+	nbr_of_timesteps = 5000;
 	Nx = 4, Ny = 4, Nz = 4;
 	m = 0.00279636665; // Metal units [ev/Å]
-	temp_eq = 500 + 273.15; // Degree Celsius 
+	temp_eq = 900 + 273.15; // Degree Celsius 
 	press_eq = 6.324209 * pow(10, -7); // 1 Atm in eV/Å^3
 	tau_T = timestep*100;
 	tau_P = timestep*100;
@@ -309,21 +309,22 @@ int main()
 	}
 
 	// Calculate the mean squared displacement and the velocity correlation function
-	nbr_of_terms = 200 + 1;
-	for(i = 0; i < nbr_of_terms; i++){
-		for(j = 0; j < nbr_of_terms; j++){
+	nbr_of_steps = 300 + 1;
+	for(i = 0; i < nbr_of_steps; i++){
+		for(j = 0; j < nbr_of_steps; j++){
 			for(k = 0; k < nbr_of_atoms; k++){
 				msd = sqrt((Q[i+j][k][0] - Q[i][k][0])*(Q[i+j][k][0] - Q[i][k][0]) + (Q[i+j][k][1] - Q[i][k][1])*(Q[i+j][k][1] - Q[i][k][1]) + (Q[i+j][k][2] - Q[i][k][2])*(Q[i+j][k][2] - Q[i][k][2]));
-				MSD[j] += msd*msd/(nbr_of_terms*nbr_of_atoms);
+				MSD[j] += msd*msd/(nbr_of_steps*nbr_of_atoms);
+				//printf("msd: %F \t %F \t %F \n", msd, Q[i+j][k][0], Q[i][k][0]);
 
 				vel = (V[i+j][k][0] * V[i][k][0]) + (V[i+j][k][1] * V[i][k][1])+ (V[i+j][k][2] * V[i][k][2]);
-				vel_corr_func[j] += vel/(nbr_of_terms*nbr_of_atoms);
+				vel_corr_func[j] += vel/(nbr_of_steps*nbr_of_atoms);
 			}
 		}
 	}
 
 	// Calculate the spectral function
-	get_spectral_func(vel_corr_func, omega, spectral_func, nbr_of_terms, timestep);
+	get_spectral_func(vel_corr_func, omega, spectral_func, nbr_of_steps, timestep);
 
 	// Calculate the self diffusion coefficient from the MSD. Valid method if q>>l and t>>tau
 	self_diffusion = MSD[nbr_of_timesteps]/(6 * nbr_of_timesteps * timestep);
