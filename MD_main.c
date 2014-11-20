@@ -1,5 +1,7 @@
 /*
  MD_main.c
+Main program for MD simulation of 256 Al atoms. 
+
  */
 
 #include <stdio.h>
@@ -30,38 +32,38 @@ int main()
 	double temp_eq;
 	double press_eq;
 	double kappa_P;
-	int startCut;
+	int start_Cut;
 	double msd;
 	double vel;
 	double self_diffusion;
 	double meanF;
 	int nbr_of_steps;
-	int corrLength;
+	int corr_length;
 	int nbr_of_freq;
 
 
 	// Initiation of variables 
 	lattice_param = 4.05; // Units: [Å]
 	timestep = 0.01; // [ps]
-	nbr_of_timesteps = 5000;
-	Nx = 4, Ny = 4, Nz = 4;
+	nbr_of_timesteps = 25000; // Simulation length 
+	Nx = 4, Ny = 4, Nz = 4; // Number of primitive cells in the supercell
 	m = 0.00279636665; // Metal units [ev/Å]
-	temp_eq = 950 + 273.15; // Degree Celsius 
+	temp_eq = 500 + 273.15; // Degree Celsius 
 	press_eq = 6.324209 * pow(10, -7); // 1 Atm in eV/Å^3
-	tau_T = timestep*10;
-	tau_P = timestep*10;
+	tau_T = timestep*10; // Parameter for eqlibr of temp
+	tau_P = timestep*10; // Parameter for eqlibr of pres
 	kappa_P = 2.21901454; //3.85 * pow(10, 9);/ // Liquid Aluminum Units: Å^3/eV
 	cell_size = lattice_param*Nx;
-	startCut = 2000;
+	start_Cut = 2000; // eqlibr- time 
 	self_diffusion = 0;
 	meanF = 0;
-	nbr_of_freq = 1000;
-	corrLength = 50;
-	nbr_of_steps = 300;
+	nbr_of_freq = 1000; // Resolution of spectral function
+	corr_length = 50; // Length when VCF -> 0
+	nbr_of_steps = 300; // Maximum number of time steps in the MSD calculation. 
 
-	// If startCut is too big, write a message
-	if(startCut > nbr_of_timesteps/2){
-		printf("NB: startCut is too big!");
+	// If start_Cut is too big, write a message
+	if(start_Cut > nbr_of_timesteps/2){
+		printf("NB: start_Cut is too big!");
 	}
 
 	// Declaration of matrixes and arrays 
@@ -70,8 +72,8 @@ int main()
 	double omega[nbr_of_freq];
 	double *temp = malloc((nbr_of_timesteps+1) * sizeof(double));
 	double *press = malloc((nbr_of_timesteps+1) * sizeof(double));
-	double *corr_func_T = malloc((nbr_of_timesteps-startCut+1) * sizeof(double));
-	double *corr_func_P = malloc((nbr_of_timesteps-startCut+1) * sizeof(double));
+	double *corr_func_T = malloc((nbr_of_timesteps-start_Cut+1) * sizeof(double));
+	double *corr_func_P = malloc((nbr_of_timesteps-start_Cut+1) * sizeof(double));
 	double *MSD = malloc((nbr_of_steps+1) * sizeof(double));
 	double *vel_corr_func = malloc((nbr_of_steps+1) * sizeof(double));
 	double *spectral_func = malloc((nbr_of_freq) * sizeof(double));
@@ -101,7 +103,7 @@ int main()
 	}
 
 	// Initiation of corr_func
-	for(i = 0; i <nbr_of_timesteps - startCut + 1; i++){
+	for(i = 0; i <nbr_of_timesteps - start_Cut + 1; i++){
 		corr_func_T[i] = 0.0;
 		corr_func_P[i] = 0.0;
 	}
@@ -163,7 +165,7 @@ int main()
 
 	// Time evolution according to the velocity Verlet algorithm
 	// This part uses the equilibration function such that the velocities and the positions are rescaled
-	for (i = 1; i < startCut ; i++){
+	for (i = 1; i < start_Cut ; i++){
 		// v(t+dt/2)
 		for (j = 0; j < nbr_of_atoms; j++){
 			for(n = 0; n < 3; n++){
@@ -240,7 +242,7 @@ int main()
 
 	// Verlet algoritm for time evolution
 	// No rescaling of the velocities and positions
-	for (i = startCut; i < nbr_of_timesteps + 1; i++){
+	for (i = start_Cut; i < nbr_of_timesteps + 1; i++){
 		// v(t+dt/2)
 		for (j = 0; j < nbr_of_atoms; j++){
 			for(n = 0; n < 3; n++){
@@ -309,21 +311,21 @@ int main()
 	
 	// Get the correlation functions
 	printf("TEMPERATURE: \n");
-	get_corr_func(temp, corr_func_T, nbr_of_timesteps+1, startCut);
+	get_corr_func(temp, corr_func_T, nbr_of_timesteps+1, start_Cut);
 	printf("PRESSURE: \n");
-	get_corr_func(press, corr_func_P, nbr_of_timesteps+1, startCut);
+	get_corr_func(press, corr_func_P, nbr_of_timesteps+1, start_Cut);
 
 	// Write corr_func to data file
 	FILE *c_file;
 	c_file = fopen("correlation.data","w");
 
-	for(i = 0; i < (nbr_of_timesteps-startCut+1); i++){
+	for(i = 0; i < (nbr_of_timesteps-start_Cut+1); i++){
 		fprintf(c_file,"%.5f \t %e \n", corr_func_T[i], corr_func_P[i]);
 	}
 
 	// Calculate the mean squared displacement and the velocity correlation function
 
-	for(i = startCut; i < startCut + nbr_of_steps; i++){
+	for(i = start_Cut; i < start_Cut + nbr_of_steps; i++){
 		for(j = 0; j < nbr_of_steps; j++){
 			for(k = 0; k < nbr_of_atoms; k++){
 				msd = sqrt(pow((Q[i + j][k][0] - Q[i][k][0]),2) + pow((Q[i + j][k][1] - Q[i][k][1]),2) + pow((Q[i + j][k][2] - Q[i][k][2]),2));
