@@ -38,7 +38,7 @@ int main()
 	// Initiation of variables 
 	lattice_param = 4.05; // Units: [Å]
 	timestep = 0.01; // [ps]
-	nbr_of_timesteps = 10000;
+	nbr_of_timesteps = 2000;
 	Nx = 4, Ny = 4, Nz = 4;
 	m = 0.00279636665; // Metal units [ev/Å]
 	temp_eq = 700 + 273.15; // Degree Celsius 
@@ -54,7 +54,6 @@ int main()
 	// Declaration of matrixes and arrays 
 	double q[4*Nx*Ny*Nz][3], v[nbr_of_atoms][3], a[nbr_of_atoms][3];
 	double f[4*Nx*Ny*Nz][3];
-	double *Q = malloc((nbr_of_timesteps+1)*(nbr_of_atoms)*(3)*sizeof(double));
 	double *temp = malloc((nbr_of_timesteps+1) * sizeof(double));
 	double *press = malloc((nbr_of_timesteps+1) * sizeof(double));
 	double *corr_func_T = malloc((nbr_of_timesteps-startCut+1) * sizeof(double));
@@ -62,7 +61,17 @@ int main()
 	double *MSD_T = malloc((nbr_of_timesteps+1) * sizeof(double));
 	double *MSD_P = malloc((nbr_of_timesteps+1) * sizeof(double));
 
-/*
+	// Declaration of the Q-array
+	double *allElements = malloc((nbr_of_timesteps+1)*(nbr_of_atoms)*(3)*sizeof(double));
+	double ***Q = malloc((nbr_of_timesteps+1)*sizeof(double **));
+	for(i = 0; i < nbr_of_timesteps +1; i++){
+		Q[i] = malloc(nbr_of_atoms * sizeof(double *));
+		
+		for(j = 0; j < nbr_of_atoms; j++){
+			Q[i][j] = allElements + (i * nbr_of_atoms * 3) + (j * 3);
+		}
+	}
+
 	// Initiation of Q
 	for(i = 0; i < nbr_of_timesteps + 1; i++){
 		for(j = 0; j < nbr_of_atoms; j++){
@@ -70,7 +79,7 @@ int main()
 				Q[i][j][n] = 0.0;
 			}
 		}
-	}*/
+	}
 
 	// Initiation of corr_func
 	for(i = 0; i <nbr_of_timesteps - startCut + 1; i++){
@@ -114,14 +123,13 @@ int main()
 	// Calculate initial pressure
 	press[0] = get_P(q, cell_size, nbr_of_atoms, temp[0]);
 
-/*
 	// Save the inital displacement in Q
 	for(j = 0; j < nbr_of_atoms; j++){
 		for(n = 0; n < nbr_of_atoms; n++){
 			Q[0][j][n] = q[j][n];
 		}
 	}
-*/
+
 	// Make a file to save the energies and displacement of a particle in
 	FILE *e_file;
 	e_file = fopen("energy.data","w");
@@ -197,14 +205,14 @@ int main()
 		if(i%1000 == 0){
 			printf("%i av %i steg \n", i, nbr_of_timesteps);
 		}
-/*
+
 		// Save the displacement in Q
 		for(j = 0; j < nbr_of_atoms; j++){
 			for(n = 0; n < 3; n++){
 				Q[i][j][n] = q[j][n];
 			}
 		}
-*/	
+
 		// Print the average energy data to output file
 		fprintf(e_file,"%.5f \t %e \t %e \t %e \t %F \t %e \n", i*timestep, energy, pe, ke, temp[i], press[i]);
 		fprintf(d_file,"%.5f \t %e \t %e \n", q[100][0], q[100][1], q[100][2]);
@@ -240,7 +248,7 @@ int main()
 	get_MSD(MSD_T, Q, nbr_of_timesteps);
 	get_MSD(MSD_P, Q, nbr_of_timesteps);
 
-
+*/
 	// Calculate the displacement of every particle s timesteps ahead
 	for(i = 0; i < nbr_of_timesteps; i++){
 		for(j = 0; j < nbr_of_timesteps - i; j++){
@@ -250,15 +258,15 @@ int main()
 		}
 	}
 
-*/
+
 	// Close the energy output file 
 	fclose(e_file);
 	fclose(c_file);
 	fclose(d_file);
 
 	// Free allocated memory
-	free(temp); free(press); free(corr_func_T); free(corr_func_P); 
-	temp = NULL; press = NULL; corr_func_T = NULL; corr_func_P = NULL;
+	free(temp); free(press); free(corr_func_T); free(corr_func_P); free(Q);
+	temp = NULL; press = NULL; corr_func_T = NULL; corr_func_P = NULL; Q = NULL;
 
 	return 0;
 }
