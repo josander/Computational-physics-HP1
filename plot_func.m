@@ -96,18 +96,10 @@ figure(5);
 dispData = importdata('displacement.data');
 %%
 set(gcf,'renderer','painters','PaperPosition',[0 0 6 8]);
-%Size = size(corrData);
+Size = size(corrData);
 
-steps = 10000;
+steps = Size(1);
 
-<<<<<<< HEAD
-plot3(dispData(:,1), dispData(:,2), dispData(:,3),'r . --');
-grid on
-axis equal
-ylabel('Y');
-xlabel('X');
-zlabel('Z');
-=======
 plot3(dispData(1:steps,1), dispData(1:steps,2), dispData(1:steps,3),'b  --', 'LineWidth', 0.001);
 t = title('Displacement of 1 atom at 500 C$^\circ$','fontsize',14);
 set(t,'interpreter','latex');
@@ -116,7 +108,6 @@ xlabel('X [\AA]','Interpreter','latex');
 zlabel('Z [\AA]','Interpreter','latex');
 axis equal
 grid on
->>>>>>> 52af588d2e262ef4b8f5d6e07c30a23604f5b918
 
 print(gcf,'-depsc2','diffusionLiquid500.eps')
 
