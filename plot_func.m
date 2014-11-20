@@ -48,7 +48,7 @@ sT= 5.028783;
 sP= 4.884246; 
 
 %% Plot the correlation data
-corrSamp = 10000;  % The maximum value for k to be plotted, [0.01ps]
+corrSamp = 100;  % The maximum value for k to be plotted, [0.01ps]
 figure(4);
 corrData = importdata('correlation.data');
 %%
@@ -56,6 +56,7 @@ clf
 set(gcf,'renderer','painters','PaperPosition',[0 0 4.7 3]);
 Size = size(corrData);
 
+figure(4);
 plot((0:0.01:(corrSamp-0.1)/100)',corrData(1:corrSamp,1));
 hold on
 plot([0 (corrSamp-0.01)/100], [exp(-2) exp(-2)],'g-');
@@ -71,11 +72,12 @@ l = legend('Correlation function','$ e^{-2}$');
 set(l,'Interpreter','latex');
 print(gcf,'-depsc2','correlationT.eps')
 
+figure(5);
 plot((0:0.01:(corrSamp-0.1)/100)',corrData(1:corrSamp,2));
 hold on
 plot([0 (corrSamp-0.01)/100], [exp(-2) exp(-2)],'g-');
 %axis([0 100 0 0.4])
-title('Correlation function for preassure','interpreter','latex','fontsize',14);
+title('Correlation function for pressure','interpreter','latex','fontsize',14);
 y = ylabel('$\Phi _P (k)$ [-]','interpreter','latex','fontsize',10);
 x = xlabel('Time lag $k$ [ps]','interpreter','latex','fontsize',10);
 %set(x, 'Units', 'Normalized', 'Position', [0.5, -0.01, 0]);

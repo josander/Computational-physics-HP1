@@ -146,8 +146,6 @@ void get_corr_func(double A[], double *corr_func, int nbr_of_timesteps, int star
 	// Calculate the statistical inefficiency
 	i = 0;
 	while(corr_func[i] >= exp(-2)){
-	//for(i = 0; i < 5; i++){
-		printf("Antal datapkter för s: %i \n", i);
 		s += corr_func[i];
 		i++;
 	}
