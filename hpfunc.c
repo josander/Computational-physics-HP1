@@ -144,10 +144,11 @@ void get_corr_func(double A[], double *corr_func, int nbr_of_timesteps, int star
 }
 
 // Function that calculates the mean-squared-displacement
-void get_MSD(double MSD[], double q[][nbr_of_atoms][3], int nbr_of_timesteps)
+
+/*
+void get_MSD(double *MSD, double q[][3], double s, int nbr_of_timesteps, int nbr_of_atoms)
 {
 	int i, j, k;
-	double diffusion_coeff = 0;
 
 	// Calculate the displacement of every particle s timesteps ahead
 	for(i = 0; i < nbr_of_timesteps; i++){
@@ -158,5 +159,6 @@ void get_MSD(double MSD[], double q[][nbr_of_atoms][3], int nbr_of_timesteps)
 		}
 	}
 
-	printf("Self-diffusion coefficient: %F \n", diffusion_coeff);
 }
+
+*/
