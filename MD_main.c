@@ -292,10 +292,7 @@ int main()
 			for(n = 0; n < 3; n++){
 				Q[i][j][n] = q[j][n];			
 				V[i][j][n] = v[j][n];
-				
 			}
-	
-				
 		}
 
 		// Print the average energy data to output file
