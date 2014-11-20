@@ -4,6 +4,7 @@
 clf
 clear all
 clc
+%%
 data = importdata('energy.data');
 set(gcf,'renderer','painters','PaperPosition',[0 0 4.7 3]);
 Size = size(data);
@@ -37,7 +38,7 @@ set(gcf,'renderer','painters','PaperPosition',[0 0 4.7 3]);
 plot(data(:,1),data(:,end));
 meanPress = mean(data(1000:Size(1),end))
 title('Pressure','interpreter','latex','fontsize',14);
-y = ylabel('Pressure [$eV/\AA^3$]','interpreter','latex','fontsize',10);
+y = ylabel('Pressure [eV/\AA$^3$]','interpreter','latex','fontsize',10);
 xlabel('Time [ps]','interpreter','latex','fontsize',10);
 %axis([0 Size(1)*0.01 -0.004 0.004]);
 plotTickLatex2D
@@ -93,17 +94,31 @@ print(gcf,'-depsc2','correlationP.eps')
 figure(5);
 
 dispData = importdata('displacement.data');
-set(gcf,'renderer','painters','PaperPosition',[0 0 12 6]);
-Size = size(corrData);
+%%
+set(gcf,'renderer','painters','PaperPosition',[0 0 6 8]);
+%Size = size(corrData);
 
+steps = 10000;
+
+<<<<<<< HEAD
 plot3(dispData(:,1), dispData(:,2), dispData(:,3),'r . --');
 grid on
 axis equal
 ylabel('Y');
 xlabel('X');
 zlabel('Z');
+=======
+plot3(dispData(1:steps,1), dispData(1:steps,2), dispData(1:steps,3),'b  --', 'LineWidth', 0.001);
+t = title('Displacement of 1 atom at 500 C$^\circ$','fontsize',14);
+set(t,'interpreter','latex');
+ylabel('Y [\AA]','Interpreter','latex');
+xlabel('X [\AA]','Interpreter','latex');
+zlabel('Z [\AA]','Interpreter','latex');
+axis equal
+grid on
+>>>>>>> 52af588d2e262ef4b8f5d6e07c30a23604f5b918
 
-print(gcf,'-depsc2','diffusionLiquid.eps')
+print(gcf,'-depsc2','diffusionLiquid500.eps')
 
 %% Plot the MSD
 

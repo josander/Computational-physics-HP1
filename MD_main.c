@@ -50,7 +50,7 @@ int main()
 	tau_P = timestep*100;
 	kappa_P = 2.21901454; //3.85 * pow(10, 9);/ // Liquid Aluminum Units: Å^3/eV
 	cell_size = lattice_param*Nx;
-	startCut = 1000;
+	startCut = 10000;
 	self_diffusion = 0;
 	meanF = 0;
 
@@ -320,7 +320,7 @@ int main()
 				vel = (V[i+j][k][0] * V[i][k][0]) + (V[i+j][k][1] * V[i][k][1])+ (V[i+j][k][2] * V[i][k][2]);
 				vel_corr_func[j] += vel/(nbr_of_steps*nbr_of_atoms);
 			}
-		}
+		}if (i%100 == 0 ){printf("Loop: %i \n", i);}
 	}
 
 	// Calculate the spectral function
