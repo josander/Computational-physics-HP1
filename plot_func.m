@@ -73,7 +73,7 @@ set(gcf,'renderer','painters','PaperPosition',[0 0 12 6]);
 
 plot(MSDdata(:,1));
 ylabel('Displacement');
-xlabel('Time');
+xlabel('Timestep');
 
 print(gcf,'-depsc2','MSD.eps');
 
