@@ -100,7 +100,7 @@ set(gcf,'renderer','painters','PaperPosition',[0 0 6 8]);
 
 steps = 10000;
 
-plot3(dispData(1:steps,1), dispData(1:steps,2), dispData(1:steps,3),'b  --', 'LineWidth', 0.001);
+plot3(dispData(1:steps,1), dispData(1:steps,2), dispData(1:steps,3),'b  -', 'LineWidth', 0.001);
 t = title('Displacement of 1 atom at 500 C$^\circ$','fontsize',14);
 set(t,'interpreter','latex');
 ylabel('Y [\AA]','Interpreter','latex');
