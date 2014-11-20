@@ -49,7 +49,7 @@ int main()
 	cell_size = lattice_param*Nx;
 	s_T = 0; 
 	s_P = 0;
-	startCut = 1000;
+	startCut = 10000;
 
 	// Declaration of matrixes and arrays 
 	double q[4*Nx*Ny*Nz][3], v[nbr_of_atoms][3], a[nbr_of_atoms][3];
@@ -248,7 +248,7 @@ int main()
 */
 
 	// Calculate the mean squared displacement of every particle
-	for(i = 0; i < nbr_of_timesteps; i++){
+	/*for(i = 0; i < nbr_of_timesteps; i++){
 		for(j = 0; j < nbr_of_timesteps - i; j++){
 			for(k = 0; k < nbr_of_atoms; k++){
 				MSD[j] += sqrt((Q[i+j][k][0] - Q[i][k][0])*(Q[i+j][k][0] - Q[i][k][0]) + (Q[i+j][k][1] - Q[i][k][1])*(Q[i+j][k][1] - Q[i][k][1]) + (Q[i+j][k][2] - Q[i][k][2])*(Q[i+j][k][2] - Q[i][k][2]))/(nbr_of_timesteps - j)/nbr_of_atoms;
@@ -263,13 +263,13 @@ int main()
 	// Save the MSD-data
 	for(j = 0; j < nbr_of_timesteps+1; j++){
 		fprintf(m_file,"%.5f \n", MSD[j]);
-	}
+	}*/
 
 	// Close the energy output file 
 	fclose(e_file);
 	fclose(c_file);
 	fclose(d_file);
-	fclose(m_file);
+	//fclose(m_file);
 
 	// Free allocated memory
 	free(temp); free(press); free(corr_func_T); free(corr_func_P); free(Q);
