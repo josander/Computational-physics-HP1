@@ -28,7 +28,7 @@ figure(3);
 plot(data(:,1),data(:,end));
 meanPress = mean(data(1000:Size(1),end))
 
-ylabel('Pressure [$eV\AA^3$]','interpreter','latex','fontsize',10);
+ylabel('Pressure [$eV/\AA^3$]','interpreter','latex','fontsize',10);
 xlabel('Time [ps]','interpreter','latex','fontsize',10);
 print(gcf,'-depsc2','pressure.eps')
 
