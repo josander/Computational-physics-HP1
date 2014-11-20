@@ -96,9 +96,9 @@ figure(5);
 dispData = importdata('displacement.data');
 %%
 set(gcf,'renderer','painters','PaperPosition',[0 0 6 8]);
-%Size = size(corrData);
+Size = size(corrData);
 
-steps = 10000;
+steps = Size(1);
 
 plot3(dispData(1:steps,1), dispData(1:steps,2), dispData(1:steps,3),'b  -', 'LineWidth', 0.001);
 t = title('Displacement of 1 atom at 500 C$^\circ$','fontsize',14);
