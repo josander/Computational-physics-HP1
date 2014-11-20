@@ -140,7 +140,7 @@ int main()
 
 	// Get the initial Einstein frequency for the calculation of the spectral function
 	for(j = 0; j < nbr_of_atoms; j++){
-		meanF += (f[j][0]*f[j][0] + f[j][1]*f[j][1]+f[j][2]*f[j][2])/nbr_of_atoms;
+		meanF += (f[j][0]*f[j][0] + f[j][1]*f[j][1] + f[j][2]*f[j][2])/nbr_of_atoms;
 	}
 	omega[0] = sqrt(meanF/(3*m*K_B*temp[0]));
 
@@ -329,22 +329,20 @@ int main()
 	}
 
 	// Calculate the mean squared displacement and the velocity correlation function
-	for(i = 0; i < nbr_of_timesteps; i++){
-		for(j = 0; j < nbr_of_timesteps - i; j++){
+	for(i = 0; i < 200; i++){
+		for(j = 0; j < 200; j++){
 			for(k = 0; k < nbr_of_atoms; k++){
 				msd = sqrt((Q[i+j][k][0] - Q[i][k][0])*(Q[i+j][k][0] - Q[i][k][0]) + (Q[i+j][k][1] - Q[i][k][1])*(Q[i+j][k][1] - Q[i][k][1]) + (Q[i+j][k][2] - Q[i][k][2])*(Q[i+j][k][2] - Q[i][k][2]));
-				MSD[j] += msd*msd/(nbr_of_timesteps - j)/nbr_of_atoms;
+				MSD[j] += msd*msd/200/nbr_of_atoms;
 
-				vel = sqrt((V[i+j][k][0] * V[i][k][0])*(V[i+j][k][0] * V[i][k][0]) + (V[i+j][k][1] * V[i][k][1])*(V[i+j][k][1] * V[i][k][1]) + (V[i+j][k][2] * V[i][k][2])*(V[i+j][k][2] * V[i][k][2]));
-				vel_corr_func[j] += vel*vel/(nbr_of_timesteps - j)/nbr_of_atoms;
-					
+				vel = (V[i+j][k][0] * V[i][k][0]) + (V[i+j][k][1] * V[i][k][1])+ (V[i+j][k][2] * V[i][k][2]);
+				vel_corr_func[j] += vel*vel/200/nbr_of_atoms;
 			}
 		}if (i%100 == 0 ){printf("Loop: %i \n", i);}
 	}
 
-
 	// Calculate the spectral function
-	get_spectral_func(vel_corr_func, omega, spectral_func, nbr_of_timesteps, timestep);
+	get_spectral_func(vel_corr_func, omega, spectral_func, 200, timestep);
 
 	// Calculate the self diffusion coefficient from the MSD. Valid method if q>>l and t>>tau
 	self_diffusion = MSD[nbr_of_timesteps]/(6 * nbr_of_timesteps * timestep);
@@ -360,7 +358,7 @@ int main()
 	m_file = fopen("MSD.data","w");
 
 	// Save the MSD-data
-	for(j = 0; j < nbr_of_timesteps+1; j++){
+	for(j = 0; j < 200; j++){
 		fprintf(m_file,"%.5f \t %e \t %e \n", MSD[j], vel_corr_func[j], spectral_func[j]);
 	}
 
