@@ -48,7 +48,7 @@ int main()
 	tau_P = timestep*100;
 	kappa_P = 2.21901454; //3.85 * pow(10, 9);/ // Liquid Aluminum Units: Å^3/eV
 	cell_size = lattice_param*Nx;
-	startCut = 1000;
+	startCut = 10000;
 	self_diffusion = 0;
 
 	// Declaration of matrixes and arrays 
@@ -146,8 +146,8 @@ int main()
 	fprintf(e_file,"%.5f \t %e \t %e \t %e \t %F \t %e \n", 0.0, energy, pe, ke, temp[0], press[0]);
 	fprintf(d_file,"%.5f \t %e \t %e \n", q[100][0], q[100][1], q[100][2]);
 
-	// Time evolution according to the velocity Verlet algorithm
-	for (i = 1; i < nbr_of_timesteps + 1; i++){
+	// Time evolution according to the velocity Verlet algorithm (eqlib)
+	for (i = 1; i < startCut ; i++){
 		// v(t+dt/2)
 		for (j = 0; j < nbr_of_atoms; j++){
 			for(n = 0; n < 3; n++){
@@ -185,20 +185,19 @@ int main()
 
 		// Calculate the temperature
 		temp[i] = get_T(ke, nbr_of_atoms);
-		if(i < startCut){
-			// Scale velocity of the atoms to obtain the right temperature
-			rescale_T(timestep, tau_T, temp_eq, temp[i], v, nbr_of_atoms);
-		}
+		// Scale velocity of the atoms to obtain the right temperature
+		rescale_T(timestep, tau_T, temp_eq, temp[i], v, nbr_of_atoms);
+		
 		
 		// Calculate the pressure
 		cell_size = lattice_param * Nx;
 		press[i] = get_P(q, cell_size, nbr_of_atoms, temp[i]);
 		
 
-		if(i < startCut){
-			// Scale position of the atoms to obtain the right pressure
-			lattice_param = rescale_P(timestep, tau_P, press_eq, press[i], q, nbr_of_atoms, kappa_P, lattice_param);
-		}
+	
+		// Scale position of the atoms to obtain the right pressure
+		lattice_param = rescale_P(timestep, tau_P, press_eq, press[i], q, nbr_of_atoms, kappa_P, lattice_param);
+		
 
 		// Calcutaion of the pe, ke and total energy
 		pe = get_energy_AL(q, cell_size, nbr_of_atoms);
@@ -224,6 +223,80 @@ int main()
 		fprintf(d_file,"%.5f \t %e \t %e \n", q[100][0], q[100][1], q[100][2]);
 	}
 
+	for (i = startCut; i < nbr_of_timesteps + 1; i++){ // No eqlib
+		// v(t+dt/2)
+		for (j = 0; j < nbr_of_atoms; j++){
+			for(n = 0; n < 3; n++){
+		    		v[j][n] += timestep * 0.5 * a[j][n];
+			}
+		} 
+
+		// q(t+dt) 
+		for (j = 0; j < nbr_of_atoms; j++){
+			for(n = 0; n < 3; n++){
+		    		q[j][n] += timestep * v[j][n];
+			}
+		}
+
+		// a(t+dt)
+		// Get forces
+		get_forces_AL(f, q, cell_size, nbr_of_atoms);
+
+		// Scale forces to acceleration
+		for(j = 0; j < nbr_of_atoms; j++){
+			for(n = 0; n < 3; n++){
+				a[j][n] = f[j][n]/m;
+			}
+		}
+
+		// v(t+dt)
+		for (j = 0; j < nbr_of_atoms; j++){
+			for(n = 0; n < 3; n++){
+		    		v[j][n] += timestep * 0.5 * a[j][n];
+			}
+		} 
+
+		// Calculate ke to calculate rescale
+		ke = get_ke(v, nbr_of_atoms, m);
+
+		// Calculate the temperature
+		temp[i] = get_T(ke, nbr_of_atoms);
+
+		
+		// Calculate the pressure
+		cell_size = lattice_param * Nx;
+		press[i] = get_P(q, cell_size, nbr_of_atoms, temp[i]);
+		
+
+	
+
+		// Calcutaion of the pe, ke and total energy
+		pe = get_energy_AL(q, cell_size, nbr_of_atoms);
+		pe = sqrt(pe*pe);
+		ke = get_ke(v, nbr_of_atoms, m);
+		energy = sqrt(pe*pe) + sqrt(ke*ke);
+
+		// Print every 1000 timestep in the terminal
+		if(i%1000 == 0){
+			printf("%i av %i steg \n", i, nbr_of_timesteps);
+		}
+
+		// Save the displacement in Q
+		for(j = 0; j < nbr_of_atoms; j++){
+			for(n = 0; n < 3; n++){
+				Q[i][j][n] = q[j][n];
+				V[i][j][n] = v[j][n];
+			}
+		}
+
+		// Print the average energy data to output file
+		fprintf(e_file,"%.5f \t %e \t %e \t %e \t %F \t %e \n", i*timestep, energy, pe, ke, temp[i], press[i]);
+		fprintf(d_file,"%.5f \t %e \t %e \n", q[100][0], q[100][1], q[100][2]);
+	}
+
+
+
+
 	// Get the correlation functions
 	printf("TEMPERATURE: \n");
 	get_corr_func(temp, corr_func_T, nbr_of_timesteps+1, startCut);
@@ -245,8 +318,10 @@ int main()
 
 */
 
+
 	// Calculate the mean squared displacement and the velocity correlation function
 	for(i = 0; i < nbr_of_timesteps; i++){
+
 		for(j = 0; j < nbr_of_timesteps - i; j++){
 			for(k = 0; k < nbr_of_atoms; k++){
 				msd = sqrt((Q[i+j][k][0] - Q[i][k][0])*(Q[i+j][k][0] - Q[i][k][0]) + (Q[i+j][k][1] - Q[i][k][1])*(Q[i+j][k][1] - Q[i][k][1]) + (Q[i+j][k][2] - Q[i][k][2])*(Q[i+j][k][2] - Q[i][k][2]));
