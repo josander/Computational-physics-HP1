@@ -43,13 +43,13 @@ int main()
 	// Initiation of variables 
 	lattice_param = 4.05; // Units: [Å]
 	timestep = 0.01; // [ps]
-	nbr_of_timesteps = 15000;
+	nbr_of_timesteps = 5000;
 	Nx = 4, Ny = 4, Nz = 4;
 	m = 0.00279636665; // Metal units [ev/Å]
 	temp_eq = 900 + 273.15; // Degree Celsius 
 	press_eq = 6.324209 * pow(10, -7); // 1 Atm in eV/Å^3
-	tau_T = timestep*100;
-	tau_P = timestep*100;
+	tau_T = timestep*10;
+	tau_P = timestep*10;
 	kappa_P = 2.21901454; //3.85 * pow(10, 9);/ // Liquid Aluminum Units: Å^3/eV
 	cell_size = lattice_param*Nx;
 	startCut = 2000;
@@ -67,14 +67,14 @@ int main()
 	// Declaration of matrixes and arrays 
 	double q[4*Nx*Ny*Nz][3], v[nbr_of_atoms][3], a[nbr_of_atoms][3];
 	double f[4*Nx*Ny*Nz][3];
-	double omega[nbr_of_steps];
+	double omega[nbr_of_freq];
 	double *temp = malloc((nbr_of_timesteps+1) * sizeof(double));
 	double *press = malloc((nbr_of_timesteps+1) * sizeof(double));
 	double *corr_func_T = malloc((nbr_of_timesteps-startCut+1) * sizeof(double));
 	double *corr_func_P = malloc((nbr_of_timesteps-startCut+1) * sizeof(double));
 	double *MSD = malloc((nbr_of_steps+1) * sizeof(double));
 	double *vel_corr_func = malloc((nbr_of_steps+1) * sizeof(double));
-	double *spectral_func = malloc((nbr_of_steps+1) * sizeof(double));
+	double *spectral_func = malloc((nbr_of_freq) * sizeof(double));
 
 	// Declaration of the Q-array and the V-array
 	double *allElements = malloc((nbr_of_timesteps+1)*(nbr_of_atoms)*(3)*sizeof(double));
@@ -347,8 +347,6 @@ int main()
 	// Print the self diffusion coefficient from the MSD in the terminal
 	printf("Self diffusion coefficient from MSD: %e \n",self_diffusion);
 
-	// Calculate the spectral function
-	get_spectral_func(vel_corr_func, omega, spectral_func, nbr_of_steps, timestep);
 
 	// Calculate the self diffusion coefficient from the spectral function
 	self_diffusion = spectral_func[0]/6;
