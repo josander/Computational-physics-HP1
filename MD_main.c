@@ -54,7 +54,7 @@ int main()
 	// Declaration of matrixes and arrays 
 	double q[4*Nx*Ny*Nz][3], v[nbr_of_atoms][3], a[nbr_of_atoms][3];
 	double f[4*Nx*Ny*Nz][3];
-	//double Q[nbr_of_timesteps+1][nbr_of_atoms][3];
+	double *Q = malloc((nbr_of_timesteps+1)*(nbr_of_atoms)*(3)*sizeof(double));
 	double *temp = malloc((nbr_of_timesteps+1) * sizeof(double));
 	double *press = malloc((nbr_of_timesteps+1) * sizeof(double));
 	double *corr_func_T = malloc((nbr_of_timesteps-startCut+1) * sizeof(double));

@@ -15,11 +15,6 @@ extern void rescale_T(double, double, double , double, double[][3], int);
 extern double get_P(double[][3], double ,int , double);
 extern double rescale_P(double, double, double, double, double[][3], int , double, double );
 extern void get_corr_func(double[], double *, int, int);
-<<<<<<< HEAD
-extern void get_MSD(double[], double[][nbr_of_atoms][3], int);
-=======
-//extern void get_MSD(double *, double[][3], double, int, int);
->>>>>>> 86822ef5a828d6b8d365ea27b274c3e1aeb22f90
-
+//extern void get_MSD(double[], double[][nbr_of_atoms][3], int);
 
 #endif
