@@ -40,7 +40,7 @@ meanPress = mean(data(1000:Size(1),end))
 title('Pressure','interpreter','latex','fontsize',14);
 y = ylabel('Pressure [eV/\AA$^3$]','interpreter','latex','fontsize',10);
 xlabel('Time [ps]','interpreter','latex','fontsize',10);
-axis([0 Size(1)*0.01 -0.004 0.004]);
+%axis([0 Size(1)*0.01 -0.004 0.004]);
 plotTickLatex2D
 set(y, 'Units', 'Normalized', 'Position', [-0.1, 0.5, 0]);
 print(gcf,'-depsc2','pressure.eps')
@@ -117,9 +117,9 @@ figure(6);
 MSDdata = importdata('MSD.data');
 set(gcf,'renderer','painters','PaperPosition',[0 0 12 6]);
 
-plot(MSDdata(:,1));
+plot(MSDdata(:,1),MSDdata(:,2));
 ylabel('Displacement');
-xlabel('Timestep');
+xlabel('Time');
 
 print(gcf,'-depsc2','MSD.eps');
 
@@ -130,20 +130,20 @@ figure(7);
 MSDdata = importdata('MSD.data');
 set(gcf,'renderer','painters','PaperPosition',[0 0 12 6]);
 
-plot(MSDdata(:,2));
-ylabel('Displacement');
-xlabel('Timestep');
+plot(MSDdata(:,1),MSDdata(:,3));
+ylabel('Velocity');
+xlabel('Time');
 
 print(gcf,'-depsc2','VCF.eps');
 
 %% Plot the Spectral function
 
-figure(7);
+figure(8);
 MSDdata = importdata('MSD.data');
 set(gcf,'renderer','painters','PaperPosition',[0 0 12 6]);
 
-plot(MSDdata(:,3));
-ylabel('Displacement');
-xlabel('Timestep');
+plot(MSDdata(:,4),MSDdata(:,5));
+ylabel('Dont know');
+xlabel('Omega');
 
 print(gcf,'-depsc2','spectral.eps');
