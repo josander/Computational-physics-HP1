@@ -109,7 +109,7 @@ double rescale_P(double timestep, double tau_P, double P_eq, double P, double q[
 }
 
 
-// Function that calculates the correlation function
+// Function that calculates the correlation function, the statistical inefficiency and the standard deviation
 void get_corr_func(double A[], double *corr_func, int nbr_of_timesteps, int start)
 {
 	int i, k;
@@ -157,22 +157,6 @@ void get_corr_func(double A[], double *corr_func, int nbr_of_timesteps, int star
 
 }
 
-/*
-// Function that calculates the mean-squared-displacement
-void get_MSD(double MSD[], double q[][nbr_of_atoms][3], int nbr_of_timesteps)
-{
-	int i, j, k;
-
-	// Calculate the displacement of every particle s timesteps ahead
-	for(i = 0; i < nbr_of_timesteps; i++){
-		for(j = 0; j < nbr_of_timesteps - i; j++){
-			for(k = 0; k < nbr_of_atoms; k++){
-				MSD[j] += sqrt((q[i+j][k][0] - q[i][k][0])*(q[i+j][k][0] - q[i][k][0]) + (q[i+j][k][1] - q[i][k][1])*(q[i+j][k][1] - q[i][k][1]) + (q[i+j][k][2] - q[i][k][2])*(q[i+j][k][2] - q[i][k][2]))/nbr_of_atoms;
-			}
-		}
-	}
-
-}*/
 
 
 // Function that calculates the mean-squared-displacement
@@ -181,7 +165,7 @@ void get_spectral_func(double *vel_corr_func, double *omega, double *spectral_fu
 	int i, j, k;
 
 	for(i = 0; i < nbr_of_timesteps + 1; i++){
-		spectral_func[i] = 2 * vel_corr_func[i]*cos(omega[i]*i*timestep);
+		spectral_func[i] = 2 * vel_corr_func[i] * cos(omega[i] * i * timestep);
 	}
 }
 
