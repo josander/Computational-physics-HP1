@@ -38,7 +38,7 @@ int main()
 	// Initiation of variables 
 	lattice_param = 4.05; // Units: [Å]
 	timestep = 0.01; // [ps]
-	nbr_of_timesteps = 3000;
+	nbr_of_timesteps = 10000;
 	Nx = 4, Ny = 4, Nz = 4;
 	m = 0.00279636665; // Metal units [ev/Å]
 	temp_eq = 500 + 273.15; // Degree Celsius 
@@ -65,7 +65,6 @@ int main()
 	double ***Q = malloc((nbr_of_timesteps+1)*sizeof(double **));
 	for(i = 0; i < nbr_of_timesteps +1; i++){
 		Q[i] = malloc(nbr_of_atoms * sizeof(double *));
-		
 		for(j = 0; j < nbr_of_atoms; j++){
 			Q[i][j] = allElements + (i * nbr_of_atoms * 3) + (j * 3);
 		}
@@ -248,20 +247,14 @@ int main()
 
 */
 
-	// Calculate the displacement of every particle s timesteps ahead
-	n = 0;
+	// Calculate the mean squared displacement of every particle
 	for(i = 0; i < nbr_of_timesteps; i++){
 		for(j = 0; j < nbr_of_timesteps - i; j++){
 			for(k = 0; k < nbr_of_atoms; k++){
-				if(j == 0){
-					n++;
-				}
 				MSD[j] += sqrt((Q[i+j][k][0] - Q[i][k][0])*(Q[i+j][k][0] - Q[i][k][0]) + (Q[i+j][k][1] - Q[i][k][1])*(Q[i+j][k][1] - Q[i][k][1]) + (Q[i+j][k][2] - Q[i][k][2])*(Q[i+j][k][2] - Q[i][k][2]))/(nbr_of_timesteps - j)/nbr_of_atoms;
 			}
 		}
 	}
-
-	printf("n %i \t %i \n", n, nbr_of_atoms);
 
 	// New file to print the MSD
 	FILE *m_file;
