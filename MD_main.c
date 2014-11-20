@@ -44,13 +44,13 @@ int main()
 	nbr_of_timesteps = 2000;
 	Nx = 4, Ny = 4, Nz = 4;
 	m = 0.00279636665; // Metal units [ev/Å]
-	temp_eq = 700 + 273.15; // Degree Celsius 
+	temp_eq = 500 + 273.15; // Degree Celsius 
 	press_eq = 6.324209 * pow(10, -7); // 1 Atm in eV/Å^3
 	tau_T = timestep*100;
 	tau_P = timestep*100;
 	kappa_P = 2.21901454; //3.85 * pow(10, 9);/ // Liquid Aluminum Units: Å^3/eV
 	cell_size = lattice_param*Nx;
-	startCut = 1000;
+	startCut = 500;
 	self_diffusion = 0;
 	meanF = 0;
 
@@ -222,13 +222,13 @@ int main()
 		for(j = 0; j < nbr_of_atoms; j++){
 			for(n = 0; n < 3; n++){
 				Q[i][j][n] = q[j][n];
-				V[i][j][n] = v[j][n];
+				//V[i][j][n] = v[j][n];
 			}
 		}
 
 		// Print the average energy data to output file
 		fprintf(e_file,"%.5f \t %e \t %e \t %e \t %F \t %e \n", i*timestep, energy, pe, ke, temp[i], press[i]);
-		fprintf(d_file,"%.5f \t %e \t %e \n", q[100][0], q[100][1], q[100][2]);
+		fprintf(d_file,"%e \t %e \t %e \n", q[100][0], q[100][1], q[100][2]);
 	}
 
 	for (i = startCut; i < nbr_of_timesteps + 1; i++){ // No eqlib
@@ -288,17 +288,19 @@ int main()
 		// Save the displacement in Q
 		for(j = 0; j < nbr_of_atoms; j++){
 			for(n = 0; n < 3; n++){
-				Q[i][j][n] = q[j][n];
-				V[i][j][n] = v[j][n];
+				Q[i][j][n] = q[j][n];			
+				//V[i][j][n] = v[j][n];
+				
 			}
+	
+				
 		}
 
 		// Print the average energy data to output file
 		fprintf(e_file,"%.5f \t %e \t %e \t %e \t %F \t %e \n", i*timestep, energy, pe, ke, temp[i], press[i]);
-		fprintf(d_file,"%.5f \t %e \t %e \n", q[100][0], q[100][1], q[100][2]);
+		fprintf(d_file,"%e \t %e \t %e \n", q[100][0], q[100][1], q[100][2]);
 	}
-
-
+	
 	// Get the correlation functions
 	printf("TEMPERATURE: \n");
 	get_corr_func(temp, corr_func_T, nbr_of_timesteps+1, startCut);
@@ -318,15 +320,19 @@ int main()
 	for(i = startCut; i < startCut + nbr_of_steps; i++){
 		for(j = 0; j < nbr_of_steps; j++){
 			for(k = 0; k < nbr_of_atoms; k++){
-				msd = sqrt(pow((Q[i+j][k][0] - Q[i][k][0]),2) + pow((Q[i+j][k][1] - Q[i][k][1]),2) + pow((Q[i+j][k][2] - Q[i][k][2]),2));
-				MSD[j] += msd*msd/(nbr_of_steps*nbr_of_atoms);
-				//printf("msd: %e \t %e \t %e \n", msd, Q[i+j][k][0], Q[i][k][0]);
+				msd = sqrt(pow((Q[i + j][k][0] - Q[i][k][0]),2) + pow((Q[i + j][k][1] - Q[i][k][1]),2) + pow((Q[i + j][k][2] - Q[i][k][2]),2));
+				//MSD[j] += msd*msd/(nbr_of_steps*nbr_of_atoms);
+				
+				printf("msd: %e \t %e \t %e \n", msd, Q[i+j][k][1], Q[i][k][1]);
 
 				vel = (V[i+j][k][0] * V[i][k][0]) + (V[i+j][k][1] * V[i][k][1])+ (V[i+j][k][2] * V[i][k][2]);
 				vel_corr_func[j] += vel/(nbr_of_steps*nbr_of_atoms);
 			}
 		}
 	}
+
+	
+		
 
 	// Calculate the spectral function
 	get_spectral_func(vel_corr_func, omega, spectral_func, nbr_of_steps, timestep);
@@ -349,7 +355,7 @@ int main()
 		fprintf(m_file,"%e \t %e \t %e \t %e \t %e \n", timestep*j, MSD[j], vel_corr_func[j], omega[j], spectral_func[j]);
 	}
 
-	// Close the energy output file 
+	// Close the output files 
 	fclose(e_file);
 	fclose(c_file);
 	fclose(d_file);
