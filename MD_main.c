@@ -40,10 +40,10 @@ int main()
 	// Initiation of variables 
 	lattice_param = 4.05; // Units: [Å]
 	timestep = 0.01; // [ps]
-	nbr_of_timesteps = 2000;
+	nbr_of_timesteps = 10000;
 	Nx = 4, Ny = 4, Nz = 4;
 	m = 0.00279636665; // Metal units [ev/Å]
-	temp_eq = 500 + 273.15; // Degree Celsius 
+	temp_eq = 900 + 273.15; // Degree Celsius 
 	press_eq = 6.324209 * pow(10, -7); // 1 Atm in eV/Å^3
 	tau_T = timestep*100;
 	tau_P = timestep*100;
@@ -339,7 +339,7 @@ int main()
 				vel_corr_func[j] += vel*vel/(nbr_of_timesteps - j)/nbr_of_atoms;
 					
 			}
-		}
+		}if (i%100 == 0 ){printf("Loop: %i \n", i);}
 	}
 
 
