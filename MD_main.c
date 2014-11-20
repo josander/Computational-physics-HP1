@@ -44,15 +44,16 @@ int main()
 	nbr_of_timesteps = 4000;
 	Nx = 4, Ny = 4, Nz = 4;
 	m = 0.00279636665; // Metal units [ev/Å]
-	temp_eq = 1000 + 273.15; // Degree Celsius 
+	temp_eq = 900 + 273.15; // Degree Celsius 
 	press_eq = 6.324209 * pow(10, -7); // 1 Atm in eV/Å^3
 	tau_T = timestep*100;
 	tau_P = timestep*100;
 	kappa_P = 2.21901454; //3.85 * pow(10, 9);/ // Liquid Aluminum Units: Å^3/eV
 	cell_size = lattice_param*Nx;
-	startCut = 100;
+	startCut = 1000;
 	self_diffusion = 0;
 	meanF = 0;
+	nbr_of_steps = 300 + 1;
 
 	// If startCut is too big, write a message
 	if(startCut > nbr_of_timesteps/2){
@@ -67,9 +68,9 @@ int main()
 	double *press = malloc((nbr_of_timesteps+1) * sizeof(double));
 	double *corr_func_T = malloc((nbr_of_timesteps-startCut+1) * sizeof(double));
 	double *corr_func_P = malloc((nbr_of_timesteps-startCut+1) * sizeof(double));
-	double *MSD = malloc((nbr_of_timesteps+1) * sizeof(double));
-	double *vel_corr_func = malloc((nbr_of_timesteps+1) * sizeof(double));
-	double *spectral_func = malloc((nbr_of_timesteps+1) * sizeof(double));
+	double *MSD = malloc((nbr_of_steps+1) * sizeof(double));
+	double *vel_corr_func = malloc((nbr_of_steps+1) * sizeof(double));
+	double *spectral_func = malloc((nbr_of_steps+1) * sizeof(double));
 
 	// Declaration of the Q-array and the V-array
 	double *allElements = malloc((nbr_of_timesteps+1)*(nbr_of_atoms)*(3)*sizeof(double));
@@ -317,14 +318,11 @@ int main()
 	}
 
 	// Calculate the mean squared displacement and the velocity correlation function
-	nbr_of_steps = 300 + 1;
 	for(i = startCut; i < startCut + nbr_of_steps; i++){
 		for(j = 0; j < nbr_of_steps; j++){
 			for(k = 0; k < nbr_of_atoms; k++){
 				msd = sqrt(pow((Q[i + j][k][0] - Q[i][k][0]),2) + pow((Q[i + j][k][1] - Q[i][k][1]),2) + pow((Q[i + j][k][2] - Q[i][k][2]),2));
 				MSD[j] += msd*msd/(nbr_of_steps*nbr_of_atoms);
-				
-				//printf("msd: %e \t %e \t %e \n", msd, Q[i+j][k][1], Q[i][k][1]);
 
 				vel = (V[i+j][k][0] * V[i][k][0]) + (V[i+j][k][1] * V[i][k][1])+ (V[i+j][k][2] * V[i][k][2]);
 				vel_corr_func[j] += vel/(nbr_of_steps*nbr_of_atoms);
@@ -332,17 +330,17 @@ int main()
 		}
 	}
 
-	
-		
+	// Calculate the self diffusion coefficient from the MSD. Valid method if q>>l and t>>tau
+	self_diffusion = (MSD[nbr_of_steps - 1]-MSD[50]) / ((nbr_of_steps-1-50) * timestep * 6);
+
+	// Print the self diffusion coefficient from the MSD in the terminal
+	printf("Self diffusion coefficient from MSD: %e \n",self_diffusion);
 
 	// Calculate the spectral function
 	get_spectral_func(vel_corr_func, omega, spectral_func, nbr_of_steps, timestep);
 
-	// Calculate the self diffusion coefficient from the MSD. Valid method if q>>l and t>>tau
-	self_diffusion = MSD[nbr_of_timesteps]/(6 * nbr_of_timesteps * timestep);
-
-	// Print the self diffusion coefficient from the MSD in the terminal
-	printf("Self diffusion coefficient from MSD: %e \n",self_diffusion);
+	// Calculate the self diffusion coefficient from the spectral function
+	self_diffusion = spectral_func[0]/6;
 
 	// Print the self diffusion coefficient from the vel-corr-func in the terminal
 	printf("Self diffusion coefficient from vel-corr-func: %e \n",self_diffusion);
