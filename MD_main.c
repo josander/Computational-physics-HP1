@@ -72,9 +72,9 @@ int main()
 	double *press = malloc((nbr_of_timesteps+1) * sizeof(double));
 	double *corr_func_T = malloc((nbr_of_timesteps-startCut+1) * sizeof(double));
 	double *corr_func_P = malloc((nbr_of_timesteps-startCut+1) * sizeof(double));
-	double *MSD = malloc((nbr_of_timesteps+1) * sizeof(double));
-	double *vel_corr_func = malloc((nbr_of_timesteps+1) * sizeof(double));
-	double *spectral_func = malloc((nbr_of_timesteps+1) * sizeof(double));
+	double *MSD = malloc((nbr_of_steps+1) * sizeof(double));
+	double *vel_corr_func = malloc((nbr_of_steps+1) * sizeof(double));
+	double *spectral_func = malloc((nbr_of_steps+1) * sizeof(double));
 
 	// Declaration of the Q-array and the V-array
 	double *allElements = malloc((nbr_of_timesteps+1)*(nbr_of_atoms)*(3)*sizeof(double));
@@ -328,8 +328,6 @@ int main()
 			for(k = 0; k < nbr_of_atoms; k++){
 				msd = sqrt(pow((Q[i + j][k][0] - Q[i][k][0]),2) + pow((Q[i + j][k][1] - Q[i][k][1]),2) + pow((Q[i + j][k][2] - Q[i][k][2]),2));
 				MSD[j] += msd*msd/(nbr_of_steps*nbr_of_atoms);
-				
-				//printf("msd: %e \t %e \t %e \n", msd, Q[i+j][k][1], Q[i][k][1]);
 
 				vel = (V[i+j][k][0] * V[i][k][0]) + (V[i+j][k][1] * V[i][k][1])+ (V[i+j][k][2] * V[i][k][2]);
 				vel_corr_func[j] += vel/(nbr_of_steps*nbr_of_atoms);
@@ -342,11 +340,18 @@ int main()
 	// Calculate the spectral function
 	get_spectral_func(vel_corr_func, omega, spectral_func, nbr_of_steps, nbr_of_freq, timestep);
 
+
 	// Calculate the self diffusion coefficient from the MSD. Valid method if q>>l and t>>tau
-	self_diffusion = MSD[nbr_of_timesteps]/(6 * nbr_of_timesteps * timestep);
+	self_diffusion = (MSD[nbr_of_steps - 1]-MSD[50]) / ((nbr_of_steps-1-50) * timestep * 6);
 
 	// Print the self diffusion coefficient from the MSD in the terminal
 	printf("Self diffusion coefficient from MSD: %e \n",self_diffusion);
+
+	// Calculate the spectral function
+	get_spectral_func(vel_corr_func, omega, spectral_func, nbr_of_steps, timestep);
+
+	// Calculate the self diffusion coefficient from the spectral function
+	self_diffusion = spectral_func[0]/6;
 
 	// Print the self diffusion coefficient from the vel-corr-func in the terminal
 	printf("Self diffusion coefficient from vel-corr-func: %e \n",self_diffusion);

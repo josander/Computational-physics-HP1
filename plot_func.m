@@ -4,12 +4,13 @@
 clf
 clear all
 clc
-%%
+
 data = importdata('energy.data');
 set(gcf,'renderer','painters','PaperPosition',[0 0 4.7 3]);
 Size = size(data);
-%%
+
 figure(1);
+clf
 plot(data(:,1),data(:,2:end-2));
 
 % labels
@@ -50,7 +51,6 @@ sP= 4.884246;
 
 %% Plot the correlation data
 corrSamp = 100;  % The maximum value for k to be plotted, [0.01ps]
-figure(4);
 corrData = importdata('correlation.data');
 %%
 clf
@@ -92,15 +92,15 @@ print(gcf,'-depsc2','correlationP.eps')
 %% Plot the displacement in 3D
 
 figure(5);
-
+clf
 dispData = importdata('displacement.data');
-%%
+
 set(gcf,'renderer','painters','PaperPosition',[0 0 6 8]);
 Size = size(dispData);
 
 steps = Size(1);
 
-plot3(dispData(1:steps,1), dispData(1:steps,2), dispData(1:steps,3),'b  -', 'LineWidth', 0.001);
+plot3(dispData(1:steps,1), dispData(1:steps,2), dispData(1:steps,3),'g  -', 'LineWidth', 0.001);
 t = title('Displacement of 1 atom at 500 C$^\circ$','fontsize',14);
 set(t,'interpreter','latex');
 ylabel('Y [\AA]','Interpreter','latex');
@@ -109,13 +109,12 @@ zlabel('Z [\AA]','Interpreter','latex');
 axis equal
 grid on
 
-var(dispData(1:steps,3))
-
 print(gcf,'-depsc2','diffusionLiquid500.eps')
 
 %% Plot the MSD
 
 figure(6);
+clf
 MSDdata = importdata('MSD.data');
 set(gcf,'renderer','painters','PaperPosition',[0 0 12 6]);
 
@@ -128,12 +127,12 @@ print(gcf,'-depsc2','MSD.eps');
 %% Plot the Velocity correlation function
 
 figure(7);
-
+clf
 MSDdata = importdata('MSD.data');
 set(gcf,'renderer','painters','PaperPosition',[0 0 12 6]);
 
-plot(MSDdata(:,1),MSDdata(:,3));
-ylabel('Velocity');
+plot(MSDdata(:,1),MSDdata(:,3)/MSDdata(1,3));
+ylabel('Velocity correlation function phi/phi(0)');
 xlabel('Time');
 
 print(gcf,'-depsc2','VCF.eps');
@@ -141,6 +140,7 @@ print(gcf,'-depsc2','VCF.eps');
 %% Plot the Spectral function
 
 figure(8);
+clf
 MSDdata = importdata('MSD.data');
 set(gcf,'renderer','painters','PaperPosition',[0 0 12 6]);
 
