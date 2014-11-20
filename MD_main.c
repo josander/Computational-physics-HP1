@@ -247,6 +247,7 @@ int main()
 	// Get the MSD
 	get_MSD(MSD_T, Q, nbr_of_timesteps);
 	get_MSD(MSD_P, Q, nbr_of_timesteps);
+
 */
 
 	// Calculate the displacement of every particle s timesteps ahead
@@ -258,11 +259,20 @@ int main()
 		}
 	}
 
+	// New file to print the MSD
+	FILE *m_file;
+	m_file = fopen("MSD.data","w");
+
+	// Save the MSD-data
+	for(j = 0; j < nbr_of_timesteps+1; j++){
+		fprintf(m_file,"%.5f \t %e \n", MSD_T[j], MSD_P[j]);
+	}
 
 	// Close the energy output file 
 	fclose(e_file);
 	fclose(c_file);
 	fclose(d_file);
+	fclose(m_file);
 
 	// Free allocated memory
 	free(temp); free(press); free(corr_func_T); free(corr_func_P); free(Q);

@@ -63,3 +63,16 @@ xlabel('X');
 zlabel('Z');
 
 print(gcf,'-depsc2','diffusionLiquid.eps')
+
+%% Plot the MSD
+
+figure(6);
+
+MSDdata = importdata('MSD.data');
+set(gcf,'renderer','painters','PaperPosition',[0 0 12 6]);
+
+plot(MSDdata(:,1));
+ylabel('Displacement');
+xlabel('Time');
+
+print(gcf,'-depsc2','MSD.eps')
