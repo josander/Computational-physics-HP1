@@ -172,17 +172,14 @@ void get_spectral_func(double *vel_corr_func, double *omega, double *spectral_fu
 		omega[i] = i * PI / nbr_of_steps;
 		for(j = 0; j < nbr_of_steps; j++){
 			spectral_func[i] += vel_corr_func[j] * cos(omega[i] * j);
-<<<<<<< HEAD
+
 			
 		}
 
 		spectral_func[i] *= 2.0/nbr_of_steps;
 
 		
-=======
-		}
-		spectral_func[i] *= 2.0/nbr_of_steps;
->>>>>>> e10ccfbafad6fd6c0959b128ee0332132c9520a3
+
 	}
 }
 

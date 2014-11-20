@@ -341,11 +341,10 @@ int main()
 	// Print the self diffusion coefficient from the MSD in the terminal
 	printf("Self diffusion coefficient from MSD: %e \n",self_diffusion);
 
-<<<<<<< HEAD
-=======
+
 	// Calculate the spectral function
 	get_spectral_func(vel_corr_func, omega, spectral_func, nbr_of_steps, nbr_of_freq, timestep);
->>>>>>> e10ccfbafad6fd6c0959b128ee0332132c9520a3
+
 
 	// Calculate the self diffusion coefficient from the spectral function
 	self_diffusion = spectral_func[0]/6;
