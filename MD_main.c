@@ -67,14 +67,14 @@ int main()
 	// Declaration of matrixes and arrays 
 	double q[4*Nx*Ny*Nz][3], v[nbr_of_atoms][3], a[nbr_of_atoms][3];
 	double f[4*Nx*Ny*Nz][3];
-	double omega[nbr_of_steps+1];
+	double omega[nbr_of_freq];
 	double *temp = malloc((nbr_of_timesteps+1) * sizeof(double));
 	double *press = malloc((nbr_of_timesteps+1) * sizeof(double));
 	double *corr_func_T = malloc((nbr_of_timesteps-startCut+1) * sizeof(double));
 	double *corr_func_P = malloc((nbr_of_timesteps-startCut+1) * sizeof(double));
 	double *MSD = malloc((nbr_of_steps+1) * sizeof(double));
 	double *vel_corr_func = malloc((nbr_of_steps+1) * sizeof(double));
-	double *spectral_func = malloc((nbr_of_steps+1) * sizeof(double));
+	double *spectral_func = malloc((nbr_of_freq) * sizeof(double));
 
 	// Declaration of the Q-array and the V-array
 	double *allElements = malloc((nbr_of_timesteps+1)*(nbr_of_atoms)*(3)*sizeof(double));
@@ -336,7 +336,7 @@ int main()
 	}
 
 	// Calculate the self diffusion coefficient from the MSD. Valid method if q>>l and t>>tau
-	self_diffusion = (MSD[nbr_of_steps - 1]-MSD[50]) / ((nbr_of_steps-1-50) * timestep * 6);
+	self_diffusion = (MSD[nbr_of_steps - 1] - MSD[50]) / ((nbr_of_steps-1-50) * timestep * 6);
 
 	// Print the self diffusion coefficient from the MSD in the terminal
 	printf("Self diffusion coefficient from MSD: %e \n",self_diffusion);
@@ -344,7 +344,6 @@ int main()
 	// Calculate the spectral function
 	get_spectral_func(vel_corr_func, omega, spectral_func, nbr_of_steps, nbr_of_freq, timestep);
 
-	printf("WHAT IS GOING ON????");
 	// Calculate the self diffusion coefficient from the spectral function
 	self_diffusion = spectral_func[0]/6;
 
