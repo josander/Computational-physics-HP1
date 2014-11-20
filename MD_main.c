@@ -347,7 +347,7 @@ int main()
 	get_spectral_func(vel_corr_func, omega, spectral_func, nbr_of_timesteps, timestep);
 
 	// Calculate the self diffusion coefficient from the MSD. Valid method if q>>l and t>>tau
-	self_diffusion = MSD[nbr_of_timesteps]/(6*nbr_of_timesteps*timestep);
+	self_diffusion = MSD[nbr_of_timesteps]/(6 * nbr_of_timesteps * timestep);
 
 	// Print the self diffusion coefficient from the MSD in the terminal
 	printf("Self diffusion coefficient from MSD: %e \n",self_diffusion);
