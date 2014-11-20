@@ -36,12 +36,14 @@ int main()
 	double self_diffusion;
 	double meanF;
 	int nbr_of_steps;
+	int corrLength;
+	int nbr_of_freq;
 
 
 	// Initiation of variables 
 	lattice_param = 4.05; // Units: [Å]
 	timestep = 0.01; // [ps]
-	nbr_of_timesteps = 5000;
+	nbr_of_timesteps = 15000;
 	Nx = 4, Ny = 4, Nz = 4;
 	m = 0.00279636665; // Metal units [ev/Å]
 	temp_eq = 900 + 273.15; // Degree Celsius 
@@ -53,6 +55,8 @@ int main()
 	startCut = 2000;
 	self_diffusion = 0;
 	meanF = 0;
+	nbr_of_freq = 1000;
+	corrLength = 50;
 	nbr_of_steps = 300 + 1;
 
 	// If startCut is too big, write a message
@@ -63,7 +67,7 @@ int main()
 	// Declaration of matrixes and arrays 
 	double q[4*Nx*Ny*Nz][3], v[nbr_of_atoms][3], a[nbr_of_atoms][3];
 	double f[4*Nx*Ny*Nz][3];
-	double omega[nbr_of_timesteps + 1];
+	double omega[nbr_of_steps];
 	double *temp = malloc((nbr_of_timesteps+1) * sizeof(double));
 	double *press = malloc((nbr_of_timesteps+1) * sizeof(double));
 	double *corr_func_T = malloc((nbr_of_timesteps-startCut+1) * sizeof(double));
@@ -315,6 +319,7 @@ int main()
 	}
 
 	// Calculate the mean squared displacement and the velocity correlation function
+
 	for(i = startCut; i < startCut + nbr_of_steps; i++){
 		for(j = 0; j < nbr_of_steps; j++){
 			for(k = 0; k < nbr_of_atoms; k++){
@@ -326,6 +331,12 @@ int main()
 			}
 		}
 	}
+
+		
+
+	// Calculate the spectral function
+	get_spectral_func(vel_corr_func, omega, spectral_func, nbr_of_steps, nbr_of_freq, timestep);
+
 
 	// Calculate the self diffusion coefficient from the MSD. Valid method if q>>l and t>>tau
 	self_diffusion = (MSD[nbr_of_steps - 1]-MSD[50]) / ((nbr_of_steps-1-50) * timestep * 6);

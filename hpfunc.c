@@ -163,17 +163,21 @@ void get_corr_func(double A[], double *corr_func, int nbr_of_timesteps, int star
 
 
 
-// Function that calculates the mean-squared-displacement
-void get_spectral_func(double *vel_corr_func, double *omega, double *spectral_func, int nbr_of_timesteps, int timestep)
+// Function that calculates the spectral function
+void get_spectral_func(double *vel_corr_func, double *omega, double *spectral_func, int nbr_of_steps, int num_of_freq, int timestep)
 {
 	int i, j, k;
 
-	for(i = 0; i < nbr_of_timesteps + 1; i++){
-		omega[i] = i * PI / nbr_of_timesteps;
-		for(j = 0; j < nbr_of_timesteps +1; j++){
-			spectral_func[i] += vel_corr_func[j] * cos(PI * i * timestep)/nbr_of_timesteps;
+	for(i = 0; i < num_of_freq ; i++){
+		omega[i] = i * PI / nbr_of_steps;
+		for(j = 0; j < nbr_of_steps; j++){
+			spectral_func[i] += vel_corr_func[j] * cos(omega[i] * j);
+			//printf("Cos:%F, \t ver_corr[j]: %F  \t spect: %F \n",vel_corr_func[j] ,cos(omega[i] * j),spectral_func[i]);		
 		}
-		spectral_func[i] *= 2;
+		//printf("Spect: %e \t",spectral_func[i] );
+		spectral_func[i] *= 2.0/nbr_of_steps;
+		//printf("Spect2: %e \n",spectral_func[i] );
+		
 	}
 }
 
