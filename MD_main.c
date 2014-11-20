@@ -321,9 +321,9 @@ int main()
 		for(j = 0; j < nbr_of_steps; j++){
 			for(k = 0; k < nbr_of_atoms; k++){
 				msd = sqrt(pow((Q[i + j][k][0] - Q[i][k][0]),2) + pow((Q[i + j][k][1] - Q[i][k][1]),2) + pow((Q[i + j][k][2] - Q[i][k][2]),2));
-				//MSD[j] += msd*msd/(nbr_of_steps*nbr_of_atoms);
+				MSD[j] += msd*msd/(nbr_of_steps*nbr_of_atoms);
 				
-				printf("msd: %e \t %e \t %e \n", msd, Q[i+j][k][1], Q[i][k][1]);
+				//printf("msd: %e \t %e \t %e \n", msd, Q[i+j][k][1], Q[i][k][1]);
 
 				vel = (V[i+j][k][0] * V[i][k][0]) + (V[i+j][k][1] * V[i][k][1])+ (V[i+j][k][2] * V[i][k][2]);
 				vel_corr_func[j] += vel/(nbr_of_steps*nbr_of_atoms);
