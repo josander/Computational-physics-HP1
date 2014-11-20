@@ -41,7 +41,7 @@ int main()
 	// Initiation of variables 
 	lattice_param = 4.05; // Units: [Å]
 	timestep = 0.01; // [ps]
-	nbr_of_timesteps = 4000;
+	nbr_of_timesteps = 5000;
 	Nx = 4, Ny = 4, Nz = 4;
 	m = 0.00279636665; // Metal units [ev/Å]
 	temp_eq = 900 + 273.15; // Degree Celsius 
@@ -50,7 +50,7 @@ int main()
 	tau_P = timestep*100;
 	kappa_P = 2.21901454; //3.85 * pow(10, 9);/ // Liquid Aluminum Units: Å^3/eV
 	cell_size = lattice_param*Nx;
-	startCut = 1000;
+	startCut = 2000;
 	self_diffusion = 0;
 	meanF = 0;
 	nbr_of_steps = 300 + 1;
@@ -224,7 +224,7 @@ int main()
 		for(j = 0; j < nbr_of_atoms; j++){
 			for(n = 0; n < 3; n++){
 				Q[i][j][n] = q[j][n];
-				//V[i][j][n] = v[j][n];
+				V[i][j][n] = v[j][n];
 			}
 		}
 
@@ -291,7 +291,7 @@ int main()
 		for(j = 0; j < nbr_of_atoms; j++){
 			for(n = 0; n < 3; n++){
 				Q[i][j][n] = q[j][n];			
-				//V[i][j][n] = v[j][n];
+				V[i][j][n] = v[j][n];
 				
 			}
 	
