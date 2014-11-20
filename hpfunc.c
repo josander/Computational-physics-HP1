@@ -153,7 +153,7 @@ void get_corr_func(double A[], double *corr_func, int nbr_of_timesteps, int star
 	sigmaTot = sqrt((mean2 - mean*mean)/(nbr_of_timesteps-start)/s);
 
 	printf("Statistical inefficiency: %F \n", s);
-	printf("Result: %F ± %F \n", mean, sigmaTot);
+	printf("Result: %.6f ± %F \n", mean, sigmaTot);
 
 }
 
@@ -174,20 +174,27 @@ void get_MSD(double MSD[], double q[][nbr_of_atoms][3], int nbr_of_timesteps)
 
 }*/
 
-/*
+
 // Function that calculates the mean-squared-displacement
-void get_MSD(double MSD[], double q[][nbr_of_atoms][3], int nbr_of_timesteps)
+void get_spectral_func(double *vel_corr_func, double *omega, double *spectral_func, int nbr_of_timesteps, int timestep)
 {
 	int i, j, k;
 
-	// Calculate the displacement of every particle s timesteps ahead
-	for(i = 0; i < nbr_of_timesteps; i++){
-		for(j = 0; j < nbr_of_timesteps - i; j++){
-			for(k = 0; k < nbr_of_atoms; k++){
-				MSD[j] += sqrt((q[i+j][k][0] - q[i][k][0])*(q[i+j][k][0] - q[i][k][0]) + (q[i+j][k][1] - q[i][k][1])*(q[i+j][k][1] - q[i][k][1]) + (q[i+j][k][2] - q[i][k][2])*(q[i+j][k][2] - q[i][k][2]))/nbr_of_atoms;
-			}
-		}
+	for(i = 0; i < nbr_of_timesteps + 1; i++){
+		spectral_func[i] = 2 * vel_corr_func[i]*cos(omega[i]*i*timestep);
 	}
+}
 
-}*/
+
+
+
+
+
+
+
+
+
+
+
+
 

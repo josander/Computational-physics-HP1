@@ -16,5 +16,6 @@ extern double get_P(double[][3], double ,int , double);
 extern double rescale_P(double, double, double, double, double[][3], int , double, double );
 extern void get_corr_func(double[], double *, int, int);
 //extern void get_MSD(double[], double[][nbr_of_atoms][3], int);
+extern void get_spectral_func(double *, double *, double *, int, int);
 
 #endif
