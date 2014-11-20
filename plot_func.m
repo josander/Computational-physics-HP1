@@ -96,7 +96,7 @@ figure(5);
 dispData = importdata('displacement.data');
 %%
 set(gcf,'renderer','painters','PaperPosition',[0 0 6 8]);
-Size = size(corrData);
+Size = size(dispData);
 
 steps = Size(1);
 
@@ -108,6 +108,8 @@ xlabel('X [\AA]','Interpreter','latex');
 zlabel('Z [\AA]','Interpreter','latex');
 axis equal
 grid on
+
+var(dispData(1:steps,3))
 
 print(gcf,'-depsc2','diffusionLiquid500.eps')
 

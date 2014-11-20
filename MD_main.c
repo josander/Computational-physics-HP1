@@ -41,7 +41,7 @@ int main()
 	// Initiation of variables 
 	lattice_param = 4.05; // Units: [Å]
 	timestep = 0.01; // [ps]
-	nbr_of_timesteps = 8000;
+	nbr_of_timesteps = 2000;
 	Nx = 4, Ny = 4, Nz = 4;
 	m = 0.00279636665; // Metal units [ev/Å]
 	temp_eq = 700 + 273.15; // Degree Celsius 
@@ -346,7 +346,7 @@ int main()
 
 	// Save the MSD-data
 	for(j = 0; j < nbr_of_steps; j++){
-		fprintf(m_file,"%.5f \t %e \t %e \t %e \t %e \n", timestep*j, MSD[j], vel_corr_func[j], omega[j], spectral_func[j]);
+		fprintf(m_file,"%e \t %e \t %e \t %e \t %e \n", timestep*j, MSD[j], vel_corr_func[j], omega[j], spectral_func[j]);
 	}
 
 	// Close the energy output file 
