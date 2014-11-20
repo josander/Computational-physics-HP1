@@ -144,7 +144,7 @@ void get_corr_func(double A[], double *corr_func, int nbr_of_timesteps, int star
 }
 
 // Function that calculates the mean-squared-displacement
-void get_MSD(double MSD[], double *q[nbr_of_atoms][3], int nbr_of_timesteps)
+void get_MSD(double MSD[], double q[][nbr_of_atoms][3], int nbr_of_timesteps)
 {
 	int i, j, k;
 	double diffusion_coeff = 0;
