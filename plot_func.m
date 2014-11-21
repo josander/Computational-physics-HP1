@@ -111,27 +111,34 @@ grid on
 
 print(gcf,'-depsc2','diffusionLiquid500.eps')
 
+%% Import MSD-data for the solid 
+sMSDdata = importdata('MSD.data');
+
+%% Import MSD-data for the liquid 
+lMSDdata = importdata('MSD.data');
+
 %% Plot the MSD
 
 figure(6);
 clf
-MSDdata = importdata('MSD.data');
-set(gcf,'renderer','painters','PaperPosition',[0 0 12 6]);
 
-plot(MSDdata(:,1),MSDdata(:,2));
-ylabel('Displacement');
-xlabel('Time');
+set(gcf,'renderer','painters','PaperPosition',[0 0 4.7 3]);
 
+plot(sMSDdata(:,1),sMSDdata(:,2), lMSDdata(:,1),lMSDdata(:,2));
+title('Mean Square Displacement(MSD)','interpreter','latex','fontsize',14);
+y = ylabel('$\Delta_{MSD} (k) [$\AA$^2]$','interpreter','latex','fontsize',10);
+x = xlabel('Time lag $k$ [ps]','interpreter','latex','fontsize',10);
+plotTickLatex2D
 print(gcf,'-depsc2','MSD.eps');
 
 %% Plot the Velocity correlation function
 
 figure(7);
 clf
-MSDdata = importdata('MSD.data');
+
 set(gcf,'renderer','painters','PaperPosition',[0 0 12 6]);
 
-plot(MSDdata(:,1),MSDdata(:,3)/MSDdata(1,3));
+plot(sMSDdata(:,1),sMSDdata(:,3)/sMSDdata(1,3));
 ylabel('Velocity correlation function phi/phi(0)');
 xlabel('Time');
 
@@ -141,10 +148,10 @@ print(gcf,'-depsc2','VCF.eps');
 
 figure(8);
 clf
-MSDdata = importdata('MSD.data');
+
 set(gcf,'renderer','painters','PaperPosition',[0 0 12 6]);
 
-plot(MSDdata(:,4),MSDdata(:,5));
+plot(sMSDdata(:,4),sMSDdata(:,5));
 ylabel('Dont know');
 xlabel('Omega');
 

@@ -38,7 +38,7 @@ void rand_disp(double position[][3] ,double lattice_param ,int N)
 	}  		  
 }
 
-// Calculates kinetic energy
+// Calculates kinetic energy of the system
 double get_ke(double v[][3], int N, double m)
 {
 	int i, j;
@@ -86,7 +86,7 @@ double get_P(double q[][3], double cell_length, int N, double T)
 	return P;
 
 }
-// Rescales P and lattice_param
+// Rescales lattice_param according to eqlibr
 double rescale_P(double timestep, double tau_P, double P_eq, double P, double q[][3], int N, double kappa_T, double lattice_param)
 {
 	double alphaP;
@@ -163,7 +163,7 @@ void get_corr_func(double A[], double *corr_func, int nbr_of_timesteps, int star
 // Function that calculates the spectral function
 void get_spectral_func(double *vel_corr_func, double *omega, double *spectral_func, int nbr_of_steps, int num_of_freq, int timestep)
 {
-	int i, j, k;
+	int i, j;
 
 	for(i = 0; i < num_of_freq ; i++){
 		omega[i] = i * PI / nbr_of_steps;
