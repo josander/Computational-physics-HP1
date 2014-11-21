@@ -34,11 +34,8 @@ void rand_disp(double position[][3] ,double lattice_param ,int N)
 		
 		for(j = 0; j < 3; j++){
 			position[i][j] +=  ran[j] * length_corr;
-	
 		}
-
-	}  	
-		  
+	}  		  
 }
 
 // Calculates kinetic energy
