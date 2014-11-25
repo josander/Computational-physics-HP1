@@ -59,10 +59,9 @@ int main()
 	eqlibr_steps1 = 0; // Number of time-steps in eqilibr with temp_melt
 	eqlibr_steps2 = 10000; // Number of time-steps in equilibr with temp_eq
 	start_Cut = eqlibr_steps1 + eqlibr_steps2; // eqlibr- time 
-	
-
 	self_diffusion = 0.0;
 	meanF = 0.0;
+
 	nbr_of_freq = 1000; // Resolution of spectral function
 	corr_length = 100; // Length when VCF -> 0
 	nbr_of_steps = 500; // Maximum number of time steps in the MSD calculation. 

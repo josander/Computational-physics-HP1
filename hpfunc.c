@@ -1,6 +1,6 @@
 /*
 hpfunc.c
-Contains function for homeproblem 1/b
+Contains functions for homeproblem 1/b
 
 By Jossan och Svensson
 
