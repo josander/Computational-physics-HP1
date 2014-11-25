@@ -6,6 +6,7 @@ clear all
 clc
 
 data = importdata('energy.data');
+
 set(gcf,'renderer','painters','PaperPosition',[0 0 4.7 3]);
 Size = size(data);
 
@@ -112,13 +113,16 @@ grid on
 print(gcf,'-depsc2','diffusionLiquid500.eps')
 
 %% Plot the cell size as a function of time
-
+figure(4);
+set(gcf,'renderer','painters','PaperPosition',[0 0 4.7 3]);
 cellData = importdata('cellSize.data');
 plot(cellData(:,1), cellData(:,2));
 
-ylabel('Time [ps]','Interpreter','latex');
-xlabel('Cell Size [\AA]','Interpreter','latex');
+title('Lattice constant during equilibration','interpreter','latex','fontsize',14);
+xlabel('Time [ps]','Interpreter','latex','fontsize',10);
+ylabel('Cell Size [\AA]','Interpreter','latex','fontsize',10);
 
+print(gcf,'-depsc2','cellSize.eps');
 %% Import MSD-data for the solid 
 sMSDdata = importdata('MSD.data');
 
@@ -144,8 +148,15 @@ plotTickLatex2D
 print(gcf,'-depsc2','MSD1.eps');
 
 %% MSD for 500C 
-axis([0 1 0 0.5]);
+plot(sMSDdata(:,1),sMSDdata(:,2), lMSDdata(:,1),lMSDdata(:,2));
+title('Mean Square Displacement(MSD)','interpreter','latex','fontsize',14);
+y = ylabel('$\Delta_{MSD} ($k$) [$\AA$^2]$','interpreter','latex','fontsize',10);
+x = xlabel('Time lag k [ps]','interpreter','latex','fontsize',10);
+l = legend('$\Delta_{MSD}$, T = 500C$^\circ$','$\Delta_{MSD}$, T = 900C$^\circ$')
 
+
+axis([0 1 0 0.5]);
+set(l,'Interpreter','latex');
 
 plotTickLatex2D
 print(gcf,'-depsc2','MSD2.eps');

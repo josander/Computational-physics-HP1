@@ -45,16 +45,16 @@ int main()
 	// Initiation of variables 
 	lattice_param = 4.05; // Units: [Å]
 	timestep = 0.01; // [ps]
-	nbr_of_timesteps = 4000; // Simulation length 
+	nbr_of_timesteps = 10000; // Simulation length 
 	Nx = 4, Ny = 4, Nz = 4; // Number of primitive cells in the supercell
 	m = 0.00279636665; // Metal units [ev/Å]
-	temp_eq = 700 + 273.15; // Degree Celsius 
+	temp_eq = 500 + 273.15; // Degree Celsius 
 	press_eq = 6.324209 * pow(10, -7); // 1 Atm in eV/Å^3
-	tau_T = timestep*10; // Parameter for eqlibr of temp
-	tau_P = timestep*10; // Parameter for eqlibr of pres
+	tau_T = timestep*75; // Parameter for eqlibr of temp
+	tau_P = timestep*75; // Parameter for eqlibr of pres
 	kappa_P = 2.21901454; //3.85 * pow(10, 9);/ // Liquid Aluminum Units: Å^3/eV
 	cell_size = lattice_param*Nx;
-	start_Cut = 1000; // eqlibr- time 
+	start_Cut = 4500; // eqlibr- time 
 	self_diffusion = 0;
 	meanF = 0;
 	nbr_of_freq = 1000; // Resolution of spectral function
@@ -65,6 +65,8 @@ int main()
 	if(start_Cut > nbr_of_timesteps/2){
 		printf("NB: start_Cut is too big!");
 	}
+	printf("MD simulation \nNumber of steps: %i \t Eqilibr_steps: %i \nTemp_eq: %f [K]\t Press_eq: %e [ev/Å^3]\n", nbr_of_timesteps, start_Cut, temp_eq, press_eq);
+
 
 	// Declaration of matrixes and arrays 
 	double q[4*Nx*Ny*Nz][3], v[nbr_of_atoms][3], a[nbr_of_atoms][3];
@@ -236,7 +238,7 @@ int main()
 
 		// Print every 1000 timestep in the terminal
 		if(i%1000 == 0){
-			printf("%i av %i steg \n", i, nbr_of_timesteps);
+			printf("%i of %i steps \n", i, nbr_of_timesteps);
 		}
 
 		// Save the displacement in Q
@@ -306,7 +308,7 @@ int main()
 
 		// Print every 1000 timestep in the terminal
 		if(i%1000 == 0){
-			printf("%i av %i steg \n", i, nbr_of_timesteps);
+			printf("%i of %i steps \n", i, nbr_of_timesteps);
 		}
 
 		// Save the displacement in Q
