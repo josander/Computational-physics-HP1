@@ -51,7 +51,6 @@ print(gcf,'-depsc2','pressure.eps')
 corrSamp = 100;  % The maximum value for k to be plotted, [0.01ps]
 corrData = importdata('correlation.data');
 
-clf
 set(gcf,'renderer','painters','PaperPosition',[0 0 4.7 3]);
 Size = size(corrData);
 
@@ -207,7 +206,7 @@ title('Spectral function','interpreter','latex','fontsize',14);
 ylabel(' $\hat{\Phi}_v(\omega$) [ps/\AA]','interpreter','latex','fontsize',10);
 xlabel(' $\omega$ [ps$^{-1}$]','interpreter','latex','fontsize',10);
 l = legend('$\Phi_v$, T = 500C$^\circ$','$\Phi_v$, T = 900C$^\circ$');
-axis([0 0.0016 0 3])
+%axis([0 0.0016 0 3])
 set(l,'Interpreter','latex');
 plotTickLatex2D
 print(gcf,'-depsc2','spectral.eps');
