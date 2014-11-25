@@ -45,16 +45,16 @@ int main()
 	// Initiation of variables 
 	lattice_param = 4.05; // Units: [Å]
 	timestep = 0.01; // [ps]
-	nbr_of_timesteps = 25000; // Simulation length 
+	nbr_of_timesteps = 4000; // Simulation length 
 	Nx = 4, Ny = 4, Nz = 4; // Number of primitive cells in the supercell
 	m = 0.00279636665; // Metal units [ev/Å]
-	temp_eq = 500 + 273.15; // Degree Celsius 
+	temp_eq = 700 + 273.15; // Degree Celsius 
 	press_eq = 6.324209 * pow(10, -7); // 1 Atm in eV/Å^3
 	tau_T = timestep*10; // Parameter for eqlibr of temp
 	tau_P = timestep*10; // Parameter for eqlibr of pres
 	kappa_P = 2.21901454; //3.85 * pow(10, 9);/ // Liquid Aluminum Units: Å^3/eV
 	cell_size = lattice_param*Nx;
-	start_Cut = 2000; // eqlibr- time 
+	start_Cut = 1000; // eqlibr- time 
 	self_diffusion = 0;
 	meanF = 0;
 	nbr_of_freq = 1000; // Resolution of spectral function
@@ -156,12 +156,16 @@ int main()
 	FILE *e_file;
 	e_file = fopen("energy.data","w");
 
+	FILE *cell_file;
+	cell_file = fopen("cellSize.data","w");
+
 	FILE *d_file;
 	d_file = fopen("displacement.data","w");
 
 	// Save the initial energies in the file
 	fprintf(e_file,"%.5f \t %e \t %e \t %e \t %F \t %e \n", 0.0, energy, pe, ke, temp[0], press[0]);
 	fprintf(d_file,"%.5f \t %e \t %e \n", q[100][0], q[100][1], q[100][2]);
+	fprintf(cell_file,"%.5f \n", cell_size);
 
 	// Time evolution according to the velocity Verlet algorithm
 	// This part uses the equilibration function such that the velocities and the positions are rescaled
@@ -210,12 +214,20 @@ int main()
 		// Calculate the pressure
 		cell_size = lattice_param * Nx;
 		press[i] = get_P(q, cell_size, nbr_of_atoms, temp[i]);
-		
 	
-		// Scale position of the atoms to obtain the right pressure
+		// Scale positions of the atoms to obtain the right pressure
 		lattice_param = rescale_P(timestep, tau_P, press_eq, press[i], q, nbr_of_atoms, kappa_P, lattice_param);
-		
 
+		// Get forces after rescaling the positions
+		get_forces_AL(f, q, cell_size, nbr_of_atoms);
+
+		// Scale forces to acceleration
+		for(j = 0; j < nbr_of_atoms; j++){
+			for(n = 0; n < 3; n++){
+				a[j][n] = f[j][n]/m;
+			}
+		}
+		
 		// Calcutaion of the pe, ke and total energy
 		pe = get_energy_AL(q, cell_size, nbr_of_atoms);
 		pe = sqrt(pe*pe);
@@ -238,6 +250,7 @@ int main()
 		// Print the average energy data to output file
 		fprintf(e_file,"%.5f \t %e \t %e \t %e \t %F \t %e \n", i*timestep, energy, pe, ke, temp[i], press[i]);
 		fprintf(d_file,"%e \t %e \t %e \n", q[100][0], q[100][1], q[100][2]);
+		fprintf(cell_file,"%e \n", cell_size);
 	}
 
 	// Verlet algoritm for time evolution
@@ -368,6 +381,7 @@ int main()
 	fclose(c_file);
 	fclose(d_file);
 	fclose(m_file);
+	fclose(cell_file);
 
 	// Free allocated memory
 	free(temp); free(press); free(corr_func_T); free(corr_func_P); free(Q); free(V); free(vel_corr_func); free(spectral_func); free(MSD);
