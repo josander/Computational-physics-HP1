@@ -165,7 +165,7 @@ int main()
 	// Save the initial energies in the file
 	fprintf(e_file,"%.5f \t %e \t %e \t %e \t %F \t %e \n", 0.0, energy, pe, ke, temp[0], press[0]);
 	fprintf(d_file,"%.5f \t %e \t %e \n", q[100][0], q[100][1], q[100][2]);
-	fprintf(cell_file,"%.5f \n", cell_size);
+	fprintf(cell_file,"%e \t %e \n", 0.0, cell_size);
 
 	// Time evolution according to the velocity Verlet algorithm
 	// This part uses the equilibration function such that the velocities and the positions are rescaled
@@ -250,7 +250,7 @@ int main()
 		// Print the average energy data to output file
 		fprintf(e_file,"%.5f \t %e \t %e \t %e \t %F \t %e \n", i*timestep, energy, pe, ke, temp[i], press[i]);
 		fprintf(d_file,"%e \t %e \t %e \n", q[100][0], q[100][1], q[100][2]);
-		fprintf(cell_file,"%e \n", cell_size);
+		fprintf(cell_file,"%e \t %e \n", timestep*i, cell_size);
 	}
 
 	// Verlet algoritm for time evolution
