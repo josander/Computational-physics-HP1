@@ -156,12 +156,16 @@ int main()
 	FILE *e_file;
 	e_file = fopen("energy.data","w");
 
+	FILE *cell_file;
+	cell_file = fopen("cellSize.data","w");
+
 	FILE *d_file;
 	d_file = fopen("displacement.data","w");
 
 	// Save the initial energies in the file
 	fprintf(e_file,"%.5f \t %e \t %e \t %e \t %F \t %e \n", 0.0, energy, pe, ke, temp[0], press[0]);
 	fprintf(d_file,"%.5f \t %e \t %e \n", q[100][0], q[100][1], q[100][2]);
+	fprintf(cell_file,"%.5f \n", cell_size);
 
 	// Time evolution according to the velocity Verlet algorithm
 	// This part uses the equilibration function such that the velocities and the positions are rescaled
@@ -246,6 +250,7 @@ int main()
 		// Print the average energy data to output file
 		fprintf(e_file,"%.5f \t %e \t %e \t %e \t %F \t %e \n", i*timestep, energy, pe, ke, temp[i], press[i]);
 		fprintf(d_file,"%e \t %e \t %e \n", q[100][0], q[100][1], q[100][2]);
+		fprintf(cell_file,"%e \n", cell_size);
 	}
 
 	// Verlet algoritm for time evolution
@@ -376,6 +381,7 @@ int main()
 	fclose(c_file);
 	fclose(d_file);
 	fclose(m_file);
+	fclose(cell_file);
 
 	// Free allocated memory
 	free(temp); free(press); free(corr_func_T); free(corr_func_P); free(Q); free(V); free(vel_corr_func); free(spectral_func); free(MSD);
