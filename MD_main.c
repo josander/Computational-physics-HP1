@@ -30,9 +30,10 @@ int main()
 	double energy, pe, ke;
 	double tau_T, tau_P;
 	double temp_eq;
+	double temp_melt;
 	double press_eq;
 	double kappa_P;
-	int start_Cut;
+	int start_Cut, eqlibr_steps1,eqlibr_steps2;
 	double msd;
 	double vel;
 	double self_diffusion;
@@ -45,16 +46,19 @@ int main()
 	// Initiation of variables 
 	lattice_param = 4.05; // Units: [Å]
 	timestep = 0.01; // [ps]
-	nbr_of_timesteps = 50000; // Simulation length 
+	nbr_of_timesteps = 20000; // Simulation length 
 	Nx = 4, Ny = 4, Nz = 4; // Number of primitive cells in the supercell
 	m = 0.00279636665; // Metal units [ev/Å]
-	temp_eq = 700 + 273.15; // Degree Celsius 
+	temp_melt = 1200 + 273.15; // [K] For melting	
+	temp_eq = 500 + 273.15; // [K] Degree Celsius 
 	press_eq = 6.324209 * pow(10, -7); // 1 Atm in eV/Å^3
 	tau_T = timestep*100; // Parameter for eqlibr of temp
 	tau_P = timestep*100; // Parameter for eqlibr of pres
-	kappa_P = 2.21901454; // Liquid Aluminum Units: Å^3/eV
+	kappa_P = 2.21901454; //3.85 * pow(10, 9);/ // Liquid Aluminum Units: Å^3/eV
 	cell_size = lattice_param*Nx;
-	start_Cut = 10000; // eqlibriumtime 
+	eqlibr_steps1 = 0; // Number of time-steps in eqilibr with temp_melt
+	eqlibr_steps2 = 8000; // Number of time-steps in equilibr with temp_eq
+	start_Cut = eqlibr_steps1 + eqlibr_steps2; // eqlibr- time 
 	self_diffusion = 0;
 	meanF = 0;
 	nbr_of_freq = 1000; // Resolution of spectral function
@@ -63,9 +67,9 @@ int main()
 
 	// If start_Cut is too big, write a message
 	if(start_Cut > nbr_of_timesteps/2){
-		printf("NB: start_Cut is too big!");
+		printf("NB: start_Cut is too big! \n");
 	}
-	printf("MD simulation \nNumber of steps: %i \t Eqilibr_steps: %i \nTemp_eq: %f [K]\t Press_eq: %e [ev/Å^3]\n", nbr_of_timesteps, start_Cut, temp_eq, press_eq);
+	printf("MD simulation \nNumber of steps: %i \t Eqilibr_steps: %i \nTemp_eq: %f [K]\t Press_eq: %e [ev/Å^3]\nTau_T: %f \tTau_P %f \n", nbr_of_timesteps, start_Cut, temp_eq, press_eq, tau_T, tau_P);
 
 
 	// Declaration of matrixes and arrays 
@@ -168,10 +172,95 @@ int main()
 	fprintf(e_file,"%.5f \t %e \t %e \t %e \t %F \t %e \n", 0.0, energy, pe, ke, temp[0], press[0]);
 	fprintf(d_file,"%.5f \t %e \t %e \n", q[100][0], q[100][1], q[100][2]);
 	fprintf(cell_file,"%e \t %e \n", 0.0, cell_size);
+        	// Time evolution according to the velocity Verlet algorithm
+	// This part uses the equilibration function such that the velocities and the positions are rescaled
+	for (i = 1; i < eqlibr_steps1 +1; i++){
+		// v(t+dt/2)
+		for (j = 0; j < nbr_of_atoms; j++){
+			for(n = 0; n < 3; n++){
+		    		v[j][n] += timestep * 0.5 * a[j][n];
+			}
+		} 
+
+		// q(t+dt) 
+		for (j = 0; j < nbr_of_atoms; j++){
+			for(n = 0; n < 3; n++){
+		    		q[j][n] += timestep * v[j][n];
+			}
+		}
+
+		// a(t+dt)
+		// Get forces
+		get_forces_AL(f, q, cell_size, nbr_of_atoms);
+
+		// Scale forces to acceleration
+		for(j = 0; j < nbr_of_atoms; j++){
+			for(n = 0; n < 3; n++){
+				a[j][n] = f[j][n]/m;
+			}
+		}
+
+		// v(t+dt)
+		for (j = 0; j < nbr_of_atoms; j++){
+			for(n = 0; n < 3; n++){
+		    		v[j][n] += timestep * 0.5 * a[j][n];
+			}
+		} 
+
+		// Calculate ke to calculate rescale
+		ke = get_ke(v, nbr_of_atoms, m);
+
+		// Calculate the temperature
+		temp[i] = get_T(ke, nbr_of_atoms);
+
+		// Scale velocity of the atoms to obtain the right temperature
+		rescale_T(timestep, tau_T, temp_melt, temp[i], v, nbr_of_atoms);
+		
+		// Calculate the pressure
+		cell_size = lattice_param * Nx;
+		press[i] = get_P(q, cell_size, nbr_of_atoms, temp[i]);
+	
+		// Scale positions of the atoms to obtain the right pressure
+		lattice_param = rescale_P(timestep, tau_P, press_eq, press[i], q, nbr_of_atoms, kappa_P, lattice_param);
+
+		// Get forces after rescaling the positions
+		get_forces_AL(f, q, cell_size, nbr_of_atoms);
+
+		// Scale forces to acceleration
+		for(j = 0; j < nbr_of_atoms; j++){
+			for(n = 0; n < 3; n++){
+				a[j][n] = f[j][n]/m;
+			}
+		}
+		
+		// Calcutaion of the pe, ke and total energy
+		pe = get_energy_AL(q, cell_size, nbr_of_atoms);
+		pe = sqrt(pe*pe);
+		ke = get_ke(v, nbr_of_atoms, m);
+		energy = sqrt(pe*pe) + sqrt(ke*ke);
+
+		// Print every 1000 timestep in the terminal
+		if(i%1000 == 0){
+			printf("%i of %i steps \n", i, nbr_of_timesteps);
+		}
+
+		// Save the displacement in Q
+		for(j = 0; j < nbr_of_atoms; j++){
+			for(n = 0; n < 3; n++){
+				Q[i][j][n] = q[j][n];
+				V[i][j][n] = v[j][n];
+			}
+		}
+
+		// Print the average energy data to output file
+		fprintf(e_file,"%.5f \t %e \t %e \t %e \t %F \t %e \n", i*timestep, energy, pe, ke, temp[i], press[i]);
+		fprintf(d_file,"%e \t %e \t %e \n", q[100][0], q[100][1], q[100][2]);
+		fprintf(cell_file,"%e \t %e \n", timestep*i, cell_size);
+	}
 
 	// Time evolution according to the velocity Verlet algorithm
 	// This part uses the equilibration function such that the velocities and the positions are rescaled
-	for (i = 1; i < start_Cut ; i++){
+	for (i = eqlibr_steps1+1; i < start_Cut ; i++){
 		// v(t+dt/2)
 		for (j = 0; j < nbr_of_atoms; j++){
 			for(n = 0; n < 3; n++){

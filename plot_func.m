@@ -123,10 +123,10 @@ print(gcf,'-depsc2','cellSize.eps');
 %% Import MSD-data for the solid 
 sMSDdata = importdata('MSD.data');
 
-%% Import MSD-data for the liquid 
+% Import MSD-data for the liquid 
 lMSDdata = importdata('MSD.data');
 
-%% Plot the MSD
+% Plot the MSD
 
 figure(6);
 clf
@@ -159,8 +159,6 @@ plotTickLatex2D
 print(gcf,'-depsc2','MSD2.eps');
 
 %% Plot the Velocity correlation function
-
-
 
 set(gcf,'renderer','painters','PaperPosition',[0 0 4.7 3]);
 plot(sMSDdata(:,1),sMSDdata(:,3)/sMSDdata(1,3), lMSDdata(:,1),lMSDdata(:,3)/lMSDdata(1,3));
