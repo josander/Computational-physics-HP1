@@ -89,7 +89,7 @@ set(l,'Interpreter','latex');
 print(gcf,'-depsc2','correlationP.eps')
 %% Plot the displacement in 3D
 
-figure(5);
+figure(6);
 clf
 dispData = importdata('displacement.data');
 
@@ -110,7 +110,7 @@ grid on
 print(gcf,'-depsc2','diffusionLiquid500.eps')
 
 %% Plot the cell size as a function of time
-figure(4);
+figure(7);
 set(gcf,'renderer','painters','PaperPosition',[0 0 4.7 3]);
 cellData = importdata('cellSize.data');
 plot(cellData(:,1), cellData(:,2));
@@ -128,13 +128,13 @@ lMSDdata = importdata('MSD.data');
 
 % Plot the MSD
 
-figure(6);
+figure(8);
 clf
 
 set(gcf,'renderer','painters','PaperPosition',[0 0 4.7 3]);
 
 plot(sMSDdata(:,1),sMSDdata(:,2), lMSDdata(:,1),lMSDdata(:,2));
-title('Mean Square Displacement(MSD)','interpreter','latex','fontsize',14);
+title('Mean Square Displacement (MSD)','interpreter','latex','fontsize',14);
 y = ylabel('$\Delta_{MSD} ($k$) [$\AA$^2]$','interpreter','latex','fontsize',10);
 x = xlabel('Time lag k [ps]','interpreter','latex','fontsize',10);
 l = legend('$\Delta_{MSD}$, T = 500C$^\circ$','$\Delta_{MSD}$, T = 900C$^\circ$')
@@ -148,14 +148,21 @@ print(gcf,'-depsc2','MSD1.eps');
 
 MSDdata = importdata('MSD.data');
 Size = size(MSDdata);
+set(gcf,'renderer','painters','PaperPosition',[0 0 4.7 3]);
 
-figure(7);
+figure(9);
 clf
 
 for(i = 1:Size(1))
-   plot(MSDdata(i,1),MSDdata(i,2)/(6*MSDdata(i,1)),'*');
+   plot(MSDdata(i,1),MSDdata(i,2)/(6*MSDdata(i,1)),'-');
    hold on
 end
+
+title('Self Diffusion Coefficient from MSD','interpreter','latex','fontsize',14);
+y = ylabel('$\Delta_{MSD}/6k [$\AA$^2/ps]$','interpreter','latex','fontsize',10);
+x = xlabel('Time lag k [ps]','interpreter','latex','fontsize',10);
+plotTickLatex2D
+print(gcf,'-depsc2','selfDiffusion.eps');
 
 
 %% MSD for 500C 
@@ -174,6 +181,7 @@ print(gcf,'-depsc2','MSD2.eps');
 
 %% Plot the Velocity correlation function
 
+figure(10);
 set(gcf,'renderer','painters','PaperPosition',[0 0 4.7 3]);
 plot(sMSDdata(:,1),sMSDdata(:,3)/sMSDdata(1,3), lMSDdata(:,1),lMSDdata(:,3)/lMSDdata(1,3));
 title('Velocity correlation function','interpreter','latex','fontsize',14);
@@ -188,7 +196,7 @@ print(gcf,'-depsc2','VCF.eps');
 
 %% Plot the Spectral function
  omfact = 1/600; % to convert to ps^-1
-figure(8);
+figure(11);
 clf
 
 set(gcf,'renderer','painters','PaperPosition',[0 0 5 4]);
