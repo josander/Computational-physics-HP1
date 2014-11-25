@@ -114,7 +114,10 @@ print(gcf,'-depsc2','diffusionLiquid500.eps')
 %% Plot the cell size as a function of time
 
 cellData = importdata('cellSize.data');
-plot(cellData(:,1));
+plot(cellData(:,1), cellData(:,2));
+
+ylabel('Time [ps]','Interpreter','latex');
+xlabel('Cell Size [\AA]','Interpreter','latex');
 
 %% Import MSD-data for the solid 
 sMSDdata = importdata('MSD.data');
