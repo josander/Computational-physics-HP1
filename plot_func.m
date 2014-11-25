@@ -2,9 +2,8 @@
 
 % load the data file
 clf
-clear all
 clc
-
+%%
 data = importdata('energy.data');
 
 set(gcf,'renderer','painters','PaperPosition',[0 0 4.7 3]);
@@ -95,10 +94,10 @@ dispData = importdata('displacement.data');
 
 set(gcf,'renderer','painters','PaperPosition',[0 0 6 8]);
 Size = size(dispData);
-
+start_cut = 8000;
 steps = Size(1);
 
-plot3(dispData(1:steps,1), dispData(1:steps,2), dispData(1:steps,3),'g  -', 'LineWidth', 0.001);
+plot3(dispData(start_cut:steps,1), dispData(start_cut:steps,2), dispData(start_cut:steps,3),'g  -', 'LineWidth', 0.001);
 t = title('Displacement of 1 atom at 500 C$^\circ$','fontsize',14);
 set(t,'interpreter','latex');
 ylabel('Y [\AA]','Interpreter','latex');
@@ -113,7 +112,7 @@ print(gcf,'-depsc2','diffusionLiquid500.eps')
 figure(4);
 set(gcf,'renderer','painters','PaperPosition',[0 0 4.7 3]);
 cellData = importdata('cellSize.data');
-plot(cellData(:,1), cellData(:,2));
+plot(cellData(2:end,1), cellData(2:end,2));
 
 title('Length of supercell during equilibration','interpreter','latex','fontsize',14);
 xlabel('Time [ps]','Interpreter','latex','fontsize',10);
@@ -175,7 +174,7 @@ plotTickLatex2D
 print(gcf,'-depsc2','VCF.eps');
 
 %% Plot the Spectral function
- omfact = 1/600; % to convert to ps^-1
+ omfact=10; % to convert to ps^-1
 figure(8);
 clf
 
@@ -187,7 +186,18 @@ title('Spectral function','interpreter','latex','fontsize',14);
 ylabel(' $\hat{\Phi}_v(\omega$) [ps/\AA]','interpreter','latex','fontsize',10);
 xlabel(' $\omega$ [ps$^{-1}$]','interpreter','latex','fontsize',10);
 l = legend('$\Phi_v$, T = 500C$^\circ$','$\Phi_v$, T = 900C$^\circ$');
-axis([0 0.0016 0 3])
+%axis([0 1 0 3])
 set(l,'Interpreter','latex');
 plotTickLatex2D
 print(gcf,'-depsc2','spectral.eps');
+
+%%
+data = importdata('energy.data');
+%%
+
+for i = 10000:5000:40000
+   
+   plot(i+5000, mean(data(i:i+10000,end-1)), 'x')
+   hold on 
+    
+end
