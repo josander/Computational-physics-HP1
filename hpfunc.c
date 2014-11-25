@@ -21,7 +21,7 @@ void rand_disp(double position[][3] ,double lattice_param ,int N)
 	double ran[3];
 	double length_corr;	
 	for(i = 0; i < N; i++){
-		sum = 0;		
+		sum = 0.0;		
 		for(j = 0; j < 3; j++){
 			ran[j] = ((double) rand() / (double) RAND_MAX) -0.5; // ran[j] goes from -0.5 to 0.5
 			sum += ran[j]*ran[j];
@@ -42,7 +42,7 @@ void rand_disp(double position[][3] ,double lattice_param ,int N)
 double get_ke(double v[][3], int N, double m)
 {
 	int i, j;
-	double ke = 0;
+	double ke = 0.0;
 
 	for (i = 0; i < N; i++){
 		for(j = 0; j < 3; j++){		
@@ -166,7 +166,7 @@ void get_spectral_func(double *vel_corr_func, double *omega, double *spectral_fu
 	int i, j;
 
 	for(i = 0; i < num_of_freq ; i++){
-		omega[i] = i * PI / nbr_of_steps;
+		omega[i] = i * PI / num_of_freq;
 		for(j = 0; j < nbr_of_steps; j++){
 			spectral_func[i] += vel_corr_func[j] * cos(omega[i] * j);
 		}

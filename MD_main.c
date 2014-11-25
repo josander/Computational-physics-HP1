@@ -45,8 +45,10 @@ int main()
 
 	// Initiation of variables 
 	lattice_param = 4.05; // Units: [Å]
-	timestep = 0.01; // [ps]
-	nbr_of_timesteps = 25000; // Simulation length 
+
+	timestep = 0.001; // [ps]
+	nbr_of_timesteps = 50000; // Simulation length 
+
 	Nx = 4, Ny = 4, Nz = 4; // Number of primitive cells in the supercell
 	m = 0.00279636665; // Metal units [ev/Å]
 	temp_melt = 1200 + 273.15; // [K] For melting	
@@ -56,14 +58,18 @@ int main()
 	tau_P = timestep*100; // Parameter for eqlibr of pres
 	kappa_P = 2.21901454; //3.85 * pow(10, 9);/ // Liquid Aluminum Units: Å^3/eV
 	cell_size = lattice_param*Nx;
-	eqlibr_steps1 = 2000; // Number of time-steps in eqilibr with temp_melt
-	eqlibr_steps2 = 5000; // Number of time-steps in equilibr with temp_eq
+
+	eqlibr_steps1 = 0; // Number of time-steps in eqilibr with temp_melt
+	eqlibr_steps2 = 10000; // Number of time-steps in equilibr with temp_eq
+
 	start_Cut = eqlibr_steps1 + eqlibr_steps2; // eqlibr- time 
-	self_diffusion = 0;
-	meanF = 0;
+	self_diffusion = 0.0;
+	meanF = 0.0;
+
 	nbr_of_freq = 1000; // Resolution of spectral function
-	corr_length = 50; // Length when VCF -> 0
-	nbr_of_steps = 600; // Maximum number of time steps in the MSD calculation. 
+	corr_length = 100; // Length when VCF -> 0
+	nbr_of_steps = 500; // Maximum number of time steps in the MSD calculation. 
+
 
 	// If start_Cut is too big, write a message
 	if(start_Cut > nbr_of_timesteps/2){
@@ -171,9 +177,9 @@ int main()
 	// Save the initial energies in the file
 	fprintf(e_file,"%.5f \t %e \t %e \t %e \t %F \t %e \n", 0.0, energy, pe, ke, temp[0], press[0]);
 	fprintf(d_file,"%.5f \t %e \t %e \n", q[100][0], q[100][1], q[100][2]);
-	fprintf(cell_file,"%e \t %e \n", 0.0, cell_size);
 
-       	// Time evolution according to the velocity Verlet algorithm
+	fprintf(cell_file,"%e \t %e \n", 0.0, cell_size/4 - 4.05);
+        // Time evolution according to the velocity Verlet algorithm
 	// This part uses the equilibration function such that the velocities and the positions are rescaled
 	for (i = 1; i < eqlibr_steps1 +1; i++){
 		// v(t+dt/2)
@@ -257,7 +263,7 @@ int main()
 		// Print the average energy data to output file
 		fprintf(e_file,"%.5f \t %e \t %e \t %e \t %F \t %e \n", i*timestep, energy, pe, ke, temp[i], press[i]);
 		fprintf(d_file,"%e \t %e \t %e \n", q[100][0], q[100][1], q[100][2]);
-		fprintf(cell_file,"%e \t %e \n", timestep*i, cell_size);
+		fprintf(cell_file,"%e \t %e \n", timestep*i, cell_size/4 - 4.05);
 	}
 
 	// Time evolution according to the velocity Verlet algorithm
@@ -344,7 +350,7 @@ int main()
 		// Print the average energy data to output file
 		fprintf(e_file,"%.5f \t %e \t %e \t %e \t %F \t %e \n", i*timestep, energy, pe, ke, temp[i], press[i]);
 		fprintf(d_file,"%e \t %e \t %e \n", q[100][0], q[100][1], q[100][2]);
-		fprintf(cell_file,"%e \t %e \n", timestep*i, cell_size);
+		fprintf(cell_file,"%e \t %e \n", timestep*i, cell_size/4 - 4.05);
 	}
 
 	// Verlet algoritm for time evolution
