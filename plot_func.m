@@ -138,7 +138,14 @@ axis([0 1 0 6])
 set(l,'Interpreter','latex');
 
 plotTickLatex2D
-print(gcf,'-depsc2','MSD.eps');
+print(gcf,'-depsc2','MSD1.eps');
+
+%% MSD for 500C 
+axis([0 1 0 0.5]);
+
+
+plotTickLatex2D
+print(gcf,'-depsc2','MSD2.eps');
 
 %% Plot the Velocity correlation function
 
