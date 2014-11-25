@@ -138,11 +138,25 @@ title('Mean Square Displacement(MSD)','interpreter','latex','fontsize',14);
 y = ylabel('$\Delta_{MSD} ($k$) [$\AA$^2]$','interpreter','latex','fontsize',10);
 x = xlabel('Time lag k [ps]','interpreter','latex','fontsize',10);
 l = legend('$\Delta_{MSD}$, T = 500C$^\circ$','$\Delta_{MSD}$, T = 900C$^\circ$')
-axis([0 1 0 6])
+%axis([0 1 0 6])
 set(l,'Interpreter','latex');
 
 plotTickLatex2D
 print(gcf,'-depsc2','MSD1.eps');
+
+%% Plot convergence of MSD
+
+MSDdata = importdata('MSD.data');
+Size = size(MSDdata);
+
+figure(7);
+clf
+
+for(i = 1:Size(1))
+   plot(MSDdata(i,1),MSDdata(i,2)/(6*MSDdata(i,1)),'*');
+   hold on
+end
+
 
 %% MSD for 500C 
 plot(sMSDdata(:,1),sMSDdata(:,2), lMSDdata(:,1),lMSDdata(:,2));
