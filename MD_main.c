@@ -45,16 +45,16 @@ int main()
 	// Initiation of variables 
 	lattice_param = 4.05; // Units: [Å]
 	timestep = 0.01; // [ps]
-	nbr_of_timesteps = 25000; // Simulation length 
+	nbr_of_timesteps = 4000; // Simulation length 
 	Nx = 4, Ny = 4, Nz = 4; // Number of primitive cells in the supercell
 	m = 0.00279636665; // Metal units [ev/Å]
-	temp_eq = 500 + 273.15; // Degree Celsius 
+	temp_eq = 700 + 273.15; // Degree Celsius 
 	press_eq = 6.324209 * pow(10, -7); // 1 Atm in eV/Å^3
 	tau_T = timestep*10; // Parameter for eqlibr of temp
 	tau_P = timestep*10; // Parameter for eqlibr of pres
 	kappa_P = 2.21901454; //3.85 * pow(10, 9);/ // Liquid Aluminum Units: Å^3/eV
 	cell_size = lattice_param*Nx;
-	start_Cut = 2000; // eqlibr- time 
+	start_Cut = 1000; // eqlibr- time 
 	self_diffusion = 0;
 	meanF = 0;
 	nbr_of_freq = 1000; // Resolution of spectral function
@@ -210,12 +210,20 @@ int main()
 		// Calculate the pressure
 		cell_size = lattice_param * Nx;
 		press[i] = get_P(q, cell_size, nbr_of_atoms, temp[i]);
-		
 	
-		// Scale position of the atoms to obtain the right pressure
+		// Scale positions of the atoms to obtain the right pressure
 		lattice_param = rescale_P(timestep, tau_P, press_eq, press[i], q, nbr_of_atoms, kappa_P, lattice_param);
-		
 
+		// Get forces after rescaling the positions
+		get_forces_AL(f, q, cell_size, nbr_of_atoms);
+
+		// Scale forces to acceleration
+		for(j = 0; j < nbr_of_atoms; j++){
+			for(n = 0; n < 3; n++){
+				a[j][n] = f[j][n]/m;
+			}
+		}
+		
 		// Calcutaion of the pe, ke and total energy
 		pe = get_energy_AL(q, cell_size, nbr_of_atoms);
 		pe = sqrt(pe*pe);
