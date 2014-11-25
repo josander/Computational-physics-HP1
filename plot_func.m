@@ -46,14 +46,11 @@ xlabel('Time [ps]','interpreter','latex','fontsize',10);
 plotTickLatex2D
 set(y, 'Units', 'Normalized', 'Position', [-0.1, 0.5, 0]);
 print(gcf,'-depsc2','pressure.eps')
-%%
-sT= 5.028783; 	
-sP= 4.884246; 
 
 %% Plot the correlation data
 corrSamp = 100;  % The maximum value for k to be plotted, [0.01ps]
 corrData = importdata('correlation.data');
-%%
+
 clf
 set(gcf,'renderer','painters','PaperPosition',[0 0 4.7 3]);
 Size = size(corrData);
@@ -118,7 +115,7 @@ set(gcf,'renderer','painters','PaperPosition',[0 0 4.7 3]);
 cellData = importdata('cellSize.data');
 plot(cellData(:,1), cellData(:,2));
 
-title('Lattice constant during equilibration','interpreter','latex','fontsize',14);
+title('Length of supercell during equilibration','interpreter','latex','fontsize',14);
 xlabel('Time [ps]','Interpreter','latex','fontsize',10);
 ylabel('Cell Size [\AA]','Interpreter','latex','fontsize',10);
 
