@@ -1,12 +1,13 @@
 %% Plot energy, temperature and pressure
 
+lengthEq = 5000;
+
 % load the data file
 clc
 data = importdata('energy.data');
 
 set(gcf,'renderer','painters','PaperPosition',[0 0 4.7 3]);
 Size = size(data);
-lengthEq = 30000;
 
 figure(1);
 clf
@@ -72,8 +73,8 @@ title('Displacement in 3D','interpreter','latex','fontsize',14);
 
 set(gcf,'renderer','painters','PaperPosition',[0 0 6 8]);
 Size = size(dispData);
-start_cut = 25000;
-steps = 35000;
+start_cut = 1;
+steps = Size(1);
 
 plot3(dispData(start_cut:steps,1), dispData(start_cut:steps,2), dispData(start_cut:steps,3),'g  -', 'LineWidth', 0.001);
 axis equal
@@ -99,7 +100,7 @@ lMSDdata = importdata('MSD.data');
 figure(8);
 clf
 set(gcf,'renderer','painters','PaperPosition',[0 0 4.7 3]);
-plot(sMSDdata(:,1),sMSDdata(:,2), lMSDdata(:,1),lMSDdata(:,2));
+plot(sMSDdata(:,1),sMSDdata(:,2));
 
 % Plot convergence of MSD
 
@@ -121,7 +122,7 @@ end
 figure(10);
 clf
 set(gcf,'renderer','painters','PaperPosition',[0 0 4.7 3]);
-plot(sMSDdata(:,1),sMSDdata(:,3), lMSDdata(:,1),lMSDdata(:,3));
+plot(sMSDdata(:,1),sMSDdata(:,3)/sMSDdata(1,3));
 title('Velocity correlation function','interpreter','latex','fontsize',14);
 
 mean(sMSDdata(:,3))
@@ -133,7 +134,7 @@ omfact=10; % to convert to ps^-1
 figure(11);
 clf
 set(gcf,'renderer','painters','PaperPosition',[0 0 5 4]);
-plot(omfact*sMSDdata(:,4),sMSDdata(:,5),omfact*lMSDdata(:,4),lMSDdata(:,5));
+plot(omfact*sMSDdata(:,4),sMSDdata(:,5));
 
 title('Spectral function','interpreter','latex','fontsize',14);
 

@@ -49,7 +49,7 @@ int main()
 	nbr_of_timesteps = 40000; // Simulation length 
 	Nx = 4, Ny = 4, Nz = 4; // Number of primitive cells in the supercell
 	m = 0.00279636665; // Metal units [ev/Å]
-	temp_melt = 850 + 273.15; // [K] For melting	
+	temp_melt = 900 + 273.15; // [K] For melting	
 	temp_eq = 700 + 273.15; // [K] Degree Celsius 
 	press_eq = 6.324209 * pow(10, -7); // 1 Atm in eV/Å^3
 	tau_T = timestep*60; // Parameter for eqlibr of temp
@@ -67,7 +67,7 @@ int main()
 
 
 	// If start_Cut is too big, write a message
-	if(start_Cut > nbr_of_timesteps/2){
+	if(start_Cut > nbr_of_timesteps){
 		printf("NB: start_Cut is too big! \n");
 	}
 
