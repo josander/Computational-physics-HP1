@@ -1,4 +1,5 @@
-%% Plot energy, temperature and pressure
+%% Plot nice figures
+% Plot energy, temperature and pressure
 
 % load the data file
 clf
