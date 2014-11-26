@@ -3,7 +3,6 @@
 % load the data file
 clf
 clc
-%%
 data = importdata('energy.data');
 
 set(gcf,'renderer','painters','PaperPosition',[0 0 4.7 3]);
@@ -46,11 +45,29 @@ plotTickLatex2D
 set(y, 'Units', 'Normalized', 'Position', [-0.1, 0.5, 0]);
 print(gcf,'-depsc2','pressure.eps')
 
+%% Plot the means of the temperature
+clc
+figure(12);
+clf
+
+data = importdata('energy.data');
+Size = size(data);
+startCut = 10000;
+
+j = 0;
+
+for i = startCut+250:500:Size(1)-250
+   
+   plot(i, mean(data(i-250:i+250,2)), 'o')
+   hold on 
+    
+   j = j + 1
+end
+
 %% Plot the correlation data
 corrSamp = 100;  % The maximum value for k to be plotted, [0.01ps]
 corrData = importdata('correlation.data');
 
-clf
 set(gcf,'renderer','painters','PaperPosition',[0 0 4.7 3]);
 Size = size(corrData);
 
@@ -208,18 +225,7 @@ title('Spectral function','interpreter','latex','fontsize',14);
 ylabel(' $\hat{\Phi}_v(\omega$) [ps/\AA]','interpreter','latex','fontsize',10);
 xlabel(' $\omega$ [ps$^{-1}$]','interpreter','latex','fontsize',10);
 l = legend('$\Phi_v$, T = 500C$^\circ$','$\Phi_v$, T = 900C$^\circ$');
-%axis([0 1 0 3])
+
 set(l,'Interpreter','latex');
 plotTickLatex2D
 print(gcf,'-depsc2','spectral.eps');
-
-%%
-data = importdata('energy.data');
-%%
-
-for i = 10000:5000:40000
-   
-   plot(i+5000, mean(data(i:i+10000,end-1)), 'x')
-   hold on 
-    
-end
