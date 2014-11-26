@@ -52,9 +52,9 @@ int main()
 	temp_melt = 850 + 273.15; // [K] For melting	
 	temp_eq = 700 + 273.15; // [K] Degree Celsius 
 	press_eq = 6.324209 * pow(10, -7); // 1 Atm in eV/Å^3
-	tau_T = timestep*40; // Parameter for eqlibr of temp
-	tau_P = timestep*50; // Parameter for eqlibr of pres
-	kappa_P = 0.737;//2.21901454; // Aluminum compressibility at 300 K. Units: Å^3/eV
+	tau_T = timestep*60; // Parameter for eqlibr of temp
+	tau_P = timestep*60; // Parameter for eqlibr of pres
+	kappa_P = 2.21901454; // Aluminum compressibility at 300 K. Units: Å^3/eV
 	cell_size = lattice_param*Nx;
 	eqlibr_steps1 = 10000; // Number of time-steps in eqilibr with temp_melt
 	eqlibr_steps2 = 20000; // Number of time-steps in equilibr with temp_eq
