@@ -47,6 +47,7 @@ int main()
 	lattice_param = 4.05; // Units: [Å]
 	timestep = 0.01; // [ps]
 	nbr_of_timesteps = 40000; // Simulation length 
+b
 	Nx = 4, Ny = 4, Nz = 4; // Number of primitive cells in the supercell
 	m = 0.00279636665; // Metal units [ev/Å]
 	temp_melt = 600 + 273.15; // [K] For melting	
