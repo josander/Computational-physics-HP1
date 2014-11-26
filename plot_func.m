@@ -12,6 +12,8 @@ figure(1);
 clf
 plot(data(:,1),data(:,2:end-2));
 
+lengthEq = 30000;
+
 % labels
 title('Energy','interpreter','latex','fontsize',14);
 y = ylabel('Energy [eV]','interpreter','latex','fontsize',10);
@@ -25,7 +27,7 @@ print(gcf,'-depsc2','energy.eps')
 figure(2);
 set(gcf,'renderer','painters','PaperPosition',[0 0 4.7 3]);
 plot(data(:,1),data(:,end-1));
-meanTemp = mean(data(1500:Size(1),end-1))
+meanTemp = mean(data(lengthEq:Size(1),end-1))
 title('Temperature','interpreter','latex','fontsize',14);
 y = ylabel('Temperature [K]','interpreter','latex','fontsize',10);
 xlabel('Time [ps]','interpreter','latex','fontsize',10);
@@ -36,7 +38,7 @@ print(gcf,'-depsc2','temperature.eps')
 figure(3);
 set(gcf,'renderer','painters','PaperPosition',[0 0 4.7 3]);
 plot(data(:,1),data(:,end));
-meanPress = mean(data(1000:Size(1),end))
+meanPress = mean(data(lengthEq:Size(1),end))
 title('Pressure','interpreter','latex','fontsize',14);
 y = ylabel('Pressure [eV/\AA$^3$]','interpreter','latex','fontsize',10);
 xlabel('Time [ps]','interpreter','latex','fontsize',10);
@@ -52,16 +54,15 @@ clf
 
 data = importdata('energy.data');
 Size = size(data);
-startCut = 0;
-
+startCut = 1; 
 
 for i = startCut+250:500:Size(1)-250
    subplot(2,1,1)
-   plot(i, mean(data(i-250+1:i+250,end-1)), 'o')
+   plot(i, mean(data(i-250:i+250,end-1)), 'o')
    hold on 
    
    subplot(2,1,2)
-   plot(i, mean(data(i-250+1:i+250,end)), 'o')
+   plot(i, mean(data(i-250:i+250,end)), 'o')
    hold on 
 end
 
@@ -214,7 +215,7 @@ print(gcf,'-depsc2','VCF.eps');
 %% Plot the Spectral function
 
 omfact=10; % to convert to ps^-1
-figure(8);
+figure(11);
 
 clf
 

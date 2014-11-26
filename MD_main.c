@@ -47,24 +47,23 @@ int main()
 	lattice_param = 4.05; // Units: [Å]
 	timestep = 0.01; // [ps]
 	nbr_of_timesteps = 40000; // Simulation length 
-b
 	Nx = 4, Ny = 4, Nz = 4; // Number of primitive cells in the supercell
 	m = 0.00279636665; // Metal units [ev/Å]
-	temp_melt = 600 + 273.15; // [K] For melting	
-	temp_eq = 500 + 273.15; // [K] Degree Celsius 
+	temp_melt = 850 + 273.15; // [K] For melting	
+	temp_eq = 700 + 273.15; // [K] Degree Celsius 
 	press_eq = 6.324209 * pow(10, -7); // 1 Atm in eV/Å^3
 	tau_T = timestep*40; // Parameter for eqlibr of temp
 	tau_P = timestep*50; // Parameter for eqlibr of pres
-	kappa_P = 2.21901454; // Aluminum compressibility at 300 K. Units: Å^3/eV
+	kappa_P = 0.737;//2.21901454; // Aluminum compressibility at 300 K. Units: Å^3/eV
 	cell_size = lattice_param*Nx;
-	eqlibr_steps1 = 5000; // Number of time-steps in eqilibr with temp_melt
+	eqlibr_steps1 = 10000; // Number of time-steps in eqilibr with temp_melt
 	eqlibr_steps2 = 20000; // Number of time-steps in equilibr with temp_eq
 	start_Cut = eqlibr_steps1 + eqlibr_steps2; // eqlibr- time 
 	self_diffusion = 0.0;
 	meanF = 0.0;
 	nbr_of_freq = 1000; // Resolution of spectral function
-	corr_length = 100; // Length when VCF -> 0
-	nbr_of_steps = 500; // Maximum number of time steps in the MSD calculation. 
+	corr_length = 500; // Length when VCF -> 0
+	nbr_of_steps = 600; // Maximum number of time steps in the MSD calculation. 
 
 
 	// If start_Cut is too big, write a message
