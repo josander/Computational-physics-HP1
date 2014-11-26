@@ -47,20 +47,20 @@ int main()
 	lattice_param = 4.05; // Units: [Å]
 
 	timestep = 0.001; // [ps]
-	nbr_of_timesteps = 50000; // Simulation length 
+	nbr_of_timesteps = 15000; // Simulation length 
 
 	Nx = 4, Ny = 4, Nz = 4; // Number of primitive cells in the supercell
 	m = 0.00279636665; // Metal units [ev/Å]
 	temp_melt = 1200 + 273.15; // [K] For melting	
 	temp_eq = 700 + 273.15; // [K] Degree Celsius 
 	press_eq = 6.324209 * pow(10, -7); // 1 Atm in eV/Å^3
-	tau_T = timestep*100; // Parameter for eqlibr of temp
-	tau_P = timestep*100; // Parameter for eqlibr of pres
+	tau_T = timestep*500; // Parameter for eqlibr of temp
+	tau_P = timestep*500; // Parameter for eqlibr of pres
 	kappa_P = 2.21901454; //3.85 * pow(10, 9);/ // Liquid Aluminum Units: Å^3/eV
 	cell_size = lattice_param*Nx;
 
 	eqlibr_steps1 = 0; // Number of time-steps in eqilibr with temp_melt
-	eqlibr_steps2 = 10000; // Number of time-steps in equilibr with temp_eq
+	eqlibr_steps2 = 5000; // Number of time-steps in equilibr with temp_eq
 
 	start_Cut = eqlibr_steps1 + eqlibr_steps2; // eqlibr- time 
 	self_diffusion = 0.0;
