@@ -52,16 +52,16 @@ clf
 
 data = importdata('energy.data');
 Size = size(data);
-startCut = 10000;
+startCut = 1;
 
 j = 0;
 
 for i = startCut+250:500:Size(1)-250
    
-   plot(i, mean(data(i-250:i+250,2)), 'o')
+   plot(i, mean(data(i-250:i+250,end - 1)), 'o')
    hold on 
     
-   j = j + 1
+   j = j + 1;
 end
 
 %% Plot the correlation data
@@ -111,8 +111,8 @@ dispData = importdata('displacement.data');
 
 set(gcf,'renderer','painters','PaperPosition',[0 0 6 8]);
 Size = size(dispData);
-start_cut = 8000;
-steps = Size(1);
+start_cut = 25000;
+steps = 35000;
 
 plot3(dispData(start_cut:steps,1), dispData(start_cut:steps,2), dispData(start_cut:steps,3),'g  -', 'LineWidth', 0.001);
 t = title('Displacement of 1 atom at 500 C$^\circ$','fontsize',14);
