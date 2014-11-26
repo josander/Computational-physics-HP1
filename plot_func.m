@@ -52,11 +52,9 @@ clf
 
 data = importdata('energy.data');
 Size = size(data);
-<<<<<<< HEAD
-startCut = 1;
-=======
+
 startCut = 0;
->>>>>>> c3896a2a3f43e8be3495e2b528a99fde9bdbb427
+
 
 
 for i = startCut+250:500:Size(1)-250
@@ -64,16 +62,11 @@ for i = startCut+250:500:Size(1)-250
    plot(i, mean(data(i-250+1:i+250,end-1)), 'o')
    hold on 
    
-<<<<<<< HEAD
-   plot(i, mean(data(i-250:i+250,end - 1)), 'o')
-   hold on 
-    
-   j = j + 1;
-=======
+
    subplot(2,1,2)
    plot(i, mean(data(i-250+1:i+250,end)), 'o')
    hold on 
->>>>>>> c3896a2a3f43e8be3495e2b528a99fde9bdbb427
+
 end
 
 %% Plot the correlation data
