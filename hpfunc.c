@@ -158,20 +158,18 @@ void get_corr_func(double A[], double *corr_func, int nbr_of_timesteps, int star
 
 }
 
-
-
 // Function that calculates the spectral function
 void get_spectral_func(double *vel_corr_func, double *omega, double *spectral_func, int nbr_of_steps, int num_of_freq, int timestep)
 {
 	int i, j;
-
+	double factor = 2.0*5/nbr_of_steps; // 5 = nbr_of_step*timestep
 	for(i = 0; i < num_of_freq ; i++){
 		omega[i] = i * PI / num_of_freq;
 		spectral_func[i] = 0;		
 		for(j = 0; j < nbr_of_steps; j++){
 			spectral_func[i] += vel_corr_func[j] * cos(omega[i] * j);
 		}
-		spectral_func[i] *= 2.0*timestep;
+		spectral_func[i] *= factor;
 	}
 }
 

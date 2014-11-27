@@ -52,7 +52,7 @@ int main()
 	m = 0.00279636665; // Metal units [ev/Å]
 
 	temp_melt = 890 + 273.15; // [K] For melting	
-	temp_eq = 700 + 273.15; // [K] Degree Celsius 
+	temp_eq = 500 + 273.15; // [K] Degree Celsius 
 
 	press_eq = 6.324209 * pow(10, -7); // 1 Atm in eV/Å^3
 	tau_T = timestep*60; // Parameter for eqlibr of temp
@@ -60,8 +60,8 @@ int main()
 	kappa_P = 2.21901454; // Aluminum compressibility at 300 K. Units: Å^3/eV
 	cell_size = lattice_param*Nx;
 
-	eqlibr_steps1 = 20000; // Number of time-steps in eqilibr with temp_melt
-	eqlibr_steps2 = 30000; // Number of time-steps in equilibr with temp_eq
+	eqlibr_steps1 = 0; // Number of time-steps in eqilibr with temp_melt
+	eqlibr_steps2 = 50000; // Number of time-steps in equilibr with temp_eq
 
 	start_Cut = eqlibr_steps1 + eqlibr_steps2; // eqlibr- time 
 	self_diffusion = 0.0;
@@ -121,6 +121,12 @@ int main()
 	for(i = 0; i <nbr_of_timesteps - start_Cut + 1; i++){
 		corr_func_T[i] = 0.0;
 		corr_func_P[i] = 0.0;
+	}
+
+	// Initialize the spec func
+
+	for(i = 0; i < nbr_of_freq; i++){
+		spectral_func[i] = 0.0;	
 	}
 
 	// Initiation of the fcc lattice of Al-atoms 

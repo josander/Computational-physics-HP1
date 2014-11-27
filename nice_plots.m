@@ -136,11 +136,11 @@ dispData = importdata('displacement.data');
 
 set(gcf,'renderer','painters','PaperPosition',[0 0 6 8]);
 Size = size(dispData);
-start_cut = 25000;
-steps = 35000;
+start_cut = 50000;
+steps = 60000;
 
-plot3(dispData(start_cut:steps,1), dispData(start_cut:steps,2), dispData(start_cut:steps,3),'g  -', 'LineWidth', 0.001);
-t = title('Displacement of 1 atom at 500 C$^\circ$','fontsize',14);
+plot3(dispData(start_cut:steps,1), dispData(start_cut:steps,2), dispData(start_cut:steps,3),'b  -', 'LineWidth', 0.001);
+t = title('Displacement of 1 atom at 500 $^\circ$C','fontsize',14);
 set(t,'interpreter','latex');
 ylabel('Y [\AA]','Interpreter','latex');
 xlabel('X [\AA]','Interpreter','latex');
@@ -169,7 +169,7 @@ plot(sMSDdata(:,1),sMSDdata(:,2), lMSDdata(:,1),lMSDdata(:,2));
 title('Mean Square Displacement (MSD)','interpreter','latex','fontsize',14);
 y = ylabel('$\Delta_{MSD} ($k$) [$\AA$^2]$','interpreter','latex','fontsize',10);
 x = xlabel('Time lag k [ps]','interpreter','latex','fontsize',10);
-l = legend('$\Delta_{MSD}$, T = 500C$^\circ$','$\Delta_{MSD}$, T = 700C$^\circ$')
+l = legend('$\Delta_{MSD}$, T = 500$^\circ$C','$\Delta_{MSD}$, T = 700$^\circ$C')
 %axis([0 1 0 6])
 set(l,'Interpreter','latex');
 
@@ -191,9 +191,10 @@ for(i = 1:Size(1))
 end
 
 title('Self Diffusion Coefficient from MSD','interpreter','latex','fontsize',14);
-y = ylabel('$\Delta_{MSD}/6k  [$\AA$^2/ps]$','interpreter','latex','fontsize',10);
+y = ylabel('$\Delta_{MSD} /6k$  [\AA$^2$/ps]','interpreter','latex','fontsize',10);
 x = xlabel('Time lag k [ps]','interpreter','latex','fontsize',10);
 plotTickLatex2D
+set(y, 'Units', 'Normalized', 'Position', [-0.1, 0.5, 0]);
 print(gcf,'-depsc2','selfDiffusion.eps');
 
 
@@ -203,7 +204,7 @@ plot(sMSDdata(:,1),sMSDdata(:,2), lMSDdata(:,1),lMSDdata(:,2));
 title('Mean Square Displacement(MSD)','interpreter','latex','fontsize',14);
 y = ylabel('$\Delta_{MSD} ($k$) [$\AA$^2]$','interpreter','latex','fontsize',10);
 x = xlabel('Time lag k [ps]','interpreter','latex','fontsize',10);
-l = legend('$\Delta_{MSD}$, T = 500C$^\circ$','$\Delta_{MSD}$, T = 700C$^\circ$')
+l = legend('$\Delta_{MSD}$, T = 500$^\circ$C','$\Delta_{MSD}$, T = 700$^\circ$C')
 
 axis([0 1 0 0.5]);
 set(l,'Interpreter','latex');
@@ -225,7 +226,7 @@ mean(sMSDdata(:,3))
 
 ylabel(' $\Phi_v$(k) [-]','interpreter','latex','fontsize',10);
 xlabel('Time lag $k$ [ps]','interpreter','latex','fontsize',10);
-l = legend('$\Phi_v$, T = 500C$^\circ$','$\Phi_v$, T = 700C$^\circ$');
+l = legend('$\Phi_v$, T = 500$^\circ$C','$\Phi_v$, T = 700$^\circ$C');
 axis([0 1.25 -0.6 1])
 set(l,'Interpreter','latex');
 plotTickLatex2D
@@ -239,14 +240,14 @@ figure(11);
 clf
 
 set(gcf,'renderer','painters','PaperPosition',[0 0 5 4]);
-plot(omfact*sMSDdata(:,4),sMSDdata(:,5),omfact*lMSDdata(:,4),lMSDdata(:,5).);
+plot(omfact*sMSDdata(:,4),sMSDdata(:,5),omfact*lMSDdata(:,4),lMSDdata(:,5));
 
 title('Spectral function','interpreter','latex','fontsize',14);
 
 y = ylabel(' $\hat{\Phi}_v(\omega$) [ps/\AA]','interpreter','latex','fontsize',10);
 xlabel(' $\omega$ [ps$^{-1}$]','interpreter','latex','fontsize',10);
-l = legend('$\Phi_v$, T = 500C$^\circ$','$\Phi_v$, T = 700C$^\circ$');
-axis([0 10 0 7]);
+l = legend('$\Phi_v$, T = 500$^\circ$C','$\Phi_v$, T = 700$^\circ$C');
+axis([0 10 0 9]);
 set(l,'Interpreter','latex');
 plotTickLatex2D
 set(y, 'Units', 'Normalized', 'Position', [-0.1, 0.5, 0]);
