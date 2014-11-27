@@ -31,16 +31,21 @@ figure(4);
 clf
 
 Size = size(data);
+
 startCut = 1; 
+ff9
 
 for i = startCut+250:500:Size(1)-250
    subplot(2,1,1)
-   plot(i, mean(data(i-250:i+250,end-1)), 'o')
+
+   plot(i, mean(data(i-250+1:i+250,end-1)), 'o')
    hold on 
+   
 
    subplot(2,1,2)
    plot(i, mean(data(i-250:i+250,end)), 'o')
    hold on 
+
 end
 
 % Plot the correlation data
