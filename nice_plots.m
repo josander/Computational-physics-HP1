@@ -115,11 +115,15 @@ dispData = importdata('displacement.data');
 
 set(gcf,'renderer','painters','PaperPosition',[0 0 6 8]);
 Size = size(dispData);
-start_cut = 25000;
-steps = 35000;
+start_cut = 1;
+steps = 4000;
 
-plot3(dispData(start_cut:steps,1), dispData(start_cut:steps,2), dispData(start_cut:steps,3),'g  -', 'LineWidth', 0.001);
-t = title('Displacement of 1 atom at 500 C$^\circ$','fontsize',14);
+plot3(dispData(start_cut:2800,1), dispData(start_cut:2800,2), dispData(start_cut:2800,3),'b  -', 'LineWidth', 0.001);
+hold on
+plot3(dispData(2800:35000,1), dispData(2800:35000,2), dispData(2800:35000,3),'r  -', 'LineWidth', 0.001);
+hold on
+plot3(dispData(35000:50000,1), dispData(35000:50000,2), dispData(35000:50000,3),'g  -', 'LineWidth', 0.001);
+t = title('Displacement of 1 atom at 580 $^\circ$C','fontsize',14);
 set(t,'interpreter','latex');
 ylabel('Y [\AA]','Interpreter','latex');
 xlabel('X [\AA]','Interpreter','latex');
@@ -127,7 +131,7 @@ zlabel('Z [\AA]','Interpreter','latex');
 axis equal
 grid on
 
-print(gcf,'-depsc2','diffusionLiquid500.eps')
+print(gcf,'-depsc2','diffusionLiquid580.eps')
 
 %% Plot the cell size as a function of time
 figure(7);

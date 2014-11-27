@@ -1,6 +1,6 @@
 %% Plot energy, temperature and pressure
 
-lengthEq = 5000;
+lengthEq = 60000;
 
 % load the data file
 clc
@@ -138,3 +138,4 @@ plot(omfact*sMSDdata(:,4),sMSDdata(:,5));
 
 title('Spectral function','interpreter','latex','fontsize',14);
 
+Ds = sMSDdata(1,5)/6
